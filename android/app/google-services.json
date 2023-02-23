@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "575649252184",
+    "project_id": "event-finder-7b8d2",
+    "storage_bucket": "event-finder-7b8d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575649252184:android:66fa561c9692f081e99b2d",
+        "android_client_info": {
+          "package_name": "com.dominik.tajak.event_finder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "575649252184-rfrguih5gvdj4pi0qbju6umi0pinl3a2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdYiP7DGTJ4hU07c0D1mcRvstlhbK3m3E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "575649252184-rfrguih5gvdj4pi0qbju6umi0pinl3a2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "575649252184-mob76p8gjij6g1f6ll68uu6a072bas4t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dominik.tajak.eventFinder"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
