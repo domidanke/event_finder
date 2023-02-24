@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/views/feature/shared/event_card.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +20,6 @@ class _EventsPageState extends State<EventsPage> {
   @override
   void initState() {
     super.initState();
-    FirestoreService().listenForEntries();
   }
 
   @override
@@ -35,25 +33,13 @@ class _EventsPageState extends State<EventsPage> {
       },
       child: const Icon(Icons.add),) : null,
       backgroundColor: Colors.grey[500],
-      body: StreamBuilder<List<Event>>(
-        stream: FirestoreService().entries,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final allEvents = snapshot.data;
-            return ListView.separated(
-                //padding: const EdgeInsets.all(20),
-                itemBuilder: (context, index) {
-                  return EventCard(event: allEvents[index]);
-                },
-                separatorBuilder: (context, index) {
-                  return const Divider();
-                },
-                itemCount: allEvents!.length);
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: FirestoreListView<Event>(
+        query: FirestoreService().eventsCollection.orderBy('date'),
+        itemBuilder: (context, snapshot) {
+          Event event = snapshot.data();
+          return EventCard(event: event);
         },
-      ),
+      )
     );
   }
 }

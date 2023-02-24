@@ -29,25 +29,14 @@ class FirestoreService extends ChangeNotifier {
       'title': event.title,
       'date': event.date.toString(),
       'text': event.text,
+      'createdBy': event.createdBy,
     });
   }
 
-  void listenForEntries() {
-    db.collection('Events')
-        .snapshots()
-        .listen((event) {
-      final entries = event.docs.map((doc) {
-        final data = doc.data();
-        return Event(
-          date: DateTime.parse(data['date'] as String),
-          text: data['text'] as String,
-          title: data['title'] as String,
-        );
-      }).toList();
-
-      _entriesStreamController.add(entries);
-    });
-  }
+  final eventsCollection = db.collection('Events').withConverter<Event>(
+    fromFirestore: (snapshot, _) => Event.fromJson(snapshot.data()!),
+    toFirestore: (movie, _) => movie.toJson(),
+  );
 
   @override
   void dispose() {

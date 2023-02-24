@@ -1,5 +1,6 @@
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/alert.service.dart';
+import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/firestore_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +89,7 @@ class _EventFormState extends State<EventForm> {
                                   title: title,
                                   text: text,
                                   date: _selectedDate!,
+                                  createdBy: AuthService().getCurrentFirebaseUser()!.uid
                                 );
                                 try {
                                   await FirestoreService().writeEventToFirebase(event).then((value) {

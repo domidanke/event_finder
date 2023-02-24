@@ -1,6 +1,7 @@
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/views/feature/shared/events_page.dart';
+import 'package:event_finder/views/feature/shared/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,9 +34,7 @@ class _HomePageState extends State<HomePage> {
             controller: _pageController,
             children: [
               const EventsPage(),
-              const Center(
-                child: Text('Seite 2'),
-              ),
+              const ProfilePage(),
               Center(
                 child: Scaffold(body: Center(child: Text('Hi ${AuthService().getCurrentFirebaseUser()?.displayName}'),), floatingActionButton: FloatingActionButton(child: const Icon(Icons.logout), onPressed: () {
                   AuthService().signOut().then((value) => Navigator.pushNamed(context, 'login'));
