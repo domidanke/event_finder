@@ -2,15 +2,8 @@
 
 Flutter Event Finder App
 
-## Getting Started
+# To run the code in test, use the following command:
 
-This project is a starting point for a Flutter application.
+# firebase emulators:start --import ./emulators_data --export-on-exit
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# This will use a local version of auth, firestore, and firestorage
