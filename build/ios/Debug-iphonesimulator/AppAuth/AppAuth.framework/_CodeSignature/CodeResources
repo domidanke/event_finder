@@ -158,7 +158,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		U4w02edCqEyStvA+wVjpaob27yw=
+		ni/BXs8htLyydfO+7QNCCtppYxI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -169,6 +169,10 @@
 	<dict>
 		<key>Headers/AppAuth-umbrella.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			or0uc+5fBhvuF05zNuLoQ70WHjQ=
+			</data>
 			<key>hash2</key>
 			<data>
 			uMzAOWubHfx3lNpT36oM8CDNxHCYaZJZ1fDoSjZLx8o=
@@ -176,6 +180,10 @@
 		</dict>
 		<key>Headers/AppAuth.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			yauXWhMN5+r2TFIoXWgBvflMGG0=
+			</data>
 			<key>hash2</key>
 			<data>
 			K+7Nlf7Lm4kdzj2xCtsjC0kz2NZCe8UxtwbGvZv50h4=
@@ -183,6 +191,10 @@
 		</dict>
 		<key>Headers/AppAuthCore.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			Mv7UBfY8qg9eIFJivRTRt1b4pkc=
+			</data>
 			<key>hash2</key>
 			<data>
 			7P+YgimVWSgrydSiFDcfq4XVCvkyabfKanR4ExHny1M=
@@ -190,6 +202,10 @@
 		</dict>
 		<key>Headers/OIDAuthState+IOS.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			WK/w+zc9gg6+gVAjiXEvwP3L03M=
+			</data>
 			<key>hash2</key>
 			<data>
 			evZ4HpRwDvCDL9kEPbFAS8IZdJxr5IqXdRAY5Tnb/cM=
@@ -197,6 +213,10 @@
 		</dict>
 		<key>Headers/OIDAuthState.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			3WY55yU8xkDmxCC7TuTCe3l4rck=
+			</data>
 			<key>hash2</key>
 			<data>
 			iyxdIZ8RJLjcXLFXpN7j/QllsrVngY7btYb3ffsp6jc=
@@ -204,6 +224,10 @@
 		</dict>
 		<key>Headers/OIDAuthStateChangeDelegate.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			zjp4bMKA4PxMisrjSIIp+4goNi4=
+			</data>
 			<key>hash2</key>
 			<data>
 			/t+eDvkN/L+vjwZv2WkJzsBRo1E/0Xy9LLpxTWmIwEg=
@@ -211,6 +235,10 @@
 		</dict>
 		<key>Headers/OIDAuthStateErrorDelegate.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			o20dMM67QCayoVJ2m+2ISlwccA8=
+			</data>
 			<key>hash2</key>
 			<data>
 			tRWRFFOnY1kAwE8yYHvfcIVNV/pHEWajmw4me4kShE0=
@@ -218,6 +246,10 @@
 		</dict>
 		<key>Headers/OIDAuthorizationRequest.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			U4D9AKQ0Xat1gLayx5p8agK1jaE=
+			</data>
 			<key>hash2</key>
 			<data>
 			CQp6TRmIZ4p0NTgdvPFcbkxOcHCckOMqoa2eYONTqSo=
@@ -225,6 +257,10 @@
 		</dict>
 		<key>Headers/OIDAuthorizationResponse.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			y3Urbnge7ISUnQLFCCH3jzkZaZQ=
+			</data>
 			<key>hash2</key>
 			<data>
 			7x0V5WWmlRGjllH0ct+1wxjR1fBp9pHVoSNqJY86hYM=
@@ -232,6 +268,10 @@
 		</dict>
 		<key>Headers/OIDAuthorizationService+IOS.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			IZOhSMcER30KcCTLFoqEC+r9t0M=
+			</data>
 			<key>hash2</key>
 			<data>
 			mfpYDsntaUidWjZByB1AkG8ZfhRdLgQO0AwcTnqx4gc=
@@ -239,6 +279,10 @@
 		</dict>
 		<key>Headers/OIDAuthorizationService.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			eG8Zs+6LTAfSXUH5IcCGL3Ah0h4=
+			</data>
 			<key>hash2</key>
 			<data>
 			h2PTTg83nhQb1NZFCigABeZJ9qeVOJ4iL50NnE0jA/4=
@@ -246,6 +290,10 @@
 		</dict>
 		<key>Headers/OIDClientMetadataParameters.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			bE9xJje9QC5yKSl7a9zSmvj2xgI=
+			</data>
 			<key>hash2</key>
 			<data>
 			NiZczu+ccWYXjxBwOqigY34bYwP0YAzPJWboUR28IXg=
@@ -253,6 +301,10 @@
 		</dict>
 		<key>Headers/OIDDefines.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			DXGIDZ5njG7iDiCeWyIL41cmpcE=
+			</data>
 			<key>hash2</key>
 			<data>
 			fSs71/ksAP5uybRIBJHg4SvBmYR1jy2O35FoRLrhjhY=
@@ -260,6 +312,10 @@
 		</dict>
 		<key>Headers/OIDEndSessionRequest.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			IDqh1pkPDVMNjnzbhNnvX2xhAog=
+			</data>
 			<key>hash2</key>
 			<data>
 			puaM8mp7NP3gHOJF4rcNvepFL8UBqkV1bXTJz5JT7xY=
@@ -267,6 +323,10 @@
 		</dict>
 		<key>Headers/OIDEndSessionResponse.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			xLdQ5zOJljLsK4vNoEU9u99T97E=
+			</data>
 			<key>hash2</key>
 			<data>
 			ygAz2dnOsqw4Aw2CRdNpar0NCESev6eAfc1r8k1M75g=
@@ -274,6 +334,10 @@
 		</dict>
 		<key>Headers/OIDError.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			XwfOSqdlFWtyvGNXHdE8zC/HKOo=
+			</data>
 			<key>hash2</key>
 			<data>
 			nlEnjrKEEzURLTrSJNa9FkL3yyFRVO7rNeKBcv8bt3M=
@@ -281,6 +345,10 @@
 		</dict>
 		<key>Headers/OIDErrorUtilities.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			ZzTOqMi2RhesokAwPi+B3QRo6+s=
+			</data>
 			<key>hash2</key>
 			<data>
 			fcCf7I4YI5VTbHVk/TDlzhdvXlOHsDjBAVWlKqPK/Us=
@@ -288,6 +356,10 @@
 		</dict>
 		<key>Headers/OIDExternalUserAgent.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			5TiaWX+QlRxjghXZkGxCJytrnqw=
+			</data>
 			<key>hash2</key>
 			<data>
 			1rQVmcDRSxpXpBF7/bDU/Th+lvn8DtLIQ2fuyJmAHFA=
@@ -295,6 +367,10 @@
 		</dict>
 		<key>Headers/OIDExternalUserAgentCatalyst.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			EuSo6cig4kpVEPe7+7hOndxDV7Q=
+			</data>
 			<key>hash2</key>
 			<data>
 			sC+MXF6d9V8AtcLQs4xMTGco8ALbwDVGcZIabynJTgw=
@@ -302,6 +378,10 @@
 		</dict>
 		<key>Headers/OIDExternalUserAgentIOS.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			46iSjkTOhJs21KJIV8+f8ZfN7YI=
+			</data>
 			<key>hash2</key>
 			<data>
 			GaXXpUKkH4itu8GuR6Esv4BkjqhQvb1IIC93GdZSFpk=
@@ -309,6 +389,10 @@
 		</dict>
 		<key>Headers/OIDExternalUserAgentIOSCustomBrowser.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			9iErDmTfH42cAX7OL3mlmD35usk=
+			</data>
 			<key>hash2</key>
 			<data>
 			zx5AMzKN/voBvwQjGG77ZLOdr3+N26hMMU297iArt/o=
@@ -316,6 +400,10 @@
 		</dict>
 		<key>Headers/OIDExternalUserAgentRequest.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			z/JH3y9533385ippnl9mNEFoa6Q=
+			</data>
 			<key>hash2</key>
 			<data>
 			Hy0is2gh5nseOLO51dP35cxcb8lmm9TK8T/tsr3BMUQ=
@@ -323,6 +411,10 @@
 		</dict>
 		<key>Headers/OIDExternalUserAgentSession.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			UdSYV43r1zhG5LK6nb4t7EEkuBk=
+			</data>
 			<key>hash2</key>
 			<data>
 			7I25n47atGW1FHORu3R0834Sg4dcyhm2JlB95HwCEOU=
@@ -330,6 +422,10 @@
 		</dict>
 		<key>Headers/OIDFieldMapping.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			zNnKlXIrX40losY8kTecge0ov3I=
+			</data>
 			<key>hash2</key>
 			<data>
 			8v1oQvMZRpPaPRLF8fWEV2rFYrLIkIHl7w4Wnn/N9rI=
@@ -337,6 +433,10 @@
 		</dict>
 		<key>Headers/OIDGrantTypes.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			j+0ua8UelKiRBSj55ePebbNBr6k=
+			</data>
 			<key>hash2</key>
 			<data>
 			jcyOZBcsazAqZpADGdfPljSPuzvTBYNBRIlVjGTXbwA=
@@ -344,6 +444,10 @@
 		</dict>
 		<key>Headers/OIDIDToken.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			1EoEQZPZW6QGQ7ZtzR0p6Rlffvk=
+			</data>
 			<key>hash2</key>
 			<data>
 			X7CLoozETVsZyk2dxetgVHmajJMJ1GWLFw5/DAMLXHo=
@@ -351,6 +455,10 @@
 		</dict>
 		<key>Headers/OIDRegistrationRequest.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			Td6PpXugZDJZIDn9IZBCbqIeugA=
+			</data>
 			<key>hash2</key>
 			<data>
 			lg1xCNWJsaIs7dm2417jpFK/hN2DOh25rDFKbkY4LBQ=
@@ -358,6 +466,10 @@
 		</dict>
 		<key>Headers/OIDRegistrationResponse.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			qI+k/oRxKXnvdJKxiNjixbFTqrI=
+			</data>
 			<key>hash2</key>
 			<data>
 			bldyNnkN0uo8nk1UWO83x7IdLYS6fNooHccYYD46cx8=
@@ -365,6 +477,10 @@
 		</dict>
 		<key>Headers/OIDResponseTypes.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			12nCisKfLJwPgSqtHZmwp+6Rnp8=
+			</data>
 			<key>hash2</key>
 			<data>
 			9bvCezu0xbecXqrK88R1ugVXaNu4KpupE6ZqWYn/Km0=
@@ -372,6 +488,10 @@
 		</dict>
 		<key>Headers/OIDScopeUtilities.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			JoGrW66KNFumVLw8Ot6tYJ6H4Ws=
+			</data>
 			<key>hash2</key>
 			<data>
 			eZ/StB7+UZIRN8wJJl7BVgzPROb9hzJpiKZJIBN9jbs=
@@ -379,6 +499,10 @@
 		</dict>
 		<key>Headers/OIDScopes.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			aCJuIn1SBvnA2se79poYCWJxPwo=
+			</data>
 			<key>hash2</key>
 			<data>
 			SUsKNiZA+/ZHG9A4HF7nhAhJwkxTPgYW1kDNYSCIfhg=
@@ -386,6 +510,10 @@
 		</dict>
 		<key>Headers/OIDServiceConfiguration.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			xC1sGCzLSOrzOQDyqwRSmEKrYd0=
+			</data>
 			<key>hash2</key>
 			<data>
 			OT+ZdZ58O9MfM/9SoY7Kfn1quOql6z9ujX1c6MBeFoA=
@@ -393,6 +521,10 @@
 		</dict>
 		<key>Headers/OIDServiceDiscovery.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			8nmzdKmMPBckmDyhzNYEj2pQTJ4=
+			</data>
 			<key>hash2</key>
 			<data>
 			GfmjXpU3BVabIZlR6zfDOOQFoDLEGRm/g6JMfPoN2LU=
@@ -400,6 +532,10 @@
 		</dict>
 		<key>Headers/OIDTokenRequest.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			B2wA2sE1X8LrJW4zd/knCuWgRvs=
+			</data>
 			<key>hash2</key>
 			<data>
 			97HGQDFPjXnFgutXm7gzo+Uon9sDp8XEpONlEnSSgPM=
@@ -407,6 +543,10 @@
 		</dict>
 		<key>Headers/OIDTokenResponse.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			fYJCY4Iy2b8Yq+0AmOmbpLgDvtI=
+			</data>
 			<key>hash2</key>
 			<data>
 			1rivqlDuyYWEt/4GI74fvctz7cTNcARsQzRYubjR2CQ=
@@ -414,6 +554,10 @@
 		</dict>
 		<key>Headers/OIDTokenUtilities.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			+pM9ahS6O4kXELxFDnpEkQrIl0M=
+			</data>
 			<key>hash2</key>
 			<data>
 			AYbGCFjJXVYLkRg9+P5BSuhrcH2niXDHaLC+yVrhnD8=
@@ -421,6 +565,10 @@
 		</dict>
 		<key>Headers/OIDURLQueryComponent.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			lueLdlYN0iX4QUDqV5O3AdDHpcs=
+			</data>
 			<key>hash2</key>
 			<data>
 			gyrDsT0FyhjVZqzxcsxasmC66xoq0+h1Bbr/OjRqKn8=
@@ -428,6 +576,10 @@
 		</dict>
 		<key>Headers/OIDURLSessionProvider.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			miDMA7eqJ8eCWxN9imkX7XMCvh8=
+			</data>
 			<key>hash2</key>
 			<data>
 			gRjmVHbW0gUofe2Yzcptg5+6XWB+zO9tubmdXIsWqRw=
@@ -435,6 +587,10 @@
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			IB9E7OBLWSqcPpgzvY8ZUft3STo=
+			</data>
 			<key>hash2</key>
 			<data>
 			i8RtPE932MV3WywJIgUcEK9YKgWMVemPKcqbNQHnHBQ=

@@ -1,6 +1,7 @@
 import 'package:event_finder/views/auth/login_page.dart';
 import 'package:event_finder/views/auth/pre_auth_page.dart';
 import 'package:event_finder/views/auth/register_page.dart';
+import 'package:event_finder/views/feature/event_organizer/event_form.dart';
 import 'package:event_finder/views/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const RegisterPage());
       case 'home':
         return MaterialPageRoute(builder: (_) => const HomePage());
+      case 'event_form':
+        return MaterialPageRoute(builder: (_) => const EventForm());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

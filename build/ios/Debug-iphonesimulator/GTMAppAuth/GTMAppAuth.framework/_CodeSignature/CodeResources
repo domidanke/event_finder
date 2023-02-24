@@ -30,7 +30,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		mx/wT5/idwfYh2ACSiGpz8ZPPqg=
+		qOoLbC0P8KHFfTeR/lahtHNpaNk=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -41,6 +41,10 @@
 	<dict>
 		<key>Headers/GTMAppAuth-umbrella.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			jIvcEWQfKBph96ljDQQOZe4vpR8=
+			</data>
 			<key>hash2</key>
 			<data>
 			/3PhQTW0IqgDiqksYe1QZttakunh4/Nt8mPJcKleZFE=
@@ -48,6 +52,10 @@
 		</dict>
 		<key>Headers/GTMAppAuth.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			m/DlGAQBMBoWXnd8bIR2XV0YDd0=
+			</data>
 			<key>hash2</key>
 			<data>
 			yDjFb9ZEPHkoscmR0VVofNJDJFi/KEx2x0QqPqsfcTg=
@@ -55,6 +63,10 @@
 		</dict>
 		<key>Headers/GTMAppAuthFetcherAuthorization+Keychain.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			k7GHX5qTfVi98VFxMohH1UtEhEs=
+			</data>
 			<key>hash2</key>
 			<data>
 			fIQsRoLTzL9AL60x/Ibwh/qqOOZRHfdNMG6D8hXm5Ss=
@@ -62,6 +74,10 @@
 		</dict>
 		<key>Headers/GTMAppAuthFetcherAuthorization.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			HcWt1JmtTkii5ulJ5DtnP2nTtB8=
+			</data>
 			<key>hash2</key>
 			<data>
 			Q5Odjaiculx7athQp358b7+1cZQ9N7rHKwVJoW40FIo=
@@ -69,6 +85,10 @@
 		</dict>
 		<key>Headers/GTMKeychain.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			W0k5eWcDNSQsY6DVa1D26sQOJjA=
+			</data>
 			<key>hash2</key>
 			<data>
 			JQY+/nd+TtJaicqRz10ANfM8x1kCcSIUIOjSQnDp0Hs=
@@ -76,6 +96,10 @@
 		</dict>
 		<key>Headers/GTMOAuth2KeychainCompatibility.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			9PKQLmE1Eee/ek+oafLzKi8DQeo=
+			</data>
 			<key>hash2</key>
 			<data>
 			DCHvgutW5mjvQTNAFYefW7LD7SQLvAOKiM6nU75UUZM=
@@ -83,6 +107,10 @@
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			XHdyMHqgMJIqc+sCa7V5wcn7gEU=
+			</data>
 			<key>hash2</key>
 			<data>
 			YouXhbZ1KKTQ8KPUDgczM2Fy81hqLT6g6S2XdXYkkjg=

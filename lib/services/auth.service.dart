@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../models/enums.dart';
+
 class AuthService extends ChangeNotifier {
   factory AuthService() {
     return _singleton;
@@ -17,6 +19,14 @@ class AuthService extends ChangeNotifier {
       'https://www.googleapis.com/auth/user.gender.read'
     ],
   );
+
+  UserType _currentUsertype = UserType.base;
+  UserType get currentUsertype => _currentUsertype;
+
+  set currentUsertype(UserType type) {
+    _currentUsertype = type;
+    notifyListeners();
+  }
 
   bool _loginLoading = false;
   bool _registerLoading = false;

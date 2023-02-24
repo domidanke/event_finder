@@ -32,7 +32,10 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
             });
             try {
               await AuthService().signInWithGoogle();
-              if (mounted) Navigator.pushNamed(context, 'home');
+              final user = AuthService().getCurrentFirebaseUser();
+              if (user != null) {
+                if (mounted) Navigator.pushNamed(context, 'home');
+              }
             } catch (e) {
               debugPrint(e.toString());
               AlertService()

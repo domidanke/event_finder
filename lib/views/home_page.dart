@@ -1,3 +1,6 @@
+import 'package:event_finder/services/auth.service.dart';
+import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/views/feature/shared/events_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    FirestoreService().setUserType();
   }
 
   @override
@@ -27,15 +31,15 @@ class _HomePageState extends State<HomePage> {
               });
             },
             controller: _pageController,
-            children: const [
-              Center(
-                child: Text('Seite 1'),
-              ),
-              Center(
+            children: [
+              const EventsPage(),
+              const Center(
                 child: Text('Seite 2'),
               ),
               Center(
-                child: Text('Seite 3'),
+                child: Scaffold(body: Center(child: Text('Hi ${AuthService().getCurrentFirebaseUser()?.displayName}'),), floatingActionButton: FloatingActionButton(child: const Icon(Icons.logout), onPressed: () {
+                  AuthService().signOut().then((value) => Navigator.pushNamed(context, 'login'));
+                  },),),
               )
             ],
           ),
