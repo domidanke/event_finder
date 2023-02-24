@@ -15,12 +15,19 @@ class FirestoreService extends ChangeNotifier {
 
   static final db = FirebaseFirestore.instance;
   Stream<List<Event>> get entries => _entriesStreamController.stream;
-  late final StreamController<List<Event>> _entriesStreamController = StreamController.broadcast();
+  late final StreamController<List<Event>> _entriesStreamController =
+      StreamController.broadcast();
 
   void setUserType() async {
-    var docSnapshot = await db.collection('Admins').doc(AuthService().getCurrentFirebaseUser()?.uid).get();
+    var docSnapshot = await db
+        .collection('Admins')
+        .doc(AuthService().getCurrentFirebaseUser()?.uid)
+        .get();
     if (docSnapshot.exists) {
-      AuthService().currentUsertype = UserType.fromJson(docSnapshot.data()?['type']);
+      AuthService().currentUsertype =
+          UserType.fromJson(docSnapshot.data()?['type']);
+    } else {
+      AuthService().currentUsertype = UserType.base;
     }
   }
 
@@ -34,9 +41,9 @@ class FirestoreService extends ChangeNotifier {
   }
 
   final eventsCollection = db.collection('Events').withConverter<Event>(
-    fromFirestore: (snapshot, _) => Event.fromJson(snapshot.data()!),
-    toFirestore: (movie, _) => movie.toJson(),
-  );
+        fromFirestore: (snapshot, _) => Event.fromJson(snapshot.data()!),
+        toFirestore: (movie, _) => movie.toJson(),
+      );
 
   @override
   void dispose() {

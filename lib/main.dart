@@ -6,9 +6,9 @@ import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/views/auth/pre_auth_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -48,6 +48,7 @@ class EventFinder extends StatelessWidget {
       onGenerateRoute: RouteGenerator().generateRoute,
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
+        fontFamily: 'Quicksand',
       ),
       home: const PreAuthPage(),
     );

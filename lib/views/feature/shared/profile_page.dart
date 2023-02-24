@@ -11,21 +11,25 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return ProfileScreen(
-      actions: [
-        SignedOutAction((context) {
-          Navigator.pushReplacementNamed(context, 'login');
-        }),
-      ],
-      children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const [
-          Text('Hier kann was stehen'),
-          Text('Events'),
-          Text('2'),
-        ],
+    return Scaffold(
+      body: SafeArea(
+        child: ProfileScreen(
+          actions: [
+            SignedOutAction((context) {
+              Navigator.pushReplacementNamed(context, 'login');
+            }),
+          ],
+          children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              Text('Hier kann was stehen'),
+              Text('Events'),
+              Text('2'),
+            ],
+          ),
+        ],),
       ),
-    ],);
+    );
   }
 }

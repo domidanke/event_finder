@@ -1,6 +1,6 @@
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/views/feature/shared/events_page.dart';
-import 'package:event_finder/views/feature/shared/profile_page.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,7 +15,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    FirestoreService().setUserType();
   }
 
   @override
@@ -23,6 +22,89 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
       onWillPop: () async => !Navigator.of(context).userGestureInProgress,
       child: Scaffold(
+        appBar: AppBar(),
+        drawer: Drawer(
+          // Add a ListView to the drawer. This ensures the user can scroll
+          // through the options in the drawer if there isn't enough vertical
+          // space to fit everything.
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: const BoxDecoration(
+                  color: Colors.blueGrey,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const UserAvatar(
+                      size: 80,
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                    ),
+                    Text(
+                      '${AuthService().getCurrentFirebaseUser()?.displayName}',
+                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                    Text(
+                      '${AuthService().getCurrentFirebaseUser()?.email}',
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    )
+                  ],
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.receipt),
+                title: const Text('Meine Tickets'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.people),
+                title: const Text('Meine Follows'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.event_available),
+                title: const Text('Gespeicherte Veranstaltungen'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.account_circle_sharp),
+                title: const Text('Mein Account'),
+                onTap: () {
+                  Navigator.pushNamed(context, 'profile');
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.help),
+                title: const Text('Support'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
         body: SafeArea(
           child: PageView(
             onPageChanged: (index) {
@@ -36,7 +118,9 @@ class _HomePageState extends State<HomePage> {
                 child: Text('Noch nicht gemacht'),
               ),
               EventsPage(),
-              ProfilePage()
+              Center(
+                child: Text('Noch nicht gemacht'),
+              ),
             ],
           ),
         ),
@@ -51,8 +135,8 @@ class _HomePageState extends State<HomePage> {
               label: 'Events',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_sharp),
-              label: 'Profile',
+              icon: Icon(Icons.map),
+              label: 'Map',
             ),
           ],
           currentIndex: _selectedPage,
