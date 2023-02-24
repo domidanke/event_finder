@@ -1,4 +1,3 @@
-import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/views/feature/shared/events_page.dart';
 import 'package:event_finder/views/feature/shared/profile_page.dart';
@@ -11,8 +10,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _pageController = PageController();
-  int _selectedPage = 0;
+  final _pageController = PageController(initialPage: 1);
+  int _selectedPage = 1;
   @override
   void initState() {
     super.initState();
@@ -32,30 +31,28 @@ class _HomePageState extends State<HomePage> {
               });
             },
             controller: _pageController,
-            children: [
-              const EventsPage(),
-              const ProfilePage(),
+            children: const [
               Center(
-                child: Scaffold(body: Center(child: Text('Hi ${AuthService().getCurrentFirebaseUser()?.displayName}'),), floatingActionButton: FloatingActionButton(child: const Icon(Icons.logout), onPressed: () {
-                  AuthService().signOut().then((value) => Navigator.pushNamed(context, 'login'));
-                  },),),
-              )
+                child: Text('Noch nicht gemacht'),
+              ),
+              EventsPage(),
+              ProfilePage()
             ],
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.people),
-              label: '1',
+              icon: Icon(Icons.search),
+              label: 'Search',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_month),
-              label: '2',
+              label: 'Events',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.personal_injury),
-              label: '3',
+              icon: Icon(Icons.account_circle_sharp),
+              label: 'Profile',
             ),
           ],
           currentIndex: _selectedPage,
