@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/route_generator.dart';
 import 'package:event_finder/services/auth.service.dart';
-import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/auth/pre_auth_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,7 +31,6 @@ Future<void> main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => AuthService()),
-      ChangeNotifierProvider(create: (_) => FirestoreService()),
       ChangeNotifierProvider(create: (_) => StateService()),
     ],
     child: const EventFinder(),

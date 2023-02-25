@@ -4,9 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/auth.service.dart';
-import 'package:flutter/cupertino.dart';
 
-class FirestoreService extends ChangeNotifier {
+class FirestoreService {
   factory FirestoreService() {
     return _singleton;
   }
@@ -44,10 +43,4 @@ class FirestoreService extends ChangeNotifier {
         fromFirestore: (snapshot, _) => Event.fromJson(snapshot.data()!),
         toFirestore: (event, _) => event.toJson(),
       );
-
-  @override
-  void dispose() {
-    super.dispose();
-    _entriesStreamController.close();
-  }
 }
