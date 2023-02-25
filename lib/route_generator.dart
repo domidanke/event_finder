@@ -2,6 +2,8 @@ import 'package:event_finder/views/auth/login_page.dart';
 import 'package:event_finder/views/auth/pre_auth_page.dart';
 import 'package:event_finder/views/auth/register_page.dart';
 import 'package:event_finder/views/feature/event_organizer/event_form.dart';
+import 'package:event_finder/views/feature/shared/buy_tickets_page.dart';
+import 'package:event_finder/views/feature/shared/event_details_page.dart';
 import 'package:event_finder/views/home_page.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const EventForm());
       case 'profile':
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
+      case 'event_details':
+        return MaterialPageRoute(builder: (_) => const EventDetailsPage());
+      case 'buy_tickets':
+        return MaterialPageRoute(builder: (_) => const BuyTicketsPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

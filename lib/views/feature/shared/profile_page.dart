@@ -16,19 +16,20 @@ class _ProfilePageState extends State<ProfilePage> {
         child: ProfileScreen(
           actions: [
             SignedOutAction((context) {
-              Navigator.pushReplacementNamed(context, 'login');
+              Navigator.pushNamed(context, 'login');
             }),
           ],
           children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              Text('Hier kann was stehen'),
-              Text('Events'),
-              Text('2'),
-            ],
-          ),
-        ],),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: const [
+                Text('Hier kann was stehen'),
+                Text('Events'),
+                Text('2'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

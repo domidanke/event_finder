@@ -1,4 +1,5 @@
 import 'package:event_finder/models/event.dart';
+import 'package:event_finder/services/state.service.dart';
 import 'package:flutter/material.dart';
 
 class EventCard extends StatelessWidget {
@@ -8,7 +9,11 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return InkWell(
+      onTap: () {
+        StateService().lastSelectedEvent = event;
+        Navigator.pushNamed(context, 'event_details');
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           side: const BorderSide(color: Colors.black, width: 2),

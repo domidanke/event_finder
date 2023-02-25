@@ -24,11 +24,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(),
         drawer: Drawer(
-          // Add a ListView to the drawer. This ensures the user can scroll
-          // through the options in the drawer if there isn't enough vertical
-          // space to fit everything.
           child: ListView(
-            // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
@@ -59,9 +55,6 @@ class _HomePageState extends State<HomePage> {
                 leading: const Icon(Icons.receipt),
                 title: const Text('Meine Tickets'),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
                   Navigator.pop(context);
                 },
               ),
@@ -69,9 +62,6 @@ class _HomePageState extends State<HomePage> {
                 leading: const Icon(Icons.people),
                 title: const Text('Meine Follows'),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
                   Navigator.pop(context);
                 },
               ),
@@ -79,9 +69,6 @@ class _HomePageState extends State<HomePage> {
                 leading: const Icon(Icons.event_available),
                 title: const Text('Gespeicherte Veranstaltungen'),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
                   Navigator.pop(context);
                 },
               ),
@@ -96,9 +83,6 @@ class _HomePageState extends State<HomePage> {
                 leading: const Icon(Icons.help),
                 title: const Text('Support'),
                 onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
                   Navigator.pop(context);
                 },
               ),

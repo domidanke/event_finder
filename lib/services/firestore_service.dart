@@ -42,7 +42,7 @@ class FirestoreService extends ChangeNotifier {
 
   final eventsCollection = db.collection('Events').withConverter<Event>(
         fromFirestore: (snapshot, _) => Event.fromJson(snapshot.data()!),
-        toFirestore: (movie, _) => movie.toJson(),
+        toFirestore: (event, _) => event.toJson(),
       );
 
   @override
