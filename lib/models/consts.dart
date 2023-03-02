@@ -13,7 +13,7 @@ const genres = [
 const Map<String, String> monthMap = {
   '1': 'Jan',
   '2': 'Feb',
-  '3': 'Mrz',
+  '3': 'Mär',
   '4': 'Apr',
   '5': 'Mai',
   '6': 'Jun',
