@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:event_finder/services/auth.service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class StorageService {
@@ -6,7 +9,17 @@ class StorageService {
   }
   StorageService._internal();
   static final StorageService _singleton = StorageService._internal();
-  final _storage = FirebaseStorage.instance;
+  final storage = FirebaseStorage.instance;
 
-  Future<void> saveToStorage() async {}
+  Future<void> saveEventImageToStorage(String title, File file) async {
+    await storage
+        .ref('${AuthService().getCurrentFirebaseUser()!.uid}/events/$title')
+        .putFile(file);
+  }
+
+  Future<String> getEventImageUrl({required String eventTitle}) async {
+    final ref = storage.ref().child(
+        '${AuthService().getCurrentFirebaseUser()!.uid}/events/$eventTitle');
+    return await ref.getDownloadURL();
+  }
 }

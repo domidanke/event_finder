@@ -8,3 +8,5 @@ Flutter Event Finder App
 
 # This will use a local version of auth, firestore, and firestorage
 # To properly terminate the emulator suite, press ctrl+c
+
+# If ports are occupied, use the following command to make space for the emulator suite: sudo npx kill-port 8080

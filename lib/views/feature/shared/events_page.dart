@@ -19,23 +19,20 @@ class _EventsPageState extends State<EventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     Navigator.pushNamed(context, 'event_form');
-        //   },
-        //   child: const Icon(Icons.add),
-        // ),
-        backgroundColor: Colors.grey[300],
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: FirestoreListView<Event>(
-            query: FirestoreService().eventsCollection.orderBy('date'),
-            itemBuilder: (context, snapshot) {
-              Event event = snapshot.data();
-              return EventCard(event: event);
-            },
-          ),
-        ));
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: FirestoreListView<Event>(
+        emptyBuilder: (context) {
+          return const Center(
+            child: Text('Keine Events'),
+          );
+        },
+        query: FirestoreService().eventsCollection.orderBy('date'),
+        itemBuilder: (context, snapshot) {
+          Event event = snapshot.data();
+          return EventCard(event: event);
+        },
+      ),
+    );
   }
 }

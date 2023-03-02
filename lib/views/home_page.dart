@@ -1,5 +1,7 @@
+import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/views/feature/shared/events_page.dart';
+import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -22,31 +24,27 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
       onWillPop: () async => !Navigator.of(context).userGestureInProgress,
       child: Scaffold(
-        appBar: AppBar(),
+        //appBar: AppBar(),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
-                decoration: const BoxDecoration(
-                  color: Colors.blueGrey,
-                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const UserAvatar(
                       size: 80,
                     ),
-                    const Divider(
-                      color: Colors.white,
-                    ),
+
+                    /// TODO: Make the text color global in themedata
                     Text(
                       '${AuthService().getCurrentFirebaseUser()?.displayName}',
-                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                      style: const TextStyle(fontSize: 18, color: primaryWhite),
                     ),
                     Text(
                       '${AuthService().getCurrentFirebaseUser()?.email}',
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                      style: const TextStyle(fontSize: 12, color: primaryWhite),
                     )
                   ],
                 ),
@@ -89,23 +87,33 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body: SafeArea(
-          child: PageView(
-            onPageChanged: (index) {
-              setState(() {
-                _selectedPage = index;
-              });
-            },
-            controller: _pageController,
-            children: const [
-              Center(
-                child: Text('Noch nicht gemacht'),
-              ),
-              EventsPage(),
-              Center(
-                child: Text('Noch nicht gemacht'),
-              ),
-            ],
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: primaryGradient,
+          ),
+          child: SafeArea(
+            child: PageView(
+              onPageChanged: (index) {
+                setState(() {
+                  _selectedPage = index;
+                });
+              },
+              controller: _pageController,
+              children: [
+                Center(
+                  child: KKButton(
+                    buttonText: 'Neues Event',
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'event_form');
+                    },
+                  ),
+                ),
+                const EventsPage(),
+                const Center(
+                  child: Text('Noch nicht gemacht'),
+                ),
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -124,7 +132,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
           currentIndex: _selectedPage,
-          selectedItemColor: Colors.tealAccent[800],
+          //selectedItemColor: Colors.tealAccent[800],
           onTap: (index) {
             _pageController.animateToPage(index,
                 duration: const Duration(milliseconds: 250),

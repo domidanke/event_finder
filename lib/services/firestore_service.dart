@@ -31,16 +31,14 @@ class FirestoreService {
   }
 
   Future<void> writeEventToFirebase(Event event) async {
-    await db.collection('Events').add(<String, String>{
-      'title': event.title,
-      'date': event.date.toString(),
-      'text': event.text,
-      'createdBy': event.createdBy,
-    });
+    eventsCollection.add(event);
   }
 
   final eventsCollection = db.collection('Events').withConverter<Event>(
-        fromFirestore: (snapshot, _) => Event.fromJson(snapshot.data()!),
+        fromFirestore: (snapshot, _) {
+          if (snapshot.exists) return Event.fromJson(snapshot.data()!);
+          throw Exception('RIP');
+        },
         toFirestore: (event, _) => event.toJson(),
       );
 }

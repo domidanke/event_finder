@@ -1,5 +1,7 @@
+import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/services/storage.service.dart';
 import 'package:flutter/material.dart';
 
 class EventCard extends StatelessWidget {
@@ -9,56 +11,113 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        StateService().lastSelectedEvent = event;
-        Navigator.pushNamed(context, 'event_details');
+    return FutureBuilder(
+      future: StorageService().getEventImageUrl(eventTitle: event.title),
+      builder: (context, snapshot) {
+        final url = snapshot.data;
+        return GestureDetector(
+          onTap: () {
+            StateService().lastSelectedEvent = event;
+            Navigator.pushNamed(context, 'event_details');
+          },
+          child: Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Container(
+                height: 250,
+                decoration: BoxDecoration(
+                  image: url != null
+                      ? DecorationImage(
+                          image: NetworkImage(
+                            url,
+                          ),
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                        )
+                      : null,
+                ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Card(
+                            color: Colors.white,
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    event.date.day.toString(),
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  Text(monthMap[event.date.month.toString()]!,
+                                      style:
+                                          const TextStyle(color: Colors.black)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.favorite_border))
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Card(
+                            color: primaryColor,
+                            child: SizedBox(
+                                width: 50,
+                                height: 30,
+                                child: Center(
+                                  child: Text(
+                                    '${event.ticketPrice} €',
+                                  ),
+                                )),
+                          ),
+                          Text(
+                            event.title,
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${event.date.hour}:${event.date.minute == 0 ? '00' : event.date.minute} Uhr',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+
+                              /// TODO get city of address
+                              Text(
+                                event.address,
+                                style: const TextStyle(fontSize: 16),
+                              ),
+
+                              /// TODO get local distance to address
+                              const Text(
+                                '1.5km',
+                                style: TextStyle(fontSize: 16),
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                )),
+          ),
+        );
       },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.black, width: 2),
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-              child: Text(
-                event.date.toString().substring(0, 16),
-                style:
-                    const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
-              ),
-            ),
-            ListTile(
-              trailing: Image.asset('assets/images/logo.png'),
-              title: Text(event.title),
-              subtitle: Container(
-                  margin: const EdgeInsets.only(top: 8),
-                  child: Text(event.text.length > 50
-                      ? '${event.text.substring(0, 50)}...'
-                      : event.text)),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                TextButton(
-                  child: const Text('Speichern'),
-                  onPressed: () {/* ... */},
-                ),
-                const SizedBox(width: 8),
-                TextButton(
-                  child: const Text('Tickets'),
-                  onPressed: () {/* ... */},
-                ),
-                const SizedBox(width: 8),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

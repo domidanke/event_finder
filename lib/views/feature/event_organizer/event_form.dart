@@ -1,9 +1,16 @@
+import 'dart:io';
+
+import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/alert.service.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/storage.service.dart';
+import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EventForm extends StatefulWidget {
   const EventForm({super.key});
@@ -16,103 +23,184 @@ class _EventFormState extends State<EventForm> {
   final _formKey = GlobalKey<FormState>();
 
   late String title;
-  late String text;
+  late String details;
+  late int ticketPrice;
+  late String address;
   TextEditingController dateController = TextEditingController();
   DateTime? _selectedDate;
+  File? selectedImageFile;
+
+  String selectedGenre = genres.first;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: SizedBox(
-            height: 500,
-            child: Card(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              elevation: 6,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Title',border: OutlineInputBorder(),),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a title';
-                          }
-                          title = value;
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        controller: dateController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a date';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Date',
-                        ),
-                        onTap: () async {
-                          final selectedDate = await _showIosDatePicker(context);
-                          setState(() {
-                            dateController.text =
-                                selectedDate.toString().substring(0, 16);
-                            _selectedDate = selectedDate;
-                          });
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Text', border: OutlineInputBorder(),),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          text = value;
-                          return null;
-                        },
-                      ),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                final event = Event(
-                                  title: title,
-                                  text: text,
-                                  date: _selectedDate!,
-                                  createdBy: AuthService().getCurrentFirebaseUser()!.uid
-                                );
-                                try {
-                                  await FirestoreService().writeEventToFirebase(event).then((value) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Event erstellt.')),
-                                    );
-                                    Future.delayed(const Duration(seconds: 2)).then((value) => Navigator.pop(context));
-                                  });
-                                } catch(e) {
-                                  AlertService()
-                                      .showAlert('Event erstellen fehlgeschlagen', e.toString(), context);
-                                }
-                              }
-                            },
-                            child: const Text('Submit'),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextFormField(
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
+                decoration: const InputDecoration(
+                  labelText: 'Titel',
+                  border: OutlineInputBorder(),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a title';
+                  }
+                  title = value;
+                  return null;
+                },
               ),
-            ),
+              TextFormField(
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
+                controller: dateController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a date';
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Datum',
+                ),
+                onTap: () async {
+                  final selectedDate = await _showIosDatePicker(context);
+                  setState(() {
+                    dateController.text =
+                        selectedDate.toString().substring(0, 16);
+                    _selectedDate = selectedDate;
+                  });
+                },
+              ),
+              TextFormField(
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
+                decoration: const InputDecoration(
+                  labelText: 'Addresse',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a title';
+                  }
+                  address = value;
+                  return null;
+                },
+              ),
+              TextFormField(
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
+                decoration: const InputDecoration(
+                  labelText: 'Beschreibung',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  details = value;
+                  return null;
+                },
+              ),
+              TextFormField(
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
+                decoration: const InputDecoration(
+                  labelText: 'Ticket Preis',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a price';
+                  }
+                  ticketPrice = int.parse(value);
+                  return null;
+                },
+              ),
+              DropdownButton<String>(
+                value: selectedGenre,
+                icon: const Icon(Icons.arrow_drop_down_rounded),
+                onChanged: (String? value) {
+                  setState(() {
+                    selectedGenre = value!;
+                  });
+                },
+                items: genres.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  );
+                }).toList(),
+              ),
+              KKButton(
+                  onPressed: () async {
+                    final XFile? image = await ImagePicker()
+                        .pickImage(source: ImageSource.gallery);
+                    if (image == null) return;
+                    setState(() {
+                      selectedImageFile = File(image.path);
+                    });
+                  },
+                  buttonText: 'Bild hochladen'),
+              Text(selectedImageFile != null ? selectedImageFile!.path : ''),
+              KKButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate() &&
+                      selectedImageFile != null &&
+                      _selectedDate != null) {
+                    try {
+                      await StorageService()
+                          .saveEventImageToStorage(title, selectedImageFile!);
+                    } catch (e) {
+                      AlertService().showAlert(
+                          'Upload fehlgeschlagen', e.toString(), context);
+                      return;
+                    }
+
+                    final event = Event(
+                        title: title,
+                        details: details,
+                        address: address,
+                        date: _selectedDate!,
+                        genre: selectedGenre,
+                        createdBy: AuthService()
+                            .getCurrentFirebaseUser()!
+                            .displayName!,
+                        ticketPrice: ticketPrice);
+                    try {
+                      await FirestoreService()
+                          .writeEventToFirebase(event)
+                          .then((value) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Event erstellt.')),
+                        );
+                        Future.delayed(const Duration(seconds: 2))
+                            .then((value) => Navigator.pop(context));
+                      });
+                    } catch (e) {
+                      AlertService().showAlert('Event erstellen fehlgeschlagen',
+                          e.toString(), context);
+                    }
+                  }
+                },
+                buttonText: 'Erstellen',
+              ),
+            ],
           ),
         ),
       ),
@@ -124,22 +212,22 @@ class _EventFormState extends State<EventForm> {
     await showCupertinoModalPopup(
         context: context,
         builder: (_) => Container(
-          height: 190,
-          color: const Color.fromARGB(255, 255, 255, 255),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 180,
-                child: CupertinoDatePicker(
-                    use24hFormat: true,
-                    initialDateTime: DateTime.now(),
-                    onDateTimeChanged: (val) {
-                      pickedDate = val;
-                    }),
+              height: 190,
+              color: const Color.fromARGB(255, 255, 255, 255),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 180,
+                    child: CupertinoDatePicker(
+                        use24hFormat: true,
+                        initialDateTime: DateTime.now(),
+                        onDateTimeChanged: (val) {
+                          pickedDate = val;
+                        }),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ));
+            ));
     return pickedDate;
   }
 }

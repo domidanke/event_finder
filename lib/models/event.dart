@@ -1,25 +1,41 @@
 class Event {
-  Event({required this.title, required this.text, required this.date, required this.createdBy});
+  Event(
+      {required this.title,
+      required this.details,
+      required this.date,
+      required this.address,
+      required this.genre,
+      required this.ticketPrice,
+      required this.createdBy});
 
   Event.fromJson(Map<String, Object?> json)
       : this(
-    title: json['title']! as String,
-    text: json['text']! as String,
-    date: DateTime.parse(json['date']! as String),
-    createdBy: json['createdBy']! as String,
-  );
+          title: json['title']! as String,
+          details: json['details']! as String,
+          date: DateTime.parse(json['date']! as String),
+          address: json['address']! as String,
+          genre: json['genre']! as String,
+          ticketPrice: json['ticketPrice']! as int,
+          createdBy: json['createdBy']! as String,
+        );
 
   final String title;
-  final String text;
+  final String details;
+  final String address;
+  final String genre;
+  final int ticketPrice;
   final DateTime date;
   final String createdBy;
 
   Map<String, Object?> toJson() {
     return {
       'title': title,
-      'text': text,
+      'details': details,
       'date': date.toString(),
-      'createdBy': createdBy
+      'createdBy': createdBy,
+      'address': address,
+      'genre': genre,
+      'ticketPrice': ticketPrice,
     };
   }
 }
