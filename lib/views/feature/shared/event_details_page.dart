@@ -1,4 +1,5 @@
 import 'package:event_finder/models/event.dart';
+import 'package:event_finder/models/theme.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
@@ -55,9 +56,25 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                               const KKIcon(icon: Icon(Icons.favorite_border)),
                             ],
                           ),
-                          Text(
-                            event.title,
-                            style: const TextStyle(fontSize: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                event.title,
+                                style: const TextStyle(fontSize: 24),
+                              ),
+                              Card(
+                                color: primaryColor,
+                                child: SizedBox(
+                                    width: 50,
+                                    height: 30,
+                                    child: Center(
+                                      child: Text(
+                                        '${event.ticketPrice} €',
+                                      ),
+                                    )),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -111,7 +128,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               onPressed: () {
                 Navigator.pushNamed(context, 'buy_tickets');
               },
-              buttonText: 'Tickets kaufen ${event.ticketPrice}€',
+              buttonText: 'Tickets hier kaufen',
             )
           ],
         ),

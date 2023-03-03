@@ -303,7 +303,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                 print('Buying tickets via 3rd Party');
               },
               buttonText:
-                  'Tickets kaufen ${event.ticketPrice * numberOfTickets}€',
+                  'Tickets jetzt kaufen ${event.ticketPrice * numberOfTickets}€',
             )
           ],
         ),
