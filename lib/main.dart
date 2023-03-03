@@ -31,6 +31,7 @@ Future<void> main() async {
       print(e);
     }
   }
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => AuthService()),
