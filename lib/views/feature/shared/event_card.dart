@@ -34,7 +34,6 @@ class EventCard extends StatelessWidget {
                             event.imageUrl!,
                           ),
                           fit: BoxFit.cover,
-                          alignment: Alignment.topCenter,
                         )
                       : null,
                 ),

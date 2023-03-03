@@ -20,7 +20,7 @@ class _EventsPageState extends State<EventsPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.all(8),
       child: FirestoreListView<Event>(
         emptyBuilder: (context) {
           return const Center(
