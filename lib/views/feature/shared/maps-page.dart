@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -19,13 +20,9 @@ class MapsPageState extends State<MapsPage> {
     await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    double lat = position.latitude;
-    double long = position.longitude;
-
-    LatLng location = LatLng(lat, long);
 
     return CameraPosition(
-      target: LatLng(location.latitude, location.longitude),
+      target: LatLng(position.latitude, position.longitude),
       zoom: 14.4746,
     );
   }
@@ -37,7 +34,7 @@ class MapsPageState extends State<MapsPage> {
         future: getLocation(),
         builder:
             (BuildContext context, AsyncSnapshot<CameraPosition> snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -46,7 +43,10 @@ class MapsPageState extends State<MapsPage> {
             myLocationEnabled: true,
             mapType: MapType.normal,
             initialCameraPosition: snapshot.data!,
-            onMapCreated: (GoogleMapController controller) {
+            onMapCreated: (GoogleMapController controller) async {
+              final String json = await rootBundle
+                  .loadString('assets/json_data/map_style.json');
+              controller.setMapStyle(json);
               _controller.complete(controller);
             },
           );
