@@ -26,6 +26,7 @@ class Event {
   final int ticketPrice;
   final DateTime date;
   final String createdBy;
+  String? imageUrl = '';
 
   Map<String, Object?> toJson() {
     return {

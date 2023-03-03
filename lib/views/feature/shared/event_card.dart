@@ -1,5 +1,6 @@
 import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/models/event.dart';
+import 'package:event_finder/models/theme.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage.service.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class EventCard extends StatelessWidget {
     return FutureBuilder(
       future: StorageService().getEventImageUrl(eventTitle: event.title),
       builder: (context, snapshot) {
-        final url = snapshot.data;
+        event.imageUrl = snapshot.data;
         return GestureDetector(
           onTap: () {
             StateService().lastSelectedEvent = event;
@@ -27,10 +28,10 @@ class EventCard extends StatelessWidget {
             child: Container(
                 height: 250,
                 decoration: BoxDecoration(
-                  image: url != null
+                  image: event.imageUrl != null
                       ? DecorationImage(
                           image: NetworkImage(
-                            url,
+                            event.imageUrl!,
                           ),
                           fit: BoxFit.cover,
                           alignment: Alignment.topCenter,

@@ -1,9 +1,9 @@
-import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/widgets/kk_button_async.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/theme.dart';
 import '../../services/alert.service.dart';
 import '../../services/auth.service.dart';
 

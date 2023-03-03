@@ -1,7 +1,7 @@
-import 'package:event_finder/models/consts.dart';
+import 'package:event_finder/models/theme.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/views/feature/shared/events_page.dart';
-import 'package:event_finder/views/feature/shared/maps-page.dart';
+import 'package:event_finder/views/feature/shared/maps_page.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';

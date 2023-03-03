@@ -1,5 +1,7 @@
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/widgets/kk_button.dart';
+import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,72 +19,99 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset('assets/images/logo.png'),
-            Text(event.title),
-            Text(event.createdBy),
-            Row(
+            Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.all(15.0),
-                  padding: const EdgeInsets.all(3.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent),
-                    borderRadius: const BorderRadius.all(Radius.circular(
-                            5.0) //                 <--- border radius here
-                        ),
-                  ),
-                  child: Text(event.date.toString().substring(0, 10)),
+                    height: 250,
+                    decoration: BoxDecoration(
+                      image: event.imageUrl != null
+                          ? DecorationImage(
+                              image: NetworkImage(
+                                event.imageUrl!,
+                              ),
+                              fit: BoxFit.cover,
+                              alignment: Alignment.topCenter,
+                            )
+                          : null,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              KKIcon(
+                                icon: const Icon(Icons.arrow_back),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              const KKIcon(icon: Icon(Icons.favorite_border)),
+                            ],
+                          ),
+                          Text(
+                            event.title,
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                        ],
+                      ),
+                    )),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    const KKIcon(
+                      icon: Icon(Icons.access_time),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(event.date.toString().substring(0, 10)),
+                        Text('${event.date.toString().substring(11, 16)} Uhr')
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    const KKIcon(icon: Icon(Icons.location_on)),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Text(event.address),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 Container(
-                  margin: const EdgeInsets.all(15.0),
-                  padding: const EdgeInsets.all(3.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent),
-                    borderRadius: const BorderRadius.all(Radius.circular(
-                            5.0) //                 <--- border radius here
-                        ),
-                  ),
-                  child: Text(event.date.toString().substring(11, 16)),
-                )
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    height: 200,
+                    child: SingleChildScrollView(
+                        child: Text(
+                      event.details,
+                      style: const TextStyle(height: 1.5),
+                    ))),
               ],
             ),
-            Container(
-              margin: const EdgeInsets.all(15.0),
-              padding: const EdgeInsets.all(3.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blueAccent),
-                borderRadius: const BorderRadius.all(Radius.circular(
-                        5.0) //                 <--- border radius here
-                    ),
-              ),
-              child: const Text('Am Wegstuhl 69'),
-            ),
-            Container(
-              margin: const EdgeInsets.all(15.0),
-              padding: const EdgeInsets.all(3.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blueAccent),
-                borderRadius: const BorderRadius.all(Radius.circular(
-                        2.0) //                 <--- border radius here
-                    ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Beschreibung'),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(event.details),
-                ],
-              ),
-            ),
-            ElevatedButton(
+            KKButton(
               onPressed: () {
                 Navigator.pushNamed(context, 'buy_tickets');
               },
-              child: const Text('Tickets hier kaufen'),
+              buttonText: 'Tickets kaufen ${event.ticketPrice}€',
             )
           ],
         ),
