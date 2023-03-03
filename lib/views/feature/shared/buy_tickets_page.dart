@@ -220,7 +220,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                             height: 50,
                             child: Row(
                               children: const [
-                                Icon(Icons.monetization_on),
+                                Icon(Icons.paypal),
                                 SizedBox(
                                   width: 10,
                                 ),
