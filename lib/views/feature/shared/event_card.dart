@@ -1,24 +1,31 @@
 import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/models/theme.dart';
+import 'package:event_finder/services/auth.service.dart';
+import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage.service.dart';
 import 'package:flutter/material.dart';
 
-class EventCard extends StatelessWidget {
+class EventCard extends StatefulWidget {
   final Event event;
 
   const EventCard({super.key, required this.event});
 
   @override
+  State<EventCard> createState() => _EventCardState();
+}
+
+class _EventCardState extends State<EventCard> {
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: StorageService().getEventImageUrl(eventTitle: event.title),
+      future: StorageService().getEventImageUrl(eventTitle: widget.event.title),
       builder: (context, snapshot) {
-        event.imageUrl = snapshot.data;
+        widget.event.imageUrl = snapshot.data;
         return GestureDetector(
           onTap: () {
-            StateService().lastSelectedEvent = event;
+            StateService().lastSelectedEvent = widget.event;
             Navigator.pushNamed(context, 'event_details');
           },
           child: Card(
@@ -28,10 +35,10 @@ class EventCard extends StatelessWidget {
             child: Container(
                 height: 250,
                 decoration: BoxDecoration(
-                  image: event.imageUrl != null
+                  image: widget.event.imageUrl != null
                       ? DecorationImage(
                           image: NetworkImage(
-                            event.imageUrl!,
+                            widget.event.imageUrl!,
                           ),
                           fit: BoxFit.cover,
                         )
@@ -56,50 +63,79 @@ class EventCard extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    event.date.day.toString(),
+                                    widget.event.date.day.toString(),
                                     style: const TextStyle(color: Colors.black),
                                   ),
-                                  Text(monthMap[event.date.month.toString()]!,
+                                  Text(
+                                      monthMap[
+                                          widget.event.date.month.toString()]!,
                                       style:
                                           const TextStyle(color: Colors.black)),
                                 ],
                               ),
                             ),
                           ),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.favorite_border))
+                          if (AuthService().currentUser != null)
+                            IconButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    AuthService()
+                                        .toggleSavedEvent(widget.event.uid);
+                                  });
+                                  await FirestoreService()
+                                      .toggleSaveEventForUser(widget.event);
+                                },
+                                icon: AuthService()
+                                        .currentUser!
+                                        .savedEvents
+                                        .contains(widget.event.uid)
+                                    ? const Icon(Icons.favorite)
+                                    : const Icon(Icons.favorite_border))
                         ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Card(
-                            color: primaryColor,
-                            child: SizedBox(
-                                width: 50,
-                                height: 30,
-                                child: Center(
-                                  child: Text(
-                                    '${event.ticketPrice} €',
-                                  ),
-                                )),
+                          Row(
+                            children: [
+                              Card(
+                                color: primaryColor,
+                                child: SizedBox(
+                                    width: 50,
+                                    height: 30,
+                                    child: Center(
+                                      child: Text(
+                                        '${widget.event.ticketPrice} €',
+                                      ),
+                                    )),
+                              ),
+                              Card(
+                                child: SizedBox(
+                                    width: 50,
+                                    height: 30,
+                                    child: Center(
+                                      child: Text(
+                                        widget.event.genre,
+                                      ),
+                                    )),
+                              ),
+                            ],
                           ),
                           Text(
-                            event.title,
+                            widget.event.title,
                             style: const TextStyle(fontSize: 24),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '${event.date.hour}:${event.date.minute == 0 ? '00' : event.date.minute} Uhr',
+                                '${widget.event.date.toString().substring(11, 16)} Uhr',
                                 style: const TextStyle(fontSize: 16),
                               ),
 
                               /// TODO get city of address
                               Text(
-                                event.address,
+                                widget.event.address,
                                 style: const TextStyle(fontSize: 16),
                               ),
 

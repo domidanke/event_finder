@@ -25,7 +25,8 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
       onWillPop: () async => !Navigator.of(context).userGestureInProgress,
       child: Scaffold(
-        //appBar: AppBar(),
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(40.0), child: AppBar()),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -68,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                 leading: const Icon(Icons.event_available),
                 title: const Text('Gespeicherte Veranstaltungen'),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamed(context, 'saved_events');
                 },
               ),
               ListTile(

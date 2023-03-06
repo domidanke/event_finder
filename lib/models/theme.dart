@@ -25,6 +25,7 @@ final primaryThemeData = ThemeData(
   cardTheme: const CardTheme(color: Colors.transparent),
   canvasColor: const Color(0xff11001C),
   fontFamily: 'Quicksand',
+  appBarTheme: const AppBarTheme(color: primaryColor),
   hintColor: Colors.pinkAccent,
   indicatorColor: Colors.grey,
   dialogBackgroundColor: Colors.red,

@@ -1,6 +1,7 @@
 class Event {
   Event(
-      {required this.title,
+      {this.uid = '',
+      required this.title,
       required this.details,
       required this.date,
       required this.address,
@@ -8,8 +9,9 @@ class Event {
       required this.ticketPrice,
       required this.createdBy});
 
-  Event.fromJson(Map<String, Object?> json)
+  Event.fromJson(Map<String, Object?> json, String uid)
       : this(
+          uid: uid,
           title: json['title']! as String,
           details: json['details']! as String,
           date: DateTime.parse(json['date']! as String),
@@ -19,6 +21,7 @@ class Event {
           createdBy: json['createdBy']! as String,
         );
 
+  final String uid;
   final String title;
   final String details;
   final String address;

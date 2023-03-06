@@ -1,3 +1,4 @@
+import 'package:event_finder/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth.service.dart';
@@ -13,6 +14,7 @@ class PreAuthPage extends StatelessWidget {
       return const LoginPage();
     } else {
       debugPrint('User is logged in as ${user.displayName} with ${user.email}');
+      FirestoreService().setInitialUserData();
       return const HomePage();
     }
   }

@@ -1,3 +1,5 @@
+import 'package:event_finder/services/auth.service.dart';
+import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,22 +15,39 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ProfileScreen(
-          actions: [
-            SignedOutAction((context) {
-              Navigator.pushNamed(context, 'login');
-            }),
-          ],
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                Text('Hier kann was stehen'),
-                Text('Events'),
-                Text('2'),
-              ],
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const UserAvatar(),
+              const SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(AuthService().getCurrentFirebaseUser()!.displayName!),
+                  Text(AuthService().getCurrentFirebaseUser()!.email!),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text('Account Type: ${AuthService().currentUser!.type.name}'),
+              const SizedBox(
+                height: 50,
+              ),
+              KKButton(
+                  onPressed: () async {
+                    await AuthService().signOut().then((value) => {
+                          Navigator.pushNamedAndRemoveUntil(context, 'login',
+                              (Route<dynamic> route) => false),
+                        });
+                  },
+                  buttonText: 'Log Out')
+            ],
+          ),
         ),
       ),
     );

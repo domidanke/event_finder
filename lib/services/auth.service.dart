@@ -1,8 +1,7 @@
+import 'package:event_finder/models/app_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import '../models/enums.dart';
 
 class AuthService extends ChangeNotifier {
   factory AuthService() {
@@ -20,11 +19,11 @@ class AuthService extends ChangeNotifier {
     ],
   );
 
-  UserType _currentUsertype = UserType.base;
-  UserType get currentUsertype => _currentUsertype;
+  AppUser? _currentUser;
+  AppUser? get currentUser => _currentUser;
 
-  set currentUsertype(UserType type) {
-    _currentUsertype = type;
+  set currentUser(AppUser? user) {
+    _currentUser = user;
     notifyListeners();
   }
 
@@ -90,5 +89,13 @@ class AuthService extends ChangeNotifier {
 
   Future<String>? getToken() {
     return _firebaseAuth.currentUser?.getIdToken();
+  }
+
+  void toggleSavedEvent(String eventUid) {
+    if (currentUser!.savedEvents.contains(eventUid)) {
+      currentUser!.savedEvents.remove(eventUid);
+    } else {
+      currentUser!.savedEvents.add(eventUid);
+    }
   }
 }

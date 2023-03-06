@@ -38,9 +38,8 @@ class _EventFormState extends State<EventForm> {
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: ListView(
             children: [
               TextFormField(
                 style: TextStyle(
@@ -56,6 +55,9 @@ class _EventFormState extends State<EventForm> {
                   title = value;
                   return null;
                 },
+              ),
+              const SizedBox(
+                height: 20,
               ),
               TextFormField(
                 style: TextStyle(
@@ -80,6 +82,9 @@ class _EventFormState extends State<EventForm> {
                   });
                 },
               ),
+              const SizedBox(
+                height: 20,
+              ),
               TextFormField(
                 style: TextStyle(
                     color: Theme.of(context).textTheme.bodyMedium?.color),
@@ -95,6 +100,9 @@ class _EventFormState extends State<EventForm> {
                   return null;
                 },
               ),
+              const SizedBox(
+                height: 20,
+              ),
               TextFormField(
                 style: TextStyle(
                     color: Theme.of(context).textTheme.bodyMedium?.color),
@@ -109,6 +117,9 @@ class _EventFormState extends State<EventForm> {
                   details = value;
                   return null;
                 },
+              ),
+              const SizedBox(
+                height: 20,
               ),
               TextFormField(
                 style: TextStyle(
@@ -129,35 +140,54 @@ class _EventFormState extends State<EventForm> {
                   return null;
                 },
               ),
-              DropdownButton<String>(
-                value: selectedGenre,
-                icon: const Icon(Icons.arrow_drop_down_rounded),
-                onChanged: (String? value) {
-                  setState(() {
-                    selectedGenre = value!;
-                  });
-                },
-                items: genres.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  );
-                }).toList(),
+              const SizedBox(
+                height: 20,
               ),
-              KKButton(
-                  onPressed: () async {
-                    final XFile? image = await ImagePicker()
-                        .pickImage(source: ImageSource.gallery);
-                    if (image == null) return;
+              Center(
+                child: DropdownButton<String>(
+                  value: selectedGenre,
+                  icon: const Icon(Icons.arrow_drop_down_rounded),
+                  onChanged: (String? value) {
                     setState(() {
-                      selectedImageFile = File(image.path);
+                      selectedGenre = value!;
                     });
                   },
-                  buttonText: 'Bild hochladen'),
-              Text(selectedImageFile != null ? selectedImageFile!.path : ''),
+                  items: genres.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  KKButton(
+                      onPressed: () async {
+                        final XFile? image = await ImagePicker()
+                            .pickImage(source: ImageSource.gallery);
+                        if (image == null) return;
+                        setState(() {
+                          selectedImageFile = File(image.path);
+                        });
+                      },
+                      buttonText: 'Bild hochladen'),
+                  Text(
+                    selectedImageFile != null ? 'Image ready' : '',
+                    style: const TextStyle(color: Colors.greenAccent),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               KKButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate() &&
@@ -184,7 +214,7 @@ class _EventFormState extends State<EventForm> {
                         ticketPrice: ticketPrice);
                     try {
                       await FirestoreService()
-                          .writeEventToFirebase(event)
+                          .addEventDocument(event)
                           .then((value) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Event erstellt.')),

@@ -1,15 +1,27 @@
+import 'package:event_finder/models/enums.dart';
+
 class AppUser {
-  late String uid;
-  late String firstName;
-  late String lastName;
-  late String email;
-  late DateTime createdOn;
+  AppUser({
+    required this.type,
+    this.savedEvents = const [],
+    this.savedArtists = const [],
+  });
+
+  late UserType type;
+  late List<String> savedEvents = [];
+  late List<String> savedArtists = [];
 
   AppUser.fromJson(Map<String, dynamic> json) {
-    uid = json['uid'];
-    firstName = json['firstName'] ?? '';
-    lastName = json['lastName'] ?? '';
-    email = json['email'];
-    createdOn = DateTime.parse(json['createdOn']);
+    savedArtists = List.from(json['savedArtists']);
+    savedEvents = List.from(json['savedEvents']);
+    type = UserType.fromJson(json['type']);
+  }
+
+  Map<String, Object?> toJson() {
+    return {
+      'savedEvents': savedEvents,
+      'savedArtists': savedArtists,
+      'type': type.name
+    };
   }
 }

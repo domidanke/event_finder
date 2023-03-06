@@ -1,4 +1,5 @@
 import 'package:event_finder/services/auth.service.dart';
+import 'package:event_finder/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 
 import '../services/alert.service.dart';
@@ -34,7 +35,11 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
               await AuthService().signInWithGoogle();
               final user = AuthService().getCurrentFirebaseUser();
               if (user != null) {
-                if (mounted) Navigator.pushNamed(context, 'home');
+                if (!await FirestoreService().userExists()) {
+                  print('Creating new User');
+                  await FirestoreService().addUserDocument(user);
+                }
+                if (mounted) Navigator.pushNamed(context, '/');
               }
             } catch (e) {
               debugPrint(e.toString());
