@@ -57,7 +57,6 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                                     Navigator.pop(context);
                                   },
                                 ),
-                                const KKIcon(icon: Icon(Icons.favorite_border)),
                               ],
                             ),
                             Text(

@@ -53,7 +53,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                                     Navigator.pop(context);
                                   },
                                 ),
-                                const KKIcon(icon: Icon(Icons.favorite_border)),
                               ],
                             ),
                             Row(
