@@ -17,8 +17,12 @@ class PreAuthPage extends StatelessWidget {
       return const VerifyEmailPage();
     } else {
       debugPrint('User is logged in as ${user.displayName} with ${user.email}');
-      FirestoreService().setInitialUserData();
-      return const HomePage();
+      return FutureBuilder(
+          future: FirestoreService().getUserData(),
+          builder: (context, snapshot) {
+            AuthService().currentUser = snapshot.data;
+            return const HomePage();
+          });
     }
   }
 }

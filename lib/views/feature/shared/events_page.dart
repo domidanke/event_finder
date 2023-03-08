@@ -29,8 +29,7 @@ class _EventsPageState extends State<EventsPage> {
         },
         query: FirestoreService().eventsCollection.orderBy('date'),
         itemBuilder: (context, snapshot) {
-          Event event = snapshot.data();
-          return EventCard(event: event);
+          return EventCard(event: snapshot.data());
         },
       ),
     );

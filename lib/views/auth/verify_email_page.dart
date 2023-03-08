@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:event_finder/services/alert.service.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/firestore_service.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +23,6 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   }
 
   void startVerification() {
-    try {
-      AuthService().sendEmailVerificationEmail();
-    } on Exception catch (e) {
-      AlertService()
-          .showAlert('Fehler beim Senden der Email', e.toString(), context);
-    }
     timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
       await AuthService().getCurrentFirebaseUser()!.reload();
       var user = AuthService().getCurrentFirebaseUser()!;

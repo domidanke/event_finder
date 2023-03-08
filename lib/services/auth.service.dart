@@ -19,13 +19,7 @@ class AuthService extends ChangeNotifier {
     ],
   );
 
-  AppUser? _currentUser;
-  AppUser? get currentUser => _currentUser;
-
-  set currentUser(AppUser? user) {
-    _currentUser = user;
-    notifyListeners();
-  }
+  AppUser? currentUser;
 
   bool _loginLoading = false;
   bool _registerLoading = false;
