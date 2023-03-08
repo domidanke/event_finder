@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -17,9 +18,8 @@ class StorageService {
         .putFile(file);
   }
 
-  Future<String> getEventImageUrl({required String eventTitle}) async {
-    final ref = storage.ref().child(
-        '${AuthService().getCurrentFirebaseUser()!.uid}/events/$eventTitle');
+  Future<String> getEventImageUrl({required Event event}) async {
+    final ref = storage.ref().child('${event.creatorId}/events/${event.title}');
     return await ref.getDownloadURL();
   }
 }

@@ -91,6 +91,11 @@ class AuthService extends ChangeNotifier {
     return _firebaseAuth.currentUser?.getIdToken();
   }
 
+  Future<void> sendEmailVerificationEmail() async {
+    await _firebaseAuth.currentUser!.sendEmailVerification();
+  }
+
+  /// TODO: Move to separate User service class
   void toggleSavedEvent(String eventUid) {
     if (currentUser!.savedEvents.contains(eventUid)) {
       currentUser!.savedEvents.remove(eventUid);

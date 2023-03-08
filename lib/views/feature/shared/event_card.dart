@@ -21,7 +21,7 @@ class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: StorageService().getEventImageUrl(eventTitle: widget.event.title),
+      future: StorageService().getEventImageUrl(event: widget.event),
       builder: (context, snapshot) {
         widget.event.imageUrl = snapshot.data;
         return GestureDetector(

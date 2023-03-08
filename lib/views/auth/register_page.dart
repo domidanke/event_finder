@@ -17,6 +17,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -75,6 +76,26 @@ class _RegisterPageState extends State<RegisterPage> {
                         labelText: 'Passwort',
                       ),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Bitte geben Sie Ihr Passwort erneut ein';
+                        } else if (value != passwordController.text) {
+                          return 'Passwort ist nicht gleich';
+                        }
+                        return null;
+                      },
+                      obscureText: true,
+                      controller: confirmPasswordController,
+                      decoration: const InputDecoration(
+                        labelText: 'Passwort wiederholen',
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(
@@ -83,11 +104,16 @@ class _RegisterPageState extends State<RegisterPage> {
                 KKButtonAsync(
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
+                        if (passwordController.text !=
+                            confirmPasswordController.text) {
+                          print('PW nicht gleich');
+                          return;
+                        }
                         try {
                           authService.registerLoading = true;
                           await authService.signUp(
                               emailController.text, passwordController.text);
-                          if (mounted) Navigator.pushNamed(context, 'home');
+                          if (mounted) Navigator.pushNamed(context, '/');
                         } on FirebaseAuthException catch (e) {
                           authService.registerLoading = false;
                           AlertService().showAlert(

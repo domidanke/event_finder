@@ -23,7 +23,7 @@ class KKDrawer extends StatelessWidget {
 
                 /// TODO: Make the text color global in themedata
                 Text(
-                  '${AuthService().getCurrentFirebaseUser()?.displayName}',
+                  AuthService().getCurrentFirebaseUser()!.displayName ?? '-',
                   style: const TextStyle(fontSize: 18, color: primaryWhite),
                 ),
                 Text(
@@ -41,20 +41,28 @@ class KKDrawer extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
-          ListTile(
-            leading: const Icon(Icons.people),
-            title: const Text('Meine Follows'),
-            onTap: () {
-              Navigator.pop(context);
-            },
+          Opacity(
+            opacity: AuthService().currentUser!.savedArtists.isEmpty ? 0.4 : 1,
+            child: ListTile(
+              leading: const Icon(Icons.people),
+              title: const Text('Meine Follows'),
+              onTap: () {
+                if (AuthService().currentUser!.savedArtists.isEmpty) return;
+                Navigator.pop(context);
+              },
+            ),
           ),
           if (AuthService().currentUser!.type == UserType.base)
-            ListTile(
-              leading: const Icon(Icons.event_available),
-              title: const Text('Gespeicherte Veranstaltungen'),
-              onTap: () {
-                Navigator.pushNamed(context, 'saved_events');
-              },
+            Opacity(
+              opacity: AuthService().currentUser!.savedEvents.isEmpty ? 0.4 : 1,
+              child: ListTile(
+                leading: const Icon(Icons.event_available),
+                title: const Text('Gespeicherte Veranstaltungen'),
+                onTap: () {
+                  if (AuthService().currentUser!.savedEvents.isEmpty) return;
+                  Navigator.pushNamed(context, 'saved_events');
+                },
+              ),
             ),
           if (AuthService().currentUser!.type == UserType.host)
             ListTile(

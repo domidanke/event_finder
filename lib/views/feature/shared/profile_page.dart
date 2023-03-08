@@ -24,13 +24,11 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(
                 height: 50,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(AuthService().getCurrentFirebaseUser()!.displayName!),
-                  Text(AuthService().getCurrentFirebaseUser()!.email!),
-                ],
+              Text(AuthService().getCurrentFirebaseUser()!.displayName ?? '-'),
+              const SizedBox(
+                height: 20,
               ),
+              Text(AuthService().getCurrentFirebaseUser()!.email!),
               const SizedBox(
                 height: 20,
               ),
