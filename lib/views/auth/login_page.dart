@@ -107,8 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                                             passwordController.text)
                                         .then((value) => {
                                               authService.loginLoading = false,
-                                              Navigator.pushNamed(
-                                                  context, 'home'),
+                                              Navigator.pushNamed(context, '/'),
                                             });
                                   } on FirebaseAuthException catch (e) {
                                     authService.loginLoading = false;

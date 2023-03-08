@@ -12,6 +12,10 @@ final primaryThemeData = ThemeData(
               RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           )))),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: primaryColor,
+    elevation: 2,
+  ),
   primaryColor: primaryColor,
   listTileTheme: const ListTileThemeData(
     textColor: primaryWhite,

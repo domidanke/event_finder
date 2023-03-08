@@ -179,9 +179,12 @@ class _EventFormState extends State<EventForm> {
                         });
                       },
                       buttonText: 'Bild hochladen'),
-                  Text(
-                    selectedImageFile != null ? 'Image ready' : '',
-                    style: const TextStyle(color: Colors.greenAccent),
+                  SizedBox(
+                    width: 100,
+                    child: Text(
+                      selectedImageFile != null ? 'Image ready' : '',
+                      style: const TextStyle(color: Colors.greenAccent),
+                    ),
                   ),
                 ],
               ),
@@ -210,8 +213,9 @@ class _EventFormState extends State<EventForm> {
                         genre: selectedGenre,
                         creatorId: AuthService().getCurrentFirebaseUser()!.uid,
                         creatorName: AuthService()
-                            .getCurrentFirebaseUser()!
-                            .displayName!,
+                                .getCurrentFirebaseUser()!
+                                .displayName ??
+                            '',
                         ticketPrice: ticketPrice);
                     try {
                       await FirestoreService()
@@ -224,8 +228,12 @@ class _EventFormState extends State<EventForm> {
                             .then((value) => Navigator.pop(context));
                       });
                     } catch (e) {
-                      AlertService().showAlert('Event erstellen fehlgeschlagen',
-                          e.toString(), context);
+                      if (mounted) {
+                        AlertService().showAlert(
+                            'Event erstellen fehlgeschlagen',
+                            e.toString(),
+                            context);
+                      }
                     }
                   }
                 },

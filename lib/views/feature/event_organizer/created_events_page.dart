@@ -21,6 +21,12 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.pushNamed(context, 'event_form');
+        },
+      ),
       body: SafeArea(
         child: FirestoreListView<Event>(
           emptyBuilder: (context) {
