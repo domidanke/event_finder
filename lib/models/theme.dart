@@ -4,7 +4,6 @@ const primaryColor = Color(0xff9739C8);
 const primaryWhite = Colors.white70;
 
 final primaryThemeData = ThemeData(
-  useMaterial3: true,
   elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
           elevation: MaterialStateProperty.all(1),
