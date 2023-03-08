@@ -2,6 +2,9 @@
 
 Flutter Event Finder App
 
+# Run firebase login
+# Run firebase init
+
 # To run the code in test, use the following command:
 
 # firebase emulators:start --import ./emulators_data --export-on-exit
