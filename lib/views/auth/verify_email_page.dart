@@ -27,7 +27,6 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       await AuthService().getCurrentFirebaseUser()!.reload();
       var user = AuthService().getCurrentFirebaseUser()!;
       if (user.emailVerified) {
-        print('Email verified');
         await FirestoreService().addUserDocument(user);
         if (mounted) Navigator.pushNamed(context, '/');
         timer.cancel();
@@ -52,15 +51,20 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
         ),
         child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              const Text('Bestaetigungsemail geschickt an:'),
               Text(
-                  'Wir haben Ihnen eine Bestaetigungsemail an: ${AuthService().getCurrentFirebaseUser()!.email} geschickt'),
-              Text('Bitte verifizieren Sie Ihre Email'),
-              const SizedBox(
-                height: 20,
+                '${AuthService().getCurrentFirebaseUser()!.email}',
+                style: const TextStyle(fontSize: 24),
               ),
-              const LinearProgressIndicator()
+              const Text('Bitte verifizieren Sie Ihre Email'),
+              Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 80),
+                  child: const LinearProgressIndicator(
+                    color: primaryColor,
+                    backgroundColor: primaryWhite,
+                  ))
             ],
           ),
         ),
