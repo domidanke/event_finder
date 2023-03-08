@@ -14,3 +14,6 @@ Flutter Event Finder App
 
 # If experiencing ios build issues, delete podfile.lock and, inside the ios folder, run
 # pod deintegrate, pod setup, pod install
+
+# When verifying email addresses in local emulator, the email does not actually get sent,
+# but instead, the emultor console prints a link to verify the email
