@@ -7,7 +7,8 @@ class Event {
       required this.address,
       required this.genre,
       required this.ticketPrice,
-      required this.createdBy});
+      required this.creatorId,
+      required this.creatorName});
 
   Event.fromJson(Map<String, Object?> json, String uid)
       : this(
@@ -18,7 +19,8 @@ class Event {
           address: json['address']! as String,
           genre: json['genre']! as String,
           ticketPrice: json['ticketPrice']! as int,
-          createdBy: json['createdBy']! as String,
+          creatorId: json['creatorId']! as String,
+          creatorName: json['creatorName']! as String,
         );
 
   final String uid;
@@ -28,7 +30,8 @@ class Event {
   final String genre;
   final int ticketPrice;
   final DateTime date;
-  final String createdBy;
+  final String creatorId;
+  final String creatorName;
   String? imageUrl = '';
 
   Map<String, Object?> toJson() {
@@ -36,7 +39,8 @@ class Event {
       'title': title,
       'details': details,
       'date': date.toString(),
-      'createdBy': createdBy,
+      'creatorId': creatorId,
+      'creatorName': creatorName,
       'address': address,
       'genre': genre,
       'ticketPrice': ticketPrice,

@@ -7,7 +7,7 @@ class AppUser {
     this.savedArtists = const [],
   });
 
-  late UserType type;
+  late UserType type = UserType.base;
   late List<String> savedEvents = [];
   late List<String> savedArtists = [];
 

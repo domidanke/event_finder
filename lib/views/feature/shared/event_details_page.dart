@@ -1,5 +1,7 @@
+import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/models/theme.dart';
+import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
@@ -127,15 +129,26 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 ],
               ),
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 20),
-              child: KKButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, 'buy_tickets');
-                },
-                buttonText: 'Tickets hier kaufen',
+            if (AuthService().currentUser?.type == UserType.base)
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                child: KKButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'buy_tickets');
+                  },
+                  buttonText: 'Tickets hier kaufen',
+                ),
               ),
-            ),
+            if (event.creatorId == AuthService().getCurrentFirebaseUser()?.uid)
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                child: KKButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'edit_event');
+                  },
+                  buttonText: 'Event bearbeiten',
+                ),
+              ),
           ],
         ),
       ),

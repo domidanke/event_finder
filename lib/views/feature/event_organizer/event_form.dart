@@ -208,7 +208,8 @@ class _EventFormState extends State<EventForm> {
                         address: address,
                         date: _selectedDate!,
                         genre: selectedGenre,
-                        createdBy: AuthService()
+                        creatorId: AuthService().getCurrentFirebaseUser()!.uid,
+                        creatorName: AuthService()
                             .getCurrentFirebaseUser()!
                             .displayName!,
                         ticketPrice: ticketPrice);

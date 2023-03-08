@@ -1,4 +1,5 @@
 import 'package:event_finder/models/consts.dart';
+import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/models/theme.dart';
 import 'package:event_finder/services/auth.service.dart';
@@ -75,7 +76,7 @@ class _EventCardState extends State<EventCard> {
                               ),
                             ),
                           ),
-                          if (AuthService().currentUser != null)
+                          if (AuthService().currentUser?.type == UserType.base)
                             IconButton(
                                 onPressed: () async {
                                   setState(() {
@@ -133,13 +134,12 @@ class _EventCardState extends State<EventCard> {
                                 style: const TextStyle(fontSize: 16),
                               ),
 
-                              /// TODO get city of address
                               Text(
-                                widget.event.address,
+                                widget.event.creatorName,
                                 style: const TextStyle(fontSize: 16),
                               ),
 
-                              /// TODO get local distance to address
+                              /// TODO get local distance to address?
                               const Text(
                                 '1.5km',
                                 style: TextStyle(fontSize: 16),
