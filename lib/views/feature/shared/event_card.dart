@@ -37,9 +37,12 @@ class _EventCardState extends State<EventCard> {
                 decoration: BoxDecoration(
                   image: widget.event.imageUrl != null
                       ? DecorationImage(
-                          image: NetworkImage(
-                            widget.event.imageUrl!,
-                          ),
+                          image: FadeInImage.assetNetwork(
+                            fadeInDuration: const Duration(seconds: 1),
+                            fadeInCurve: Curves.bounceIn,
+                            image: widget.event.imageUrl!,
+                            placeholder: '',
+                          ).image,
                           fit: BoxFit.cover,
                         )
                       : null,
@@ -75,21 +78,24 @@ class _EventCardState extends State<EventCard> {
                             ),
                           ),
                           if (AuthService().currentUser?.type == UserType.base)
-                            IconButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    AuthService()
-                                        .toggleSavedEvent(widget.event.uid);
-                                  });
-                                  await FirestoreService()
-                                      .toggleSaveEventForUser(widget.event);
-                                },
-                                icon: AuthService()
-                                        .currentUser!
-                                        .savedEvents
-                                        .contains(widget.event.uid)
-                                    ? const Icon(Icons.favorite)
-                                    : const Icon(Icons.favorite_border))
+                            StatefulBuilder(builder:
+                                (BuildContext context, StateSetter setState) {
+                              return IconButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      AuthService()
+                                          .toggleSavedEvent(widget.event.uid);
+                                    });
+                                    await FirestoreService()
+                                        .toggleSaveEventForUser(widget.event);
+                                  },
+                                  icon: AuthService()
+                                          .currentUser!
+                                          .savedEvents
+                                          .contains(widget.event.uid)
+                                      ? const Icon(Icons.favorite)
+                                      : const Icon(Icons.favorite_border));
+                            }),
                         ],
                       ),
                       Column(

@@ -34,8 +34,11 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
               child: Text('Keine Events'),
             );
           },
-          query: FirestoreService().eventsCollection.where('creatorId',
-              isEqualTo: AuthService().getCurrentFirebaseUser()!.uid),
+          query: FirestoreService()
+              .eventsCollection
+              .where('creatorId',
+                  isEqualTo: AuthService().getCurrentFirebaseUser()!.uid)
+              .orderBy('date'),
           itemBuilder: (context, snapshot) {
             Event event = snapshot.data();
             return EventCard(event: event);
