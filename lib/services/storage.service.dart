@@ -19,9 +19,22 @@ class StorageService {
   }
 
   Future<String> getEventImageUrl({required Event event}) async {
-    // Why is this called twice :(
-    print('XXXXXXXXXX downloading for ${event.title}');
+    int numOfRetries = 0;
+    if (numOfRetries == 5) {
+      throw Exception('File does not exist');
+    }
     final ref = storage.ref().child('${event.creatorId}/events/${event.uid}');
-    return await ref.getDownloadURL();
+    return await ref.getDownloadURL().then((downloadUrl) async {
+      return downloadUrl;
+    }, onError: (error, _) async {
+      // Catching the error here is on purpose by design, reason for it is as follows:
+      // The FirestoreListView Widget is a live stream, and our event documents
+      // get created first which causes the stream to refresh before the image file
+      // was uploaded. getDownloadURL will not throw so we have to explicitly catch
+      // the 'error' and wait until the image file has been stored
+      await Future.delayed(const Duration(milliseconds: 500));
+      numOfRetries++;
+      return await getEventImageUrl(event: event);
+    });
   }
 }

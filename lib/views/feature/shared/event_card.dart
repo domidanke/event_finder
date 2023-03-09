@@ -18,6 +18,12 @@ class EventCard extends StatefulWidget {
 
 class _EventCardState extends State<EventCard> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: StorageService().getEventImageUrl(event: widget.event),
@@ -37,124 +43,129 @@ class _EventCardState extends State<EventCard> {
                 decoration: BoxDecoration(
                   image: widget.event.imageUrl != null
                       ? DecorationImage(
-                          image: FadeInImage.assetNetwork(
-                            fadeInDuration: const Duration(seconds: 1),
-                            fadeInCurve: Curves.bounceIn,
-                            image: widget.event.imageUrl!,
-                            placeholder: '',
-                          ).image,
+                          image: NetworkImage(widget.event.imageUrl!),
                           fit: BoxFit.cover,
                         )
                       : null,
                 ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Card(
-                            //color: Colors.white,
-                            child: SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    widget.event.date.day.toString(),
-                                    //style: const TextStyle(color: Colors.black),
-                                  ),
-                                  Text(
-                                    monthMap[
-                                        widget.event.date.month.toString()]!,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (AuthService().currentUser?.type == UserType.base)
-                            StatefulBuilder(builder:
-                                (BuildContext context, StateSetter setState) {
-                              return IconButton(
-                                  onPressed: () async {
-                                    setState(() {
-                                      AuthService()
-                                          .toggleSavedEvent(widget.event.uid);
-                                    });
-                                    await FirestoreService()
-                                        .toggleSaveEventForUser(widget.event);
-                                  },
-                                  icon: AuthService()
-                                          .currentUser!
-                                          .savedEvents
-                                          .contains(widget.event.uid)
-                                      ? const Icon(Icons.favorite)
-                                      : const Icon(Icons.favorite_border));
-                            }),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Card(
-                                //color: primaryColor,
-                                child: SizedBox(
-                                    width: 50,
-                                    height: 30,
-                                    child: Center(
-                                      child: Text(
-                                        '${widget.event.ticketPrice} €',
-                                      ),
-                                    )),
-                              ),
-                              Card(
-                                child: SizedBox(
-                                    width: 50,
-                                    height: 30,
-                                    child: Center(
-                                      child: Text(
-                                        widget.event.genre,
-                                      ),
-                                    )),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            widget.event.title,
-                            style: const TextStyle(fontSize: 24),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '${widget.event.date.toString().substring(11, 16)} Uhr',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-
-                              Text(
-                                widget.event.creatorName,
-                                style: const TextStyle(fontSize: 16),
-                              ),
-
-                              /// TODO get local distance to address?
-                              const Text(
-                                '1.5km',
-                                style: TextStyle(fontSize: 16),
-                              )
-                            ],
-                          )
-                        ],
+                child: snapshot.connectionState == ConnectionState.waiting
+                    ? const Center(
+                        child: CircularProgressIndicator(),
                       )
-                    ],
-                  ),
-                )),
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Card(
+                                  //color: Colors.white,
+                                  child: SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          widget.event.date.day.toString(),
+                                          //style: const TextStyle(color: Colors.black),
+                                        ),
+                                        Text(
+                                          monthMap[widget.event.date.month
+                                              .toString()]!,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                if (AuthService().currentUser?.type ==
+                                    UserType.base)
+                                  StatefulBuilder(builder:
+                                      (BuildContext context,
+                                          StateSetter setState) {
+                                    return IconButton(
+                                        onPressed: () async {
+                                          setState(() {
+                                            AuthService().toggleSavedEvent(
+                                                widget.event.uid);
+                                          });
+                                          await FirestoreService()
+                                              .toggleSaveEventForUser(
+                                                  widget.event);
+                                        },
+                                        icon: AuthService()
+                                                .currentUser!
+                                                .savedEvents
+                                                .contains(widget.event.uid)
+                                            ? const Icon(Icons.favorite)
+                                            : const Icon(
+                                                Icons.favorite_border));
+                                  }),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Card(
+                                      //color: primaryColor,
+                                      child: SizedBox(
+                                          width: 50,
+                                          height: 30,
+                                          child: Center(
+                                            child: Text(
+                                              '${widget.event.ticketPrice} €',
+                                            ),
+                                          )),
+                                    ),
+                                    Card(
+                                      child: SizedBox(
+                                          width: 50,
+                                          height: 30,
+                                          child: Center(
+                                            child: Text(
+                                              widget.event.genre,
+                                            ),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  widget.event.title,
+                                  style: const TextStyle(fontSize: 24),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '${widget.event.date.toString().substring(11, 16)} Uhr',
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+
+                                    Text(
+                                      widget.event.creatorName,
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+
+                                    /// TODO get local distance to address?
+                                    const Text(
+                                      '1.5km',
+                                      style: TextStyle(fontSize: 16),
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      )),
           ),
         );
       },
