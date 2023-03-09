@@ -32,7 +32,7 @@ class Event {
   final DateTime date;
   final String creatorId;
   final String creatorName;
-  String? imageUrl = '';
+  String? imageUrl;
 
   Map<String, Object?> toJson() {
     return {

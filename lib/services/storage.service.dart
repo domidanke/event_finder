@@ -19,7 +19,9 @@ class StorageService {
   }
 
   Future<String> getEventImageUrl({required Event event}) async {
-    final ref = storage.ref().child('${event.creatorId}/events/${event.title}');
+    // Why is this called twice :(
+    print('downloading for ${event.title}');
+    final ref = storage.ref().child('${event.creatorId}/events/${event.uid}');
     return await ref.getDownloadURL();
   }
 }

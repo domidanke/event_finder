@@ -247,9 +247,8 @@ class _EventFormState extends State<EventForm> {
     late DateTime pickedDate = DateTime.now();
     await showCupertinoModalPopup(
         context: context,
-        builder: (_) => Container(
+        builder: (_) => SizedBox(
               height: 190,
-              color: const Color.fromARGB(255, 255, 255, 255),
               child: Column(
                 children: [
                   SizedBox(
