@@ -1,6 +1,5 @@
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
-import 'package:event_finder/models/theme.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/widgets/kk_button.dart';
@@ -65,7 +64,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                                   style: const TextStyle(fontSize: 24),
                                 ),
                                 Card(
-                                  color: primaryColor,
+                                  //color: primaryColor,
                                   child: SizedBox(
                                       width: 50,
                                       height: 30,
@@ -83,40 +82,56 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    children: [
-                      const KKIcon(
-                        icon: Icon(Icons.access_time),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(event.date.toString().substring(0, 10)),
-                          Text('${event.date.toString().substring(11, 16)} Uhr')
-                        ],
-                      ),
-                    ],
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      children: [
+                        const KKIcon(
+                          icon: Icon(Icons.access_time),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(event.date.toString().substring(0, 10)),
+                            Text(
+                                '${event.date.toString().substring(11, 16)} Uhr')
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        const KKIcon(icon: Icon(Icons.location_on)),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Text(event.address),
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      const KKIcon(icon: Icon(Icons.location_on)),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Text(event.address),
-                    ],
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        const KKIcon(icon: Icon(Icons.music_note)),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Text(event.genre),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       height: 200,
                       child: SingleChildScrollView(
                           child: Text(
@@ -142,11 +157,14 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
             if (event.creatorId == AuthService().getCurrentFirebaseUser()?.uid)
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
-                child: KKButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'edit_event');
-                  },
-                  buttonText: 'Event bearbeiten',
+                child: SizedBox(
+                  width: 200,
+                  child: KKButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'edit_event');
+                    },
+                    buttonText: 'Event bearbeiten',
+                  ),
                 ),
               ),
           ],

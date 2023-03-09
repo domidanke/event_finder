@@ -1,7 +1,6 @@
 import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
-import 'package:event_finder/models/theme.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/services/state.service.dart';
@@ -56,7 +55,7 @@ class _EventCardState extends State<EventCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Card(
-                            color: Colors.white,
+                            //color: Colors.white,
                             child: SizedBox(
                               width: 50,
                               height: 50,
@@ -65,13 +64,12 @@ class _EventCardState extends State<EventCard> {
                                 children: [
                                   Text(
                                     widget.event.date.day.toString(),
-                                    style: const TextStyle(color: Colors.black),
+                                    //style: const TextStyle(color: Colors.black),
                                   ),
                                   Text(
-                                      monthMap[
-                                          widget.event.date.month.toString()]!,
-                                      style:
-                                          const TextStyle(color: Colors.black)),
+                                    monthMap[
+                                        widget.event.date.month.toString()]!,
+                                  ),
                                 ],
                               ),
                             ),
@@ -100,7 +98,7 @@ class _EventCardState extends State<EventCard> {
                           Row(
                             children: [
                               Card(
-                                color: primaryColor,
+                                //color: primaryColor,
                                 child: SizedBox(
                                     width: 50,
                                     height: 30,

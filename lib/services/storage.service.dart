@@ -12,9 +12,9 @@ class StorageService {
   static final StorageService _singleton = StorageService._internal();
   final storage = FirebaseStorage.instance;
 
-  Future<void> saveEventImageToStorage(String title, File file) async {
+  Future<void> saveEventImageToStorage(String eventId, File file) async {
     await storage
-        .ref('${AuthService().getCurrentFirebaseUser()!.uid}/events/$title')
+        .ref('${AuthService().getCurrentFirebaseUser()!.uid}/events/$eventId')
         .putFile(file);
   }
 

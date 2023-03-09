@@ -1,4 +1,3 @@
-import 'package:event_finder/models/theme.dart';
 import 'package:event_finder/views/feature/shared/KKDrawer.dart';
 import 'package:event_finder/views/feature/shared/events_page.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +17,8 @@ class _HomePageState extends State<HomePage> {
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(40.0), child: AppBar()),
         drawer: const KKDrawer(),
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: primaryGradient,
-          ),
-          child: const SafeArea(
-            child: EventsPage(),
-          ),
+        body: const SafeArea(
+          child: EventsPage(),
         ),
       ),
     );

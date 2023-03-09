@@ -42,8 +42,18 @@ class FirestoreService {
     return doc.data()!;
   }
 
-  Future<void> addEventDocument(Event event) async {
-    await eventsCollection.add(event);
+  Future<String> addEventDocument(Event event) async {
+    final ref = await eventsCollection.add(event);
+    return ref.id;
+  }
+
+  Future<void> updateEventDocument(
+      Map<String, Object?> map, String eventId) async {
+    await eventsCollection.doc(eventId).update(map);
+  }
+
+  Future<void> deleteEventDocument(Event event) async {
+    await eventsCollection.doc(event.uid).delete();
   }
 
   Future<void> toggleSaveEventForUser(Event event) async {

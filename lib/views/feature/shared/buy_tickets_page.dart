@@ -1,6 +1,6 @@
 import 'package:event_finder/models/event.dart';
-import 'package:event_finder/models/theme.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';

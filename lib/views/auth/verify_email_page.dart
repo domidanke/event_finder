@@ -4,7 +4,7 @@ import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/theme.dart';
+import '../../theme/theme.dart';
 
 class VerifyEmailPage extends StatefulWidget {
   const VerifyEmailPage({Key? key}) : super(key: key);

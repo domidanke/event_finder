@@ -1,6 +1,6 @@
 import 'package:event_finder/models/enums.dart';
-import 'package:event_finder/models/theme.dart';
 import 'package:event_finder/services/auth.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 

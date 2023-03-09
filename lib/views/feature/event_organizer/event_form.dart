@@ -196,15 +196,6 @@ class _EventFormState extends State<EventForm> {
                   if (_formKey.currentState!.validate() &&
                       selectedImageFile != null &&
                       _selectedDate != null) {
-                    try {
-                      await StorageService()
-                          .saveEventImageToStorage(title, selectedImageFile!);
-                    } catch (e) {
-                      AlertService().showAlert(
-                          'Upload fehlgeschlagen', e.toString(), context);
-                      return;
-                    }
-
                     final event = Event(
                         title: title,
                         details: details,
@@ -217,24 +208,30 @@ class _EventFormState extends State<EventForm> {
                                 .displayName ??
                             '',
                         ticketPrice: ticketPrice);
-                    try {
-                      await FirestoreService()
-                          .addEventDocument(event)
-                          .then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Event erstellt.')),
-                        );
-                        Future.delayed(const Duration(seconds: 2))
-                            .then((value) => Navigator.pop(context));
-                      });
-                    } catch (e) {
-                      if (mounted) {
+
+                    await FirestoreService()
+                        .addEventDocument(event)
+                        .then((String eventId) async {
+                      await StorageService()
+                          .saveEventImageToStorage(eventId, selectedImageFile!)
+                          .then((value) => {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Event erstellt.')),
+                                ),
+                                Future.delayed(const Duration(seconds: 2))
+                                    .then((value) => Navigator.pop(context)),
+                              })
+                          .catchError((e) {
                         AlertService().showAlert(
-                            'Event erstellen fehlgeschlagen',
+                            'Event Bild hochladen fehlgeschlagen',
                             e.toString(),
                             context);
-                      }
-                    }
+                      });
+                    }).catchError((e) {
+                      AlertService().showAlert('Event erstellen fehlgeschlagen',
+                          e.toString(), context);
+                    });
                   }
                 },
                 buttonText: 'Erstellen',
