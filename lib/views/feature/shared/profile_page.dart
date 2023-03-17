@@ -3,6 +3,8 @@ import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/enums.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -21,20 +23,60 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const UserAvatar(),
-              const SizedBox(
-                height: 50,
-              ),
               Text(AuthService().getCurrentFirebaseUser()!.displayName ?? '-'),
-              const SizedBox(
-                height: 20,
-              ),
               Text(AuthService().getCurrentFirebaseUser()!.email!),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
-              Text('Account Type: ${AuthService().currentUser!.type.name}'),
+              Text(
+                  '(DEV) Account Type: ${AuthService().currentUser!.type.name.toUpperCase()}'),
               const SizedBox(
                 height: 50,
+              ),
+              if (AuthService().currentUser!.type == UserType.base)
+                ListTile(
+                  leading: const Icon(Icons.receipt),
+                  title: const Text('Meine Tickets'),
+                  onTap: () {},
+                ),
+              Opacity(
+                opacity:
+                    AuthService().currentUser!.savedArtists.isEmpty ? 0.4 : 1,
+                child: ListTile(
+                  leading: const Icon(Icons.people),
+                  title: const Text('Meine Follows'),
+                  onTap: () {
+                    if (AuthService().currentUser!.savedArtists.isEmpty) return;
+                  },
+                ),
+              ),
+              if (AuthService().currentUser!.type == UserType.base)
+                Opacity(
+                  opacity:
+                      AuthService().currentUser!.savedEvents.isEmpty ? 0.4 : 1,
+                  child: ListTile(
+                    leading: const Icon(Icons.event_available),
+                    title: const Text('Gespeicherte Veranstaltungen'),
+                    onTap: () {
+                      if (AuthService().currentUser!.savedEvents.isEmpty) {
+                        return;
+                      }
+                      Navigator.pushNamed(context, 'saved_events');
+                    },
+                  ),
+                ),
+              if (AuthService().currentUser!.type == UserType.host)
+                ListTile(
+                  leading: const Icon(Icons.event),
+                  title: const Text('Meine Veranstaltungen'),
+                  onTap: () {
+                    Navigator.pushNamed(context, 'created_events');
+                  },
+                ),
+              ListTile(
+                leading: const Icon(Icons.help),
+                title: const Text('Support'),
+                onTap: () {},
               ),
               KKButton(
                   onPressed: () async {

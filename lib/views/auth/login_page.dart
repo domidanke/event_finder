@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             TextButton(
                               child: const Text(
-                                'Hier',
+                                'registrieren',
                                 style: TextStyle(
                                     decoration: TextDecoration.underline),
                               ),
@@ -125,7 +125,6 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.pushNamed(context, 'register');
                               },
                             ),
-                            const Text('registrieren')
                           ],
                         )
                       ],
