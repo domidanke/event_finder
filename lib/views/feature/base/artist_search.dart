@@ -1,4 +1,5 @@
 import 'package:event_finder/models/app_user.dart';
+import 'package:event_finder/services/state.service.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,27 @@ class _ArtistSearchState extends State<ArtistSearch> {
                   isEqualTo: 'artist',
                 ),
             itemBuilder: (context, snapshot) {
-              return const Center(child: Text('artist'));
+              final artist = snapshot.data();
+              return GestureDetector(
+                onTap: () {
+                  StateService().lastSelectedArtist = artist;
+                  Navigator.pushNamed(context, 'artist_page');
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text(artist.displayName),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 15,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              );
             },
           ),
         ),

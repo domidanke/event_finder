@@ -3,5 +3,5 @@ enum UserType {
   artist,
   host;
 
-  static UserType fromJson(String json) => values.byName(json);
+  static UserType fromString(String json) => values.byName(json);
 }

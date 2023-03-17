@@ -2,6 +2,7 @@ import 'package:event_finder/views/auth/login_page.dart';
 import 'package:event_finder/views/auth/pre_auth_page.dart';
 import 'package:event_finder/views/auth/register_page.dart';
 import 'package:event_finder/views/auth/verify_email_page.dart';
+import 'package:event_finder/views/feature/artist/artist_page.dart';
 import 'package:event_finder/views/feature/host/created_events_page.dart';
 import 'package:event_finder/views/feature/host/edit_event_form.dart';
 import 'package:event_finder/views/feature/host/event_form.dart';
@@ -31,6 +32,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const EditEventForm());
       case 'profile':
         return MaterialPageRoute(builder: (_) => const ProfilePage());
+      case 'artist_page':
+        return MaterialPageRoute(builder: (_) => const ArtistPage());
       case 'saved_events':
         return MaterialPageRoute(builder: (_) => const SavedEventsPage());
       case 'created_events':

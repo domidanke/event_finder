@@ -29,6 +29,7 @@ class FirestoreService {
   Future<void> addUserDocument(User user) async {
     final newUser = AppUser(
       type: UserType.base,
+      displayName: user.displayName ?? '',
     );
     await usersCollection
         .doc(AuthService().getCurrentFirebaseUser()!.uid)
