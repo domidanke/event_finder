@@ -2,6 +2,7 @@ import 'package:event_finder/models/enums.dart';
 
 class AppUser {
   AppUser({
+    this.uid = '',
     required this.displayName,
     required this.type,
     this.savedEvents = const [],
@@ -9,19 +10,30 @@ class AppUser {
     this.externalLinks = const ExternalLinks(),
   });
 
+  final String uid;
   final String displayName;
   final ExternalLinks externalLinks;
   late UserType type = UserType.base;
   late List<String> savedEvents = [];
   late List<String> savedArtists = [];
+  String? imageUrl;
 
-  AppUser.fromJson(Map<String, Object?> json)
+  AppUser.fromJson(Map<String, Object?> json, String uid)
       : this(
-            savedArtists: List.from(json['savedArtists'] as List<dynamic>),
-            savedEvents: List.from(json['savedEvents'] as List<dynamic>),
-            type: UserType.fromString(json['type'] as String),
-            externalLinks: ExternalLinks.fromJson(
-                json['externalLinks'] as Map<String, dynamic>),
+            uid: uid,
+            savedArtists: json['savedArtists'] != null
+                ? List.from(json['savedArtists'] as List<dynamic>)
+                : [],
+            savedEvents: json['savedEvents'] != null
+                ? List.from(json['savedEvents'] as List<dynamic>)
+                : [],
+            type: json['type'] != null
+                ? UserType.fromString(json['type'] as String)
+                : UserType.base,
+            externalLinks: json['externalLinks'] != null
+                ? ExternalLinks.fromJson(
+                    json['externalLinks'] as Map<String, dynamic>)
+                : const ExternalLinks(),
             displayName: json['displayName'] != null
                 ? json['displayName'] as String
                 : '');

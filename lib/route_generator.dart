@@ -3,6 +3,7 @@ import 'package:event_finder/views/auth/pre_auth_page.dart';
 import 'package:event_finder/views/auth/register_page.dart';
 import 'package:event_finder/views/auth/verify_email_page.dart';
 import 'package:event_finder/views/feature/artist/artist_page.dart';
+import 'package:event_finder/views/feature/base/base_home_page.dart';
 import 'package:event_finder/views/feature/host/created_events_page.dart';
 import 'package:event_finder/views/feature/host/edit_event_form.dart';
 import 'package:event_finder/views/feature/host/event_form.dart';
@@ -10,7 +11,6 @@ import 'package:event_finder/views/feature/shared/buy_tickets_page.dart';
 import 'package:event_finder/views/feature/shared/event_details_page.dart';
 import 'package:event_finder/views/feature/shared/profile_page.dart';
 import 'package:event_finder/views/feature/shared/saved_events_page.dart';
-import 'package:event_finder/views/home_page.dart';
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
@@ -25,7 +25,7 @@ class RouteGenerator {
       case 'verify_email':
         return MaterialPageRoute(builder: (_) => const VerifyEmailPage());
       case 'home':
-        return MaterialPageRoute(builder: (_) => const HomePage());
+        return MaterialPageRoute(builder: (_) => const BaseHomePage());
       case 'event_form':
         return MaterialPageRoute(builder: (_) => const EventForm());
       case 'edit_event':

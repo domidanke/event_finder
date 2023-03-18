@@ -22,8 +22,18 @@ class _ArtistPageState extends State<ArtistPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              CircleAvatar(
+                radius: 100,
+                backgroundImage: artist.imageUrl != null
+                    ? NetworkImage(artist.imageUrl!)
+                    : Image.asset('assets/images/profile_placeholder.png')
+                        .image,
+              ),
+              const SizedBox(
+                height: 50,
+              ),
               Text(artist.displayName),
               const SizedBox(
                 height: 20,

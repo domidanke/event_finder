@@ -37,4 +37,23 @@ class StorageService {
       return await getEventImageUrl(event: event);
     });
   }
+
+  Future<void> saveProfileImageToStorage(File file) async {
+    await storage
+        .ref('profile/${AuthService().getCurrentFirebaseUser()!.uid}/image')
+        .putFile(file);
+  }
+
+  Future<String> getProfileImageUrl() async {
+    await Future.delayed(const Duration(milliseconds: 5000));
+    final ref = storage
+        .ref()
+        .child('profile/${AuthService().getCurrentFirebaseUser()!.uid}/image');
+    return await ref.getDownloadURL();
+  }
+
+  Future<String> getUserImageUrl(String uid) async {
+    final ref = storage.ref().child('profile/$uid/image');
+    return await ref.getDownloadURL();
+  }
 }

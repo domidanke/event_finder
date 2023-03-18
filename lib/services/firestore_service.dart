@@ -65,7 +65,9 @@ class FirestoreService {
 
   final usersCollection = db.collection('Users').withConverter<AppUser>(
         fromFirestore: (snapshot, _) {
-          if (snapshot.exists) return AppUser.fromJson(snapshot.data()!);
+          if (snapshot.exists) {
+            return AppUser.fromJson(snapshot.data()!, snapshot.id);
+          }
           throw Exception('RIP');
         },
         toFirestore: (event, _) => event.toJson(),

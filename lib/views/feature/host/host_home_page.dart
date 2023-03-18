@@ -1,19 +1,19 @@
-import 'package:event_finder/views/feature/base/search_page.dart';
-import 'package:event_finder/views/feature/shared/events_page.dart';
+import 'package:event_finder/views/feature/host/created_events_page.dart';
+import 'package:event_finder/views/feature/shared/artist_search.dart';
 import 'package:event_finder/views/feature/shared/profile_page.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HostHomePage extends StatefulWidget {
+  const HostHomePage({super.key});
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HostHomePage> createState() => _HostHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HostHomePageState extends State<HostHomePage> {
   int _selectedIndex = 1;
   static const List<Widget> _widgetOptions = <Widget>[
-    SearchPage(),
-    EventsPage(),
+    ArtistSearch(),
+    CreatedEventsPage(),
     ProfilePage()
   ];
 
@@ -36,11 +36,11 @@ class _HomePageState extends State<HomePage> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.search),
-              label: 'Suche',
+              label: 'Artists',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.event),
-              label: 'Events',
+              label: 'Meine Events',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),

@@ -1,9 +1,12 @@
+import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/views/auth/verify_email_page.dart';
+import 'package:event_finder/views/feature/artist/artist_home_page.dart';
+import 'package:event_finder/views/feature/host/host_home_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth.service.dart';
-import '../home_page.dart';
+import '../feature/base/base_home_page.dart';
 import 'login_page.dart';
 
 class PreAuthPage extends StatelessWidget {
@@ -21,7 +24,20 @@ class PreAuthPage extends StatelessWidget {
           future: FirestoreService().getUserData(),
           builder: (context, snapshot) {
             AuthService().currentUser = snapshot.data;
-            return const HomePage();
+            if (AuthService().currentUser != null) {
+              switch (AuthService().currentUser!.type) {
+                case UserType.base:
+                  return const BaseHomePage();
+                case UserType.artist:
+                  return const ArtistHomePage();
+                case UserType.host:
+                  return const HostHomePage();
+              }
+            } else {
+              return const Scaffold(
+                body: Center(),
+              );
+            }
           });
     }
   }

@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/services/auth.service.dart';
+import 'package:event_finder/services/storage.service.dart';
 import 'package:event_finder/widgets/kk_button.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../models/enums.dart';
 
@@ -22,8 +26,53 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const UserAvatar(),
-              Text(AuthService().getCurrentFirebaseUser()!.displayName ?? '-'),
+              AuthService().currentUser!.imageUrl != null
+                  ? CircleAvatar(
+                      radius: 100,
+                      backgroundImage:
+                          NetworkImage(AuthService().currentUser!.imageUrl!))
+                  : FutureBuilder(
+                      future: StorageService().getProfileImageUrl(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          final e = snapshot.error as FirebaseException;
+                          if (e.code == 'object-not-found') {
+                            return _getUploadProfileWidget();
+                          } else {
+                            return CircleAvatar(
+                              radius: 100,
+                              backgroundImage: Image.asset(
+                                      'assets/images/profile_placeholder.png')
+                                  .image,
+                            );
+                          }
+                        }
+                        AuthService().currentUser!.imageUrl = snapshot.data;
+                        return CircleAvatar(
+                          radius: 100,
+                          backgroundImage: snapshot.connectionState ==
+                                  ConnectionState.waiting
+                              ? null
+                              : AuthService().currentUser!.imageUrl != null
+                                  ? NetworkImage(
+                                      AuthService().currentUser!.imageUrl!)
+                                  : Image.asset(
+                                          'assets/images/profile_placeholder.png')
+                                      .image,
+                          child: snapshot.connectionState ==
+                                  ConnectionState.waiting
+                              ? const CircularProgressIndicator()
+                              : null,
+                        );
+                      }),
+              const SizedBox(
+                height: 10,
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(AuthService().currentUser!.displayName ?? '-'),
               Text(AuthService().getCurrentFirebaseUser()!.email!),
               const SizedBox(
                 height: 10,
@@ -65,14 +114,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                   ),
                 ),
-              if (AuthService().currentUser!.type == UserType.host)
-                ListTile(
-                  leading: const Icon(Icons.event),
-                  title: const Text('Meine Veranstaltungen'),
-                  onTap: () {
-                    Navigator.pushNamed(context, 'created_events');
-                  },
-                ),
               ListTile(
                 leading: const Icon(Icons.help),
                 title: const Text('Support'),
@@ -89,6 +130,32 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _getUploadProfileWidget() {
+    return SizedBox(
+      height: 200,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            icon: const Icon(
+              Icons.add,
+              size: 50,
+            ),
+            onPressed: () async {
+              final XFile? image =
+                  await ImagePicker().pickImage(source: ImageSource.gallery);
+              if (image == null) return;
+              await StorageService()
+                  .saveProfileImageToStorage(File(image.path));
+              setState(() {});
+            },
+          ),
+          const Text('Profilbild hinzufuegen')
+        ],
       ),
     );
   }

@@ -19,32 +19,19 @@ class _HostSearchState extends State<HostSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const <Widget>[
-            Text('Filter 1'),
-            Text('Filter 2'),
-          ],
-        ),
-        Expanded(
-          child: FirestoreListView<AppUser>(
-            emptyBuilder: (context) {
-              return const Center(
-                child: Text('Keine Events'),
-              );
-            },
-            query: FirestoreService().usersCollection.where(
-                  'type',
-                  isEqualTo: 'host',
-                ),
-            itemBuilder: (context, snapshot) {
-              return const Center(child: Text('host'));
-            },
+    return FirestoreListView<AppUser>(
+      emptyBuilder: (context) {
+        return const Center(
+          child: Text('Keine Events'),
+        );
+      },
+      query: FirestoreService().usersCollection.where(
+            'type',
+            isEqualTo: 'host',
           ),
-        ),
-      ],
+      itemBuilder: (context, snapshot) {
+        return const Center(child: Text('host'));
+      },
     );
   }
 }

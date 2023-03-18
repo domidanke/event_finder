@@ -1,6 +1,6 @@
 import 'package:event_finder/theme/theme.dart';
-import 'package:event_finder/views/feature/base/artist_search.dart';
 import 'package:event_finder/views/feature/base/host_search.dart';
+import 'package:event_finder/views/feature/shared/artist_search.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -27,6 +27,9 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        const SizedBox(
+          height: 10,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -69,6 +72,13 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        const Divider(),
+        const SizedBox(
+          height: 10,
         ),
         Expanded(
           child: searchWidgetOptions[_selectedIndex],
