@@ -16,7 +16,7 @@ class StorageService {
   Future<void> saveEventImageToStorage(String eventId, File file) async {
     await storage
         .ref('${AuthService().getCurrentFirebaseUser()!.uid}/events/$eventId')
-        .putFile(file);
+        .putBlob(file);
   }
 
   Future<String> getEventImageUrl({required Event event}) async {
