@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:io';
 
 import 'package:event_finder/models/event.dart';
@@ -16,7 +15,7 @@ class StorageService {
   Future<void> saveEventImageToStorage(String eventId, File file) async {
     await storage
         .ref('${AuthService().getCurrentFirebaseUser()!.uid}/events/$eventId')
-        .putBlob(file);
+        .putFile(file);
   }
 
   Future<String> getEventImageUrl({required Event event}) async {
@@ -42,7 +41,7 @@ class StorageService {
   Future<void> saveProfileImageToStorage(File file) async {
     await storage
         .ref('profile/${AuthService().getCurrentFirebaseUser()!.uid}/image')
-        .putBlob(file);
+        .putFile(file);
   }
 
   Future<String> getProfileImageUrl() async {
