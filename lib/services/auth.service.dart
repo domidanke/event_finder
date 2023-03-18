@@ -106,5 +106,6 @@ class AuthService extends ChangeNotifier {
     } else {
       currentUser!.savedArtists.add(artistUid);
     }
+    notifyListeners();
   }
 }

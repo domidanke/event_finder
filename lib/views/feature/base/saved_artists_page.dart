@@ -6,6 +6,7 @@ import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage.service.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SavedArtistsPage extends StatefulWidget {
   const SavedArtistsPage({super.key});
@@ -22,6 +23,8 @@ class _SavedArtistsPageState extends State<SavedArtistsPage> {
 
   @override
   Widget build(BuildContext context) {
+    /// Doing this, so in case of unfollow of an artist, the list gets refetched
+    final AppUser currentUser = Provider.of<AuthService>(context).currentUser!;
     return Scaffold(
       body: SafeArea(
         child: FirestoreListView<AppUser>(
@@ -30,8 +33,12 @@ class _SavedArtistsPageState extends State<SavedArtistsPage> {
               child: Text('Keine Artists'),
             );
           },
-          query: FirestoreService().usersCollection.where(FieldPath.documentId,
-              whereIn: AuthService().currentUser!.savedArtists),
+          query: currentUser.savedArtists.isEmpty
+              ? FirestoreService()
+                  .usersCollection
+                  .where(FieldPath.documentId, whereIn: ['EMPTY'])
+              : FirestoreService().usersCollection.where(FieldPath.documentId,
+                  whereIn: currentUser.savedArtists),
           itemBuilder: (context, snapshot) {
             AppUser artist = snapshot.data();
             return GestureDetector(

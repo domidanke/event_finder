@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/storage.service.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/enums.dart';
 
@@ -19,6 +21,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final AppUser currentUser = Provider.of<AuthService>(context).currentUser!;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -26,11 +29,10 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              AuthService().currentUser!.imageUrl != null
+              currentUser.imageUrl != null
                   ? CircleAvatar(
                       radius: 100,
-                      backgroundImage:
-                          NetworkImage(AuthService().currentUser!.imageUrl!))
+                      backgroundImage: NetworkImage(currentUser.imageUrl!))
                   : FutureBuilder(
                       future: StorageService().getProfileImageUrl(),
                       builder: (context, snapshot) {
@@ -47,15 +49,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             );
                           }
                         }
-                        AuthService().currentUser!.imageUrl = snapshot.data;
+                        currentUser.imageUrl = snapshot.data;
                         return CircleAvatar(
                           radius: 100,
                           backgroundImage: snapshot.connectionState ==
                                   ConnectionState.waiting
                               ? null
-                              : AuthService().currentUser!.imageUrl != null
-                                  ? NetworkImage(
-                                      AuthService().currentUser!.imageUrl!)
+                              : currentUser.imageUrl != null
+                                  ? NetworkImage(currentUser.imageUrl!)
                                   : Image.asset(
                                           'assets/images/profile_placeholder.png')
                                       .image,
@@ -72,45 +73,43 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(
                 height: 10,
               ),
-              Text(AuthService().currentUser!.displayName),
+              Text(currentUser.displayName),
               Text(AuthService().getCurrentFirebaseUser()!.email!),
               const SizedBox(
                 height: 10,
               ),
               Text(
-                  '(DEV) Account Type: ${AuthService().currentUser!.type.name.toUpperCase()}'),
+                  '(DEV) Account Type: ${currentUser.type.name.toUpperCase()}'),
               const SizedBox(
                 height: 50,
               ),
-              if (AuthService().currentUser!.type == UserType.base)
+              if (currentUser.type == UserType.base)
                 ListTile(
                   leading: const Icon(Icons.receipt),
                   title: const Text('Meine Tickets'),
                   onTap: () {},
                 ),
               Opacity(
-                opacity:
-                    AuthService().currentUser!.savedArtists.isEmpty ? 0.4 : 1,
+                opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
                 child: ListTile(
                   leading: const Icon(Icons.people),
                   title: const Text('Meine Follows'),
                   onTap: () {
-                    if (AuthService().currentUser!.savedArtists.isEmpty) {
+                    if (currentUser.savedArtists.isEmpty) {
                       return;
                     }
                     Navigator.pushNamed(context, 'saved_artists');
                   },
                 ),
               ),
-              if (AuthService().currentUser!.type == UserType.base)
+              if (currentUser.type == UserType.base)
                 Opacity(
-                  opacity:
-                      AuthService().currentUser!.savedEvents.isEmpty ? 0.4 : 1,
+                  opacity: currentUser.savedEvents.isEmpty ? 0.4 : 1,
                   child: ListTile(
                     leading: const Icon(Icons.event_available),
                     title: const Text('Gespeicherte Veranstaltungen'),
                     onTap: () {
-                      if (AuthService().currentUser!.savedEvents.isEmpty) {
+                      if (currentUser.savedEvents.isEmpty) {
                         return;
                       }
                       Navigator.pushNamed(context, 'saved_events');
