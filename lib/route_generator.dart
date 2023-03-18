@@ -4,14 +4,16 @@ import 'package:event_finder/views/auth/register_page.dart';
 import 'package:event_finder/views/auth/verify_email_page.dart';
 import 'package:event_finder/views/feature/artist/artist_page.dart';
 import 'package:event_finder/views/feature/base/base_home_page.dart';
+import 'package:event_finder/views/feature/base/saved_events_page.dart';
 import 'package:event_finder/views/feature/host/created_events_page.dart';
 import 'package:event_finder/views/feature/host/edit_event_form.dart';
 import 'package:event_finder/views/feature/host/event_form.dart';
 import 'package:event_finder/views/feature/shared/buy_tickets_page.dart';
 import 'package:event_finder/views/feature/shared/event_details_page.dart';
 import 'package:event_finder/views/feature/shared/profile_page.dart';
-import 'package:event_finder/views/feature/shared/saved_events_page.dart';
 import 'package:flutter/material.dart';
+
+import 'views/feature/base/saved_artists_page.dart';
 
 class RouteGenerator {
   Route<dynamic> generateRoute(RouteSettings settings) {
@@ -36,6 +38,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ArtistPage());
       case 'saved_events':
         return MaterialPageRoute(builder: (_) => const SavedEventsPage());
+      case 'saved_artists':
+        return MaterialPageRoute(builder: (_) => const SavedArtistsPage());
       case 'created_events':
         return MaterialPageRoute(builder: (_) => const CreatedEventsPage());
       case 'event_details':

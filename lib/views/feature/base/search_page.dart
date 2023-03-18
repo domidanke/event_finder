@@ -1,4 +1,3 @@
-import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/base/host_search.dart';
 import 'package:event_finder/views/feature/shared/artist_search.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +9,23 @@ class SearchPage extends StatefulWidget {
   State<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPageState extends State<SearchPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
   @override
   void initState() {
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
-  int _selectedIndex = 0;
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
 
+  int _selectedIndex = 0;
   List<Widget> searchWidgetOptions = [
     const HostSearch(),
     const ArtistSearch(),
@@ -30,55 +38,24 @@ class _SearchPageState extends State<SearchPage> {
         const SizedBox(
           height: 10,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedIndex = 0;
-                });
-              },
-              child: Container(
-                color: _selectedIndex == 0 ? primaryColor : primaryWhite,
-                child: Row(
-                  children: const [
-                    Icon(
-                      Icons.house,
-                    ),
-                    VerticalDivider(),
-                    Text('Hosts')
-                  ],
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedIndex = 1;
-                });
-              },
-              child: Container(
-                color: _selectedIndex == 1 ? primaryColor : primaryWhite,
-                child: Row(
-                  children: const [
-                    Icon(
-                      Icons.people,
-                    ),
-                    VerticalDivider(),
-                    Text('Artists')
-                  ],
-                ),
-              ),
-            ),
+        TabBar(
+          onTap: (value) {
+            setState(() {
+              _selectedIndex = value;
+            });
+          },
+          controller: _tabController,
+          tabs: const [
+            Tab(icon: Icon(Icons.house)),
+            Tab(icon: Icon(Icons.people)),
           ],
+          unselectedLabelColor: Colors.black,
+          indicator: BoxDecoration(
+            borderRadius: BorderRadius.circular(80.0),
+          ),
         ),
         const SizedBox(
           height: 20,
-        ),
-        const Divider(),
-        const SizedBox(
-          height: 10,
         ),
         Expanded(
           child: searchWidgetOptions[_selectedIndex],

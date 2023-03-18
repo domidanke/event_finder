@@ -57,10 +57,38 @@ class FirestoreService {
     await eventsCollection.doc(event.uid).delete();
   }
 
-  Future<void> toggleSaveEventForUser(Event event) async {
+  Future<void> toggleSaveEventForUser() async {
     await usersCollection
         .doc(AuthService().getCurrentFirebaseUser()?.uid)
         .update({'savedEvents': AuthService().currentUser!.savedEvents});
+  }
+
+  Future<void> toggleSaveArtistForUser(String artistUid) async {
+    if (AuthService().currentUser!.savedArtists.contains(artistUid)) {
+      await usersCollection
+          .doc(AuthService().getCurrentFirebaseUser()?.uid)
+          .update({
+        'savedArtists': FieldValue.arrayRemove([artistUid])
+      });
+    } else {
+      await usersCollection
+          .doc(AuthService().getCurrentFirebaseUser()?.uid)
+          .update({
+        'savedArtists': FieldValue.arrayUnion([artistUid])
+      });
+    }
+  }
+
+  Future<void> toggleFollowerForArtist(String artistUid) async {
+    if (AuthService().currentUser!.savedArtists.contains(artistUid)) {
+      await usersCollection.doc(artistUid).update({
+        'follower': FieldValue.arrayRemove([AuthService().currentUser!.uid])
+      });
+    } else {
+      await usersCollection.doc(artistUid).update({
+        'follower': FieldValue.arrayUnion([AuthService().currentUser!.uid])
+      });
+    }
   }
 
   final usersCollection = db.collection('Users').withConverter<AppUser>(

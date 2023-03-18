@@ -33,6 +33,8 @@ class _ArtistSearchState extends State<ArtistSearch> {
           ),
       itemBuilder: (context, snapshot) {
         final artist = snapshot.data();
+
+        /// This is used twice, also in saved artists page TODO: merge into one widget
         return GestureDetector(
           onTap: () {
             StateService().lastSelectedArtist = artist;

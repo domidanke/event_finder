@@ -72,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(
                 height: 10,
               ),
-              Text(AuthService().currentUser!.displayName ?? '-'),
+              Text(AuthService().currentUser!.displayName),
               Text(AuthService().getCurrentFirebaseUser()!.email!),
               const SizedBox(
                 height: 10,
@@ -95,7 +95,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   leading: const Icon(Icons.people),
                   title: const Text('Meine Follows'),
                   onTap: () {
-                    if (AuthService().currentUser!.savedArtists.isEmpty) return;
+                    if (AuthService().currentUser!.savedArtists.isEmpty) {
+                      return;
+                    }
+                    Navigator.pushNamed(context, 'saved_artists');
                   },
                 ),
               ),

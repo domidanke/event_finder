@@ -59,10 +59,10 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  event.title,
-                                  style: const TextStyle(fontSize: 24),
-                                ),
+                                Text(event.title,
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                    )),
                                 Card(
                                   //color: primaryColor,
                                   child: SizedBox(

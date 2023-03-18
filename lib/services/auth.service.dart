@@ -19,6 +19,7 @@ class AuthService extends ChangeNotifier {
     ],
   );
 
+  /// TODO: Move to separate User service class
   AppUser? currentUser;
 
   bool _loginLoading = false;
@@ -95,6 +96,15 @@ class AuthService extends ChangeNotifier {
       currentUser!.savedEvents.remove(eventUid);
     } else {
       currentUser!.savedEvents.add(eventUid);
+    }
+  }
+
+  /// TODO: Move to separate User service class
+  void toggleSavedArtist(String artistUid) {
+    if (currentUser!.savedArtists.contains(artistUid)) {
+      currentUser!.savedArtists.remove(artistUid);
+    } else {
+      currentUser!.savedArtists.add(artistUid);
     }
   }
 }

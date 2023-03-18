@@ -99,7 +99,7 @@ class _EventCardState extends State<EventCard> {
                                           .toggleSavedEvent(widget.event.uid);
                                     });
                                     await FirestoreService()
-                                        .toggleSaveEventForUser(widget.event);
+                                        .toggleSaveEventForUser();
                                   },
                                   icon: AuthService()
                                           .currentUser!

@@ -7,6 +7,8 @@ class AppUser {
     required this.type,
     this.savedEvents = const [],
     this.savedArtists = const [],
+    this.savedHosts = const [],
+    this.follower = const [],
     this.externalLinks = const ExternalLinks(),
   });
 
@@ -16,6 +18,8 @@ class AppUser {
   late UserType type = UserType.base;
   late List<String> savedEvents = [];
   late List<String> savedArtists = [];
+  late List<String> savedHosts = [];
+  late List<String> follower = [];
   String? imageUrl;
 
   AppUser.fromJson(Map<String, Object?> json, String uid)
@@ -26,6 +30,12 @@ class AppUser {
                 : [],
             savedEvents: json['savedEvents'] != null
                 ? List.from(json['savedEvents'] as List<dynamic>)
+                : [],
+            savedHosts: json['savedHosts'] != null
+                ? List.from(json['savedHosts'] as List<dynamic>)
+                : [],
+            follower: json['follower'] != null
+                ? List.from(json['follower'] as List<dynamic>)
                 : [],
             type: json['type'] != null
                 ? UserType.fromString(json['type'] as String)
@@ -40,8 +50,12 @@ class AppUser {
 
   Map<String, Object?> toJson() {
     return {
+      'displayName': displayName,
       'savedEvents': savedEvents,
       'savedArtists': savedArtists,
+      'savedHosts': savedHosts,
+      'follower': follower,
+      'externalLinks': externalLinks,
       'type': type.name
     };
   }
