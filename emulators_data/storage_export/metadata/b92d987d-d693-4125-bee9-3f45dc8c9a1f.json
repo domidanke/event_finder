@@ -1,16 +1,17 @@
 {
   "name": "V80MRoOlhzUT3SiUdnetspjyBgJD/events/umohltrZCzWn173EVbJb",
   "bucket": "event-finder-7b8d2.appspot.com",
+  "contentType": "image/jpeg",
   "metageneration": 1,
   "generation": 1678370644412,
-  "contentType": "image/jpeg",
   "storageClass": "STANDARD",
+  "etag": "4UFg8ZitZiS/mtZ57JuRNBGyOlo",
   "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "customMetadata": {},
   "downloadTokens": [
     "bf37b7a1-12cb-43c6-9a62-3117a24b95b8"
   ],
-  "etag": "4UFg8ZitZiS/mtZ57JuRNBGyOlo",
-  "customMetadata": {},
   "timeCreated": "2023-03-09T14:04:04.412Z",
   "updated": "2023-03-09T14:04:04.412Z",
   "size": 86092,
