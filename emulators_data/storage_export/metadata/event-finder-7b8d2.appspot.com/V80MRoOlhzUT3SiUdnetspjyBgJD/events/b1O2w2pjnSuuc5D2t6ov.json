@@ -1,0 +1,19 @@
+{
+  "name": "V80MRoOlhzUT3SiUdnetspjyBgJD/events/b1O2w2pjnSuuc5D2t6ov",
+  "bucket": "event-finder-7b8d2.appspot.com",
+  "contentType": "",
+  "metageneration": 1,
+  "generation": 1679182872389,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "downloadTokens": [
+    "5ed534ef-9aad-4985-bfbf-0daf42c014ff"
+  ],
+  "timeCreated": "2023-03-18T23:41:12.388Z",
+  "updated": "2023-03-18T23:41:12.391Z",
+  "size": 8856,
+  "md5Hash": "5T2k39sLLQwdUrWNBQYadw==",
+  "crc32c": "1450560757"
+}
