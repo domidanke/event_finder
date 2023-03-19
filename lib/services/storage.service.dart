@@ -13,9 +13,10 @@ class StorageService {
   final storage = FirebaseStorage.instance;
 
   Future<void> saveEventImageToStorage(String eventId, File file) async {
+    SettableMetadata metadata = SettableMetadata(contentType: 'image/jpg');
     await storage
-        .ref('${AuthService().getCurrentFirebaseUser()!.uid}/events/$eventId')
-        .putBlob(file);
+        .ref('${AuthService().getCurrentFirebaseUser()!.uid}/events1/$eventId.jpeg')
+        .putFile(file, metadata);
   }
 
   Future<String> getEventImageUrl({required Event event}) async {
@@ -23,7 +24,7 @@ class StorageService {
     if (numOfRetries == 5) {
       throw Exception('File does not exist');
     }
-    final ref = storage.ref().child('${event.creatorId}/events/${event.uid}');
+    final ref = storage.ref().child('${event.creatorId}/events1/${event.uid}.jpeg');
     return await ref.getDownloadURL().then((downloadUrl) async {
       return downloadUrl;
     }, onError: (error, _) async {
@@ -32,9 +33,9 @@ class StorageService {
       // get created first which causes the stream to refresh before the image file
       // was uploaded. getDownloadURL will not throw so we have to explicitly catch
       // the 'error' and wait until the image file has been stored
-      await Future.delayed(const Duration(milliseconds: 500));
-      numOfRetries++;
-      return await getEventImageUrl(event: event);
+      //await Future.delayed(const Duration(milliseconds: 500));
+      //numOfRetries++;
+      //return await getEventImageUrl(event: event);
     });
   }
 
