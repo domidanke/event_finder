@@ -16,7 +16,7 @@ class StorageService {
     SettableMetadata metadata = SettableMetadata(contentType: 'image/jpg');
     await storage
         .ref(
-            '${AuthService().getCurrentFirebaseUser()!.uid}/events1/$eventId.jpeg')
+            '${AuthService().getCurrentFirebaseUser()!.uid}/events/$eventId.jpeg')
         .putFile(file, metadata);
   }
 
@@ -26,7 +26,7 @@ class StorageService {
       throw Exception('File does not exist');
     }
     final ref =
-        storage.ref().child('${event.creatorId}/events1/${event.uid}.jpeg');
+        storage.ref().child('${event.creatorId}/events/${event.uid}.jpeg');
     return await ref.getDownloadURL().then((downloadUrl) async {
       return downloadUrl;
     }, onError: (error, _) async {
