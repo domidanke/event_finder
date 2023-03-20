@@ -1,3 +1,6 @@
+# local dev
+emulators-data/
+
 # Miscellaneous
 *.class
 *.log
@@ -14,7 +17,6 @@
 *.ipr
 *.iws
 .idea/
-emulators-data/
 
 # Visual Studio Code related
 .vscode/
