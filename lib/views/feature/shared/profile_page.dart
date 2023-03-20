@@ -26,111 +26,113 @@ class _ProfilePageState extends State<ProfilePage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              currentUser.imageUrl != null
-                  ? CircleAvatar(
-                      radius: 100,
-                      backgroundImage: NetworkImage(currentUser.imageUrl!))
-                  : FutureBuilder(
-                      future: StorageService().getProfileImageUrl(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          final e = snapshot.error as FirebaseException;
-                          if (e.code == 'object-not-found') {
-                            return _getUploadProfileWidget();
-                          } else {
-                            return CircleAvatar(
-                              radius: 100,
-                              backgroundImage: Image.asset(
-                                      'assets/images/profile_placeholder.png')
-                                  .image,
-                            );
+          child: AuthService().getCurrentFirebaseUser()!.isAnonymous
+              ? _getGuestProfile()
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    currentUser.imageUrl != null
+                        ? CircleAvatar(
+                            radius: 100,
+                            backgroundImage:
+                                NetworkImage(currentUser.imageUrl!))
+                        : FutureBuilder(
+                            future: StorageService().getProfileImageUrl(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                final e = snapshot.error as FirebaseException;
+                                if (e.code == 'object-not-found') {
+                                  return _getUploadProfileWidget();
+                                } else {
+                                  return CircleAvatar(
+                                    radius: 100,
+                                    backgroundImage: Image.asset(
+                                            'assets/images/profile_placeholder.png')
+                                        .image,
+                                  );
+                                }
+                              }
+                              currentUser.imageUrl = snapshot.data;
+                              return CircleAvatar(
+                                radius: 100,
+                                backgroundImage: snapshot.connectionState ==
+                                        ConnectionState.waiting
+                                    ? null
+                                    : currentUser.imageUrl != null
+                                        ? NetworkImage(currentUser.imageUrl!)
+                                        : Image.asset(
+                                                'assets/images/profile_placeholder.png')
+                                            .image,
+                                child: snapshot.connectionState ==
+                                        ConnectionState.waiting
+                                    ? const CircularProgressIndicator()
+                                    : null,
+                              );
+                            }),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Divider(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(currentUser.displayName),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                        '(DEV) Account Type: ${currentUser.type.name.toUpperCase()}'),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    if (currentUser.type == UserType.base)
+                      ListTile(
+                        leading: const Icon(Icons.receipt),
+                        title: const Text('Meine Tickets'),
+                        onTap: () {},
+                      ),
+                    Opacity(
+                      opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
+                      child: ListTile(
+                        leading: const Icon(Icons.people),
+                        title: const Text('Meine Follows'),
+                        onTap: () {
+                          if (currentUser.savedArtists.isEmpty) {
+                            return;
                           }
-                        }
-                        currentUser.imageUrl = snapshot.data;
-                        return CircleAvatar(
-                          radius: 100,
-                          backgroundImage: snapshot.connectionState ==
-                                  ConnectionState.waiting
-                              ? null
-                              : currentUser.imageUrl != null
-                                  ? NetworkImage(currentUser.imageUrl!)
-                                  : Image.asset(
-                                          'assets/images/profile_placeholder.png')
-                                      .image,
-                          child: snapshot.connectionState ==
-                                  ConnectionState.waiting
-                              ? const CircularProgressIndicator()
-                              : null,
-                        );
-                      }),
-              const SizedBox(
-                height: 10,
-              ),
-              const Divider(),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(currentUser.displayName),
-              Text(AuthService().getCurrentFirebaseUser()!.email!),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                  '(DEV) Account Type: ${currentUser.type.name.toUpperCase()}'),
-              const SizedBox(
-                height: 50,
-              ),
-              if (currentUser.type == UserType.base)
-                ListTile(
-                  leading: const Icon(Icons.receipt),
-                  title: const Text('Meine Tickets'),
-                  onTap: () {},
+                          Navigator.pushNamed(context, 'saved_artists');
+                        },
+                      ),
+                    ),
+                    if (currentUser.type == UserType.base)
+                      Opacity(
+                        opacity: currentUser.savedEvents.isEmpty ? 0.4 : 1,
+                        child: ListTile(
+                          leading: const Icon(Icons.event_available),
+                          title: const Text('Gespeicherte Veranstaltungen'),
+                          onTap: () {
+                            if (currentUser.savedEvents.isEmpty) {
+                              return;
+                            }
+                            Navigator.pushNamed(context, 'saved_events');
+                          },
+                        ),
+                      ),
+                    ListTile(
+                      leading: const Icon(Icons.help),
+                      title: const Text('Support'),
+                      onTap: () {},
+                    ),
+                    KKButton(
+                        onPressed: () async {
+                          await AuthService().signOut().then((value) => {
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    'login', (Route<dynamic> route) => false),
+                              });
+                        },
+                        buttonText: 'Log Out')
+                  ],
                 ),
-              Opacity(
-                opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
-                child: ListTile(
-                  leading: const Icon(Icons.people),
-                  title: const Text('Meine Follows'),
-                  onTap: () {
-                    if (currentUser.savedArtists.isEmpty) {
-                      return;
-                    }
-                    Navigator.pushNamed(context, 'saved_artists');
-                  },
-                ),
-              ),
-              if (currentUser.type == UserType.base)
-                Opacity(
-                  opacity: currentUser.savedEvents.isEmpty ? 0.4 : 1,
-                  child: ListTile(
-                    leading: const Icon(Icons.event_available),
-                    title: const Text('Gespeicherte Veranstaltungen'),
-                    onTap: () {
-                      if (currentUser.savedEvents.isEmpty) {
-                        return;
-                      }
-                      Navigator.pushNamed(context, 'saved_events');
-                    },
-                  ),
-                ),
-              ListTile(
-                leading: const Icon(Icons.help),
-                title: const Text('Support'),
-                onTap: () {},
-              ),
-              KKButton(
-                  onPressed: () async {
-                    await AuthService().signOut().then((value) => {
-                          Navigator.pushNamedAndRemoveUntil(context, 'login',
-                              (Route<dynamic> route) => false),
-                        });
-                  },
-                  buttonText: 'Log Out')
-            ],
-          ),
         ),
       ),
     );
@@ -159,6 +161,58 @@ class _ProfilePageState extends State<ProfilePage> {
           const Text('Profilbild hinzufuegen')
         ],
       ),
+    );
+  }
+
+  Widget _getGuestProfile() {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 70,
+          backgroundImage:
+              Image.asset('assets/images/profile_placeholder.png').image,
+        ),
+        const Spacer(),
+        KKButton(
+            onPressed: () {
+              Navigator.pushNamed(context, 'activate_account');
+            },
+            buttonText: 'Activate Account'),
+        const Spacer(),
+        Opacity(
+          opacity: 0.2,
+          child: ListTile(
+            leading: const Icon(Icons.receipt),
+            title: const Text('Meine Tickets'),
+            onTap: () {},
+          ),
+        ),
+        Opacity(
+          opacity: 0.2,
+          child: ListTile(
+            leading: const Icon(Icons.event_available),
+            title: const Text('Gespeicherte Veranstaltungen'),
+            onTap: () {},
+          ),
+        ),
+        Opacity(
+          opacity: 0.2,
+          child: ListTile(
+            leading: const Icon(Icons.people),
+            title: const Text('Meine Follows'),
+            onTap: () {},
+          ),
+        ),
+        Opacity(
+          opacity: 0.2,
+          child: ListTile(
+            leading: const Icon(Icons.help),
+            title: const Text('Support'),
+            onTap: () {},
+          ),
+        ),
+        const Spacer(),
+      ],
     );
   }
 }

@@ -154,7 +154,26 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   buttonText: 'Tickets hier kaufen',
                 ),
               ),
-            if (event.creatorId == AuthService().getCurrentFirebaseUser()?.uid)
+            if (AuthService().currentUser?.type == UserType.guest)
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  children: [
+                    const Text(
+                        'Du willst Tickets kaufen? Dann registriere Dich'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    KKButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, 'activate_account');
+                      },
+                      buttonText: 'Aktiviere Account',
+                    ),
+                  ],
+                ),
+              ),
+            if (event.creatorId == AuthService().currentUser!.uid)
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 child: SizedBox(

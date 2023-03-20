@@ -55,7 +55,7 @@ class AppUser {
       'savedArtists': savedArtists,
       'savedHosts': savedHosts,
       'follower': follower,
-      'externalLinks': externalLinks,
+      'externalLinks': externalLinks.toJson(),
       'type': type.name
     };
   }
@@ -77,4 +77,12 @@ class ExternalLinks {
             instagram: json['instagram'] as String,
             facebook: json['facebook'] as String,
             soundCloud: json['soundCloud'] as String);
+
+  Map<String, Object?> toJson() {
+    return {
+      'instagram': instagram,
+      'facebook': facebook,
+      'soundCloud': soundCloud,
+    };
+  }
 }

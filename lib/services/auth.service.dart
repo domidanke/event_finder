@@ -49,11 +49,15 @@ class AuthService extends ChangeNotifier {
         email: email, password: password);
   }
 
-  Future<User?> signInWithGoogle() async {
+  Future<void> signInAsGuest() async {
+    await _firebaseAuth.signInAnonymously();
+  }
+
+  Future<void> signInWithGoogle() async {
     final GoogleSignInAccount? googleSignInAccount =
         await _googleSignIn.signIn();
 
-    if (googleSignInAccount == null) return null;
+    if (googleSignInAccount == null) return;
 
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
@@ -63,10 +67,30 @@ class AuthService extends ChangeNotifier {
       idToken: googleSignInAuthentication.idToken,
     );
 
-    final UserCredential userCredential =
-        await _firebaseAuth.signInWithCredential(credential);
+    await _firebaseAuth.signInWithCredential(credential);
+  }
 
-    return userCredential.user;
+  Future<void> activateAccountWithGoogle() async {
+    final GoogleSignInAccount? googleSignInAccount =
+        await _googleSignIn.signIn();
+
+    if (googleSignInAccount == null) return;
+
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+
+    await _firebaseAuth.currentUser?.linkWithCredential(credential);
+  }
+
+  Future<void> activateAccountWithEmail(String email, String password) async {
+    final credential =
+        EmailAuthProvider.credential(email: email, password: password);
+    await _firebaseAuth.currentUser?.linkWithCredential(credential);
   }
 
   Future<void> signOut() async {

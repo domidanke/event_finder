@@ -1,3 +1,5 @@
+import 'package:event_finder/models/enums.dart';
+import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/views/feature/base/search_page.dart';
 import 'package:event_finder/views/feature/shared/events_page.dart';
 import 'package:event_finder/views/feature/shared/profile_page.dart';
@@ -18,6 +20,7 @@ class _BaseHomePageState extends State<BaseHomePage> {
   ];
 
   void _onItemTapped(int index) {
+    if (AuthService().currentUser!.type == UserType.guest && index == 0) return;
     setState(() {
       _selectedIndex = index;
     });
@@ -28,14 +31,17 @@ class _BaseHomePageState extends State<BaseHomePage> {
     return WillPopScope(
       onWillPop: () async => !Navigator.of(context).userGestureInProgress,
       child: Scaffold(
-        //drawer: const KKDrawer(),
         body: SafeArea(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
+              icon: Opacity(
+                  opacity: AuthService().currentUser!.type == UserType.guest
+                      ? 0.2
+                      : 1,
+                  child: Icon(Icons.search)),
               label: 'Suche',
             ),
             BottomNavigationBarItem(

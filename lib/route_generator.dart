@@ -1,3 +1,4 @@
+import 'package:event_finder/views/auth/activate_account_page.dart';
 import 'package:event_finder/views/auth/login_page.dart';
 import 'package:event_finder/views/auth/pre_auth_page.dart';
 import 'package:event_finder/views/auth/register_page.dart';
@@ -24,6 +25,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const LoginPage());
       case 'register':
         return MaterialPageRoute(builder: (_) => const RegisterPage());
+      case 'activate_account':
+        return MaterialPageRoute(builder: (_) => const ActivateAccountPage());
       case 'verify_email':
         return MaterialPageRoute(builder: (_) => const VerifyEmailPage());
       case 'home':

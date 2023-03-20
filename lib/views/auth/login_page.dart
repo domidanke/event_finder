@@ -1,4 +1,5 @@
 import 'package:event_finder/services/alert.service.dart';
+import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/widgets/kk_button_async.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +109,26 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const GoogleSignInButton(),
                       ],
+                    ),
+                    TextButton(
+                      child: const Text(
+                        'Weiter als Gast',
+                        style: TextStyle(decoration: TextDecoration.underline),
+                      ),
+                      onPressed: () async {
+                        try {
+                          await AuthService()
+                              .signInAsGuest()
+                              .then((value) async {
+                            await FirestoreService().addUserDocument(
+                                AuthService().getCurrentFirebaseUser()!);
+                            if (mounted) Navigator.pushNamed(context, '/');
+                          });
+                        } on FirebaseAuthException catch (e) {
+                          AlertService().showAlert(
+                              'Login fehlgeschlagen', e.code, context);
+                        }
+                      },
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

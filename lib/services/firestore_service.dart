@@ -28,12 +28,20 @@ class FirestoreService {
 
   Future<void> addUserDocument(User user) async {
     final newUser = AppUser(
-      type: UserType.base,
+      type: user.isAnonymous ? UserType.guest : UserType.base,
       displayName: user.displayName ?? '',
     );
     await usersCollection
         .doc(AuthService().getCurrentFirebaseUser()!.uid)
         .set(newUser);
+  }
+
+  Future<void> upgradeUserDocument() async {
+    var user = AuthService().currentUser!;
+    user.type = UserType.base;
+    await usersCollection
+        .doc(AuthService().getCurrentFirebaseUser()!.uid)
+        .set(user);
   }
 
   Future<AppUser> getUserData() async {

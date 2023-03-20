@@ -1,3 +1,4 @@
+import 'package:event_finder/widgets/google_activate_button.dart';
 import 'package:event_finder/widgets/kk_button_async.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +7,14 @@ import 'package:provider/provider.dart';
 import '../../services/alert.service.dart';
 import '../../services/auth.service.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class ActivateAccountPage extends StatefulWidget {
+  const ActivateAccountPage({Key? key}) : super(key: key);
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<ActivateAccountPage> createState() => _ActivateAccountPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _ActivateAccountPageState extends State<ActivateAccountPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
@@ -29,7 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               const Text(
                 'Willkommen auf Event Finder, eine Plattform für Künstler, Veranstalter und Fans...',
@@ -99,12 +100,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       }
                       try {
                         authService.registerLoading = true;
-                        await authService
-                            .signUp(
-                                emailController.text, passwordController.text)
-                            .then((value) => {
-                                  AuthService().sendEmailVerificationEmail(),
-                                });
+                        await authService.activateAccountWithEmail(
+                            emailController.text, passwordController.text);
+                        AuthService().sendEmailVerificationEmail();
+                        authService.registerLoading = false;
                         if (mounted) Navigator.pushNamed(context, '/');
                       } on FirebaseAuthException catch (e) {
                         authService.registerLoading = false;
@@ -115,6 +114,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                   loading: authService.registerLoading,
                   buttonText: 'Registrieren'),
+              const SizedBox(
+                height: 30,
+              ),
+              const GoogleActivateButton(),
             ],
           ),
         ),

@@ -16,7 +16,7 @@ class PreAuthPage extends StatelessWidget {
     var user = AuthService().getCurrentFirebaseUser();
     if (user == null) {
       return const LoginPage();
-    } else if (!user.emailVerified) {
+    } else if (!user.isAnonymous && !user.emailVerified) {
       return const VerifyEmailPage();
     } else {
       debugPrint('User is logged in as ${user.displayName} with ${user.email}');
@@ -26,6 +26,7 @@ class PreAuthPage extends StatelessWidget {
             AuthService().currentUser = snapshot.data;
             if (AuthService().currentUser != null) {
               switch (AuthService().currentUser!.type) {
+                case UserType.guest:
                 case UserType.base:
                   return const BaseHomePage();
                 case UserType.artist:
