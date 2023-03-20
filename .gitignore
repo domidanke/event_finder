@@ -1,5 +1,5 @@
 # local dev
-emulators-data/
+emulators_data/
 
 # Miscellaneous
 *.class
