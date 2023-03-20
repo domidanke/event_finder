@@ -14,6 +14,8 @@ class ArtistSearch extends StatefulWidget {
 }
 
 class _ArtistSearchState extends State<ArtistSearch> {
+  late Future<String> _imageUrl;
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +35,7 @@ class _ArtistSearchState extends State<ArtistSearch> {
           ),
       itemBuilder: (context, snapshot) {
         final artist = snapshot.data();
+        _imageUrl = StorageService().getUserImageUrl(artist.uid);
 
         /// This is used twice, also in saved artists page TODO: merge into one widget
         return GestureDetector(
@@ -45,7 +48,7 @@ class _ArtistSearchState extends State<ArtistSearch> {
             child: ListTile(
               visualDensity: const VisualDensity(vertical: 4),
               leading: FutureBuilder(
-                  future: StorageService().getUserImageUrl(artist.uid),
+                  future: _imageUrl,
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return CircleAvatar(

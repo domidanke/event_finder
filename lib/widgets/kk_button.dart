@@ -13,7 +13,8 @@ class KKButton extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
         onPressed: onPressed,
         child: Container(
-          constraints: const BoxConstraints(maxHeight: 70, minHeight: 36.0),
+          constraints: const BoxConstraints(
+              maxHeight: 70, minHeight: 36.0, minWidth: 100),
           alignment: Alignment.center,
           child: Text(
             buttonText,

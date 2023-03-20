@@ -17,9 +17,10 @@ class EventCard extends StatefulWidget {
 }
 
 class _EventCardState extends State<EventCard> {
+  late Future<String> _imageUrl;
   @override
   void initState() {
-    // TODO: implement initState
+    _imageUrl = StorageService().getEventImageUrl(event: widget.event);
     super.initState();
   }
 
@@ -37,7 +38,7 @@ class _EventCardState extends State<EventCard> {
         child: Stack(
           children: [
             FutureBuilder(
-                future: StorageService().getEventImageUrl(event: widget.event),
+                future: _imageUrl,
                 builder: (context, snapshot) {
                   widget.event.imageUrl = snapshot.data;
                   return Container(

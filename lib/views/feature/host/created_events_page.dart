@@ -24,7 +24,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.pushNamed(context, 'event_form');
+          Navigator.pushNamed(context, 'create_event');
         },
       ),
       body: SafeArea(

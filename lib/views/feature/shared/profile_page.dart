@@ -19,6 +19,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late Future<String> _imageUrl;
+
+  @override
+  void initState() {
+    _imageUrl = StorageService().getProfileImageUrl();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppUser currentUser = Provider.of<AuthService>(context).currentUser!;
@@ -37,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             backgroundImage:
                                 NetworkImage(currentUser.imageUrl!))
                         : FutureBuilder(
-                            future: StorageService().getProfileImageUrl(),
+                            future: _imageUrl,
                             builder: (context, snapshot) {
                               if (snapshot.hasError) {
                                 final e = snapshot.error as FirebaseException;
@@ -53,21 +61,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                 }
                               }
                               currentUser.imageUrl = snapshot.data;
-                              return CircleAvatar(
-                                radius: 100,
-                                backgroundImage: snapshot.connectionState ==
-                                        ConnectionState.waiting
-                                    ? null
-                                    : currentUser.imageUrl != null
-                                        ? NetworkImage(currentUser.imageUrl!)
-                                        : Image.asset(
-                                                'assets/images/profile_placeholder.png')
-                                            .image,
-                                child: snapshot.connectionState ==
-                                        ConnectionState.waiting
-                                    ? const CircularProgressIndicator()
-                                    : null,
-                              );
+                              if (snapshot.hasData) {
+                                return CircleAvatar(
+                                  radius: 100,
+                                  backgroundImage: snapshot.connectionState ==
+                                          ConnectionState.waiting
+                                      ? null
+                                      : currentUser.imageUrl != null
+                                          ? NetworkImage(currentUser.imageUrl!)
+                                          : Image.asset(
+                                                  'assets/images/profile_placeholder.png')
+                                              .image,
+                                  child: snapshot.connectionState ==
+                                          ConnectionState.waiting
+                                      ? const CircularProgressIndicator()
+                                      : null,
+                                );
+                              } else {
+                                return const SizedBox(
+                                    height: 100,
+                                    width: 100,
+                                    child: CircularProgressIndicator());
+                              }
                             }),
                     const SizedBox(
                       height: 10,

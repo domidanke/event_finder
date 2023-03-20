@@ -48,6 +48,7 @@ class StorageService {
   }
 
   Future<String> getProfileImageUrl() async {
+    await Future.delayed(const Duration(milliseconds: 1500));
     final ref = storage
         .ref()
         .child('profile/${AuthService().getCurrentFirebaseUser()!.uid}/image');
