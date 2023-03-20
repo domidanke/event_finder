@@ -132,4 +132,14 @@ class AuthService extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  /// TODO: Move to separate User service class
+  void toggleSavedHost(String hostUid) {
+    if (currentUser!.savedHosts.contains(hostUid)) {
+      currentUser!.savedHosts.remove(hostUid);
+    } else {
+      currentUser!.savedHosts.add(hostUid);
+    }
+    notifyListeners();
+  }
 }

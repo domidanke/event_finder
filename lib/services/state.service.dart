@@ -24,4 +24,12 @@ class StateService extends ChangeNotifier {
     _lastSelectedArtist = artist;
     notifyListeners();
   }
+
+  AppUser? _lastSelectedHost;
+  AppUser? get lastSelectedHost => _lastSelectedHost;
+
+  set lastSelectedHost(AppUser? host) {
+    _lastSelectedHost = host;
+    notifyListeners();
+  }
 }

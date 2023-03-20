@@ -99,6 +99,34 @@ class FirestoreService {
     }
   }
 
+  Future<void> toggleSaveHostForUser(String hostUid) async {
+    if (AuthService().currentUser!.savedHosts.contains(hostUid)) {
+      await usersCollection
+          .doc(AuthService().getCurrentFirebaseUser()?.uid)
+          .update({
+        'savedHosts': FieldValue.arrayRemove([hostUid])
+      });
+    } else {
+      await usersCollection
+          .doc(AuthService().getCurrentFirebaseUser()?.uid)
+          .update({
+        'savedHosts': FieldValue.arrayUnion([hostUid])
+      });
+    }
+  }
+
+  Future<void> toggleFollowerForHost(String hostUid) async {
+    if (AuthService().currentUser!.savedHosts.contains(hostUid)) {
+      await usersCollection.doc(hostUid).update({
+        'follower': FieldValue.arrayRemove([AuthService().currentUser!.uid])
+      });
+    } else {
+      await usersCollection.doc(hostUid).update({
+        'follower': FieldValue.arrayUnion([AuthService().currentUser!.uid])
+      });
+    }
+  }
+
   final usersCollection = db.collection('Users').withConverter<AppUser>(
         fromFirestore: (snapshot, _) {
           if (snapshot.exists) {
