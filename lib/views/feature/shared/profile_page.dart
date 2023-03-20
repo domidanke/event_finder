@@ -5,6 +5,7 @@ import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/storage.service.dart';
 import 'package:event_finder/widgets/kk_button.dart';
+import 'package:event_finder/widgets/kk_popupMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +92,26 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text(currentUser.displayName),
+                    Row(
+                      children: [
+                        const Spacer(),
+                        Text(currentUser.displayName),
+                        const Spacer(),
+                        KKPopupMenu(
+                          onItemSelect: (int index) async {
+                            print(index);
+                            if (index == 1) {
+                              await AuthService().signOut().then((value) => {
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context,
+                                        'login',
+                                        (Route<dynamic> route) => false),
+                                  });
+                            }
+                          },
+                        )
+                      ],
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -137,15 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       leading: const Icon(Icons.help),
                       title: const Text('Support'),
                       onTap: () {},
-                    ),
-                    KKButton(
-                        onPressed: () async {
-                          await AuthService().signOut().then((value) => {
-                                Navigator.pushNamedAndRemoveUntil(context,
-                                    'login', (Route<dynamic> route) => false),
-                              });
-                        },
-                        buttonText: 'Log Out')
+                    )
                   ],
                 ),
         ),

@@ -85,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         KKButtonAsync(
                             onPressed: () async {
+                              if (authService.loginLoading) return;
                               if (formKey.currentState!.validate()) {
                                 try {
                                   authService.loginLoading = true;
