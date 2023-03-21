@@ -1,4 +1,5 @@
 import 'package:event_finder/models/enums.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AppUser {
   AppUser({
@@ -10,6 +11,7 @@ class AppUser {
     this.savedHosts = const [],
     this.follower = const [],
     this.externalLinks = const ExternalLinks(),
+    this.mainLocationCoordinates = const LatLng(0, 0),
   });
 
   final String uid;
@@ -20,6 +22,7 @@ class AppUser {
   late List<String> savedArtists = [];
   late List<String> savedHosts = [];
   late List<String> follower = [];
+  late LatLng mainLocationCoordinates;
   String? imageUrl;
 
   AppUser.fromJson(Map<String, Object?> json, String uid)
@@ -44,6 +47,10 @@ class AppUser {
                 ? ExternalLinks.fromJson(
                     json['externalLinks'] as Map<String, dynamic>)
                 : const ExternalLinks(),
+            mainLocationCoordinates: json['mainLocationCoordinates'] != null
+                ? LatLng((json['mainLocationCoordinates'] as List<dynamic>)[0],
+                    (json['mainLocationCoordinates'] as List<dynamic>)[1])
+                : const LatLng(0, 0),
             displayName: json['displayName'] != null
                 ? json['displayName'] as String
                 : '');
@@ -56,6 +63,7 @@ class AppUser {
       'savedHosts': savedHosts,
       'follower': follower,
       'externalLinks': externalLinks.toJson(),
+      'mainLocationCoordinates': mainLocationCoordinates.toJson(),
       'type': type.name
     };
   }

@@ -11,6 +11,7 @@ import 'package:event_finder/views/feature/host/created_events_page.dart';
 import 'package:event_finder/views/feature/host/edit_event_form.dart';
 import 'package:event_finder/views/feature/host/event_form.dart';
 import 'package:event_finder/views/feature/host/host_page.dart';
+import 'package:event_finder/views/feature/host/set_main_location_page.dart';
 import 'package:event_finder/views/feature/shared/buy_tickets_page.dart';
 import 'package:event_finder/views/feature/shared/event_details_page.dart';
 import 'package:event_finder/views/feature/shared/profile_page.dart';
@@ -41,6 +42,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const EditEventForm());
       case 'profile':
         return MaterialPageRoute(builder: (_) => const ProfilePage());
+      case 'set_main_location':
+        return MaterialPageRoute(builder: (_) => const SetMainLocationPage());
       case 'artist_page':
         return MaterialPageRoute(builder: (_) => const ArtistPage());
       case 'host_page':

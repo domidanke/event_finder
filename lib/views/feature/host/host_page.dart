@@ -2,6 +2,7 @@ import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/views/feature/shared/location_snippet.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -108,7 +109,14 @@ class _HostPageState extends State<HostPage> {
                         }
                       })
                 ],
-              )
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                  height: 200,
+                  child: LocationSnippet(
+                      coordinates: host.mainLocationCoordinates))
             ],
           ),
         ),

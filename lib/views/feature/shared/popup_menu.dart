@@ -10,7 +10,6 @@ class KKPopupMenu extends StatefulWidget {
 
 class _MyAppState extends State<KKPopupMenu> {
   var appBarHeight = AppBar().preferredSize.height;
-
   PopupMenuItem _buildPopupMenuItem(
       String title, IconData iconData, int position) {
     return PopupMenuItem(
@@ -48,10 +47,11 @@ class _MyAppState extends State<KKPopupMenu> {
       itemBuilder: (ctx) => [
         _buildPopupMenuItem(
             'Profil bearbeiten', Icons.edit, Options.edit.index),
+        _buildPopupMenuItem('Support', Icons.help, Options.support.index),
         _buildPopupMenuItem('Ausloggen', Icons.logout, Options.logout.index),
       ],
     );
   }
 }
 
-enum Options { edit, logout }
+enum Options { edit, support, logout }

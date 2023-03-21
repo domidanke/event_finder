@@ -1,11 +1,10 @@
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/host/create_event/create_event_page_1.dart';
-import 'package:event_finder/views/feature/host/create_event/create_event_page_4.dart';
+import 'package:event_finder/views/feature/host/create_event/create_event_page_3.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 
 import 'create_event_page_2.dart';
-import 'create_event_page_3.dart';
 
 class CreateEventWrapper extends StatefulWidget {
   const CreateEventWrapper({Key? key}) : super(key: key);
@@ -19,7 +18,6 @@ class _CreateEventWrapperState extends State<CreateEventWrapper> {
     const CreateEventPage1(),
     const CreateEventPage2(),
     const CreateEventPage3(),
-    const CreateEventPage4(),
   ];
   int _currentPage = 0;
   final PageController _pageController = PageController(initialPage: 0);

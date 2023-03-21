@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/storage.service.dart';
+import 'package:event_finder/views/feature/shared/popup_menu.dart';
 import 'package:event_finder/widgets/kk_button.dart';
-import 'package:event_finder/widgets/kk_popupMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -95,12 +95,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     Row(
                       children: [
                         const Spacer(),
-                        Text(currentUser.displayName),
+                        Text(
+                            '${currentUser.displayName} (${currentUser.type.name.toUpperCase()})'),
                         const Spacer(),
                         KKPopupMenu(
                           onItemSelect: (int index) async {
                             print(index);
-                            if (index == 1) {
+                            if (index == 2) {
                               await AuthService().signOut().then((value) => {
                                     Navigator.pushNamedAndRemoveUntil(
                                         context,
@@ -112,11 +113,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         )
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                        '(DEV) Account Type: ${currentUser.type.name.toUpperCase()}'),
                     const SizedBox(
                       height: 50,
                     ),
@@ -153,11 +149,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         ),
                       ),
-                    ListTile(
-                      leading: const Icon(Icons.help),
-                      title: const Text('Support'),
-                      onTap: () {},
-                    )
+                    if (currentUser.type == UserType.host &&
+                        currentUser.mainLocationCoordinates.latitude == 0 &&
+                        currentUser.mainLocationCoordinates.longitude == 0)
+                      KKButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, 'set_main_location');
+                          },
+                          buttonText: 'Setze deine Main Location'),
                   ],
                 ),
         ),

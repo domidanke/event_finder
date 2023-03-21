@@ -4,35 +4,36 @@ import 'package:event_finder/services/alert.service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MapsPage extends StatefulWidget {
-  const MapsPage({Key? key, required this.onAddressSelected}) : super(key: key);
+class SearchAddressInMap extends StatefulWidget {
+  const SearchAddressInMap({Key? key, required this.onAddressSelected})
+      : super(key: key);
 
   final Function(LatLng coordinates) onAddressSelected;
 
   @override
-  State<MapsPage> createState() => MapsPageState();
+  State<SearchAddressInMap> createState() => SearchAddressInMapState();
 }
 
-class MapsPageState extends State<MapsPage> {
+class SearchAddressInMapState extends State<SearchAddressInMap> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   final _addressController = TextEditingController();
 
-  Future<CameraPosition> getLocation() async {
-    await Geolocator.requestPermission();
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    return CameraPosition(
-      target: LatLng(position.latitude, position.longitude),
-      zoom: 14.4746,
-    );
-  }
+  /// TODO Move to actual gps related widget (does not exist yet)
+  // Future<CameraPosition> getLocation() async {
+  //   await Geolocator.requestPermission();
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //
+  //   return CameraPosition(
+  //     target: LatLng(position.latitude, position.longitude),
+  //     zoom: 14.4746,
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

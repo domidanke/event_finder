@@ -6,6 +6,7 @@ import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FirestoreService {
   factory FirestoreService() {
@@ -125,6 +126,12 @@ class FirestoreService {
         'follower': FieldValue.arrayUnion([AuthService().currentUser!.uid])
       });
     }
+  }
+
+  Future<void> saveMainLocationData(LatLng coordinates) async {
+    await usersCollection
+        .doc(AuthService().currentUser!.uid)
+        .update({'mainLocationCoordinates': coordinates.toJson()});
   }
 
   final usersCollection = db.collection('Users').withConverter<AppUser>(
