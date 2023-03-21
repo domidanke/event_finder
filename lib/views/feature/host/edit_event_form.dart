@@ -104,6 +104,7 @@ class _EditEventFormState extends State<EditEventForm> {
                           Provider.of<StateService>(context, listen: false)
                               .lastSelectedEvent!;
                       final map = generateMap();
+                      if (map.isEmpty) return;
                       try {
                         await FirestoreService()
                             .updateEventDocument(map, event.uid)
