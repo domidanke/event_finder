@@ -1,8 +1,6 @@
-import 'dart:io';
-
+import 'package:event_finder/views/feature/shared/maps_page.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../widgets/kk_button.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CreateEventPage3 extends StatefulWidget {
   const CreateEventPage3({Key? key}) : super(key: key);
@@ -12,17 +10,14 @@ class CreateEventPage3 extends StatefulWidget {
 }
 
 class _CreateEventPage3State extends State<CreateEventPage3> {
-  File? selectedImageFile;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Center(
-          child: KKButton(
-              onPressed: () async {
-                print('Pick Location');
-              },
-              buttonText: 'Adresse finden'),
-        ));
+    return MapsPage(
+      onAddressSelected: (LatLng coordinates) {
+        /// TODO Map to event :)
+        print(coordinates.latitude);
+        print(coordinates.longitude);
+      },
+    );
   }
 }

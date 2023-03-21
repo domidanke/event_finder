@@ -11,7 +11,8 @@ Map<String, String> kAlertMap = const {
   'weak-password': 'Das Passwort muss mindestens 6 Charaktere haben.',
   'email-already-in-use': 'Die Email wird bereits genutzt.',
   'operation-not-allowed': 'Something went wrong on the Server',
-  'internal-error': 'Etwas ist schiefgelaufen'
+  'internal-error': 'Etwas ist schiefgelaufen',
+  'not_found': 'Keine Adresse gefunden',
 };
 
 class AlertService {

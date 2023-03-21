@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import '../../../../widgets/kk_button.dart';
@@ -12,7 +10,6 @@ class CreateEventPage4 extends StatefulWidget {
 }
 
 class _CreateEventPage4State extends State<CreateEventPage4> {
-  File? selectedImageFile;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,7 +17,7 @@ class _CreateEventPage4State extends State<CreateEventPage4> {
         child: Center(
           child: KKButton(
               onPressed: () async {
-                print('Search Artist');
+                print('Kuenstler');
               },
               buttonText: 'Kuenstler hinzufuegen'),
         ));
