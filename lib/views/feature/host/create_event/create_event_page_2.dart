@@ -18,29 +18,33 @@ class _CreateEventPage2State extends State<CreateEventPage2> {
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              KKButton(
-                  onPressed: () async {
-                    final XFile? image = await ImagePicker()
-                        .pickImage(source: ImageSource.gallery);
-                    if (image == null) return;
-                    setState(() {
-                      selectedImageFile = File(image.path);
-                    });
-                  },
-                  buttonText: 'Bild hochladen'),
-              SizedBox(
-                width: 100,
-                child: Text(
-                  selectedImageFile != null ? 'Image ready' : '',
-                  style: const TextStyle(color: Colors.greenAccent),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                KKButton(
+                    onPressed: () async {
+                      final XFile? image = await ImagePicker()
+                          .pickImage(source: ImageSource.gallery);
+                      if (image == null) return;
+                      setState(() {
+                        selectedImageFile = File(image.path);
+                      });
+                    },
+                    buttonText: 'Bild hochladen'),
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    selectedImageFile != null ? 'Image ready' : '',
+                    style: const TextStyle(color: Colors.greenAccent),
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+            if (selectedImageFile != null) Image.file(selectedImageFile!),
+          ],
         ));
   }
 }
