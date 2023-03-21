@@ -17,11 +17,6 @@ class _ArtistSearchState extends State<ArtistSearch> {
   late Future<String> _imageUrl;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return FirestoreListView<AppUser>(
       emptyBuilder: (context) {
