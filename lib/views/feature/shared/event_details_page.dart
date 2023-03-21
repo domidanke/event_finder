@@ -7,6 +7,8 @@ import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'location_snippet.dart';
+
 class EventDetailsPage extends StatefulWidget {
   const EventDetailsPage({super.key});
 
@@ -128,7 +130,14 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
+                  ),
+                  SizedBox(
+                      height: 200,
+                      child: LocationSnippet(
+                          coordinates: event.locationCoordinates)),
+                  const SizedBox(
+                    height: 10,
                   ),
                   Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),

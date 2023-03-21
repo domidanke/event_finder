@@ -1,3 +1,5 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class Event {
   Event(
       {this.uid = '',
@@ -8,7 +10,8 @@ class Event {
       required this.genre,
       required this.ticketPrice,
       required this.creatorId,
-      required this.creatorName});
+      required this.creatorName,
+      this.locationCoordinates = const LatLng(0, 0)});
 
   Event.fromJson(Map<String, Object?> json, String uid)
       : this(
@@ -21,6 +24,10 @@ class Event {
           ticketPrice: json['ticketPrice']! as int,
           creatorId: json['creatorId']! as String,
           creatorName: json['creatorName']! as String,
+          locationCoordinates: json['locationCoordinates'] != null
+              ? LatLng((json['locationCoordinates'] as List<dynamic>)[0],
+                  (json['locationCoordinates'] as List<dynamic>)[1])
+              : const LatLng(0, 0),
         );
 
   final String uid;
@@ -32,6 +39,7 @@ class Event {
   final DateTime date;
   final String creatorId;
   final String creatorName;
+  final LatLng locationCoordinates;
   String? imageUrl;
 
   Map<String, Object?> toJson() {
@@ -44,6 +52,7 @@ class Event {
       'address': address,
       'genre': genre,
       'ticketPrice': ticketPrice,
+      'locationCoordinates': locationCoordinates.toJson(),
     };
   }
 }
