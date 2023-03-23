@@ -109,18 +109,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
                       children: [
-                        const KKIcon(icon: Icon(Icons.location_on)),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Text(event.address),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Row(
-                      children: [
                         const KKIcon(icon: Icon(Icons.music_note)),
                         const SizedBox(
                           width: 20,

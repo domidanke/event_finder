@@ -142,4 +142,9 @@ class AuthService extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  bool isProfileComplete() {
+    return currentUser!.mainLocationCoordinates.latitude != 0 &&
+        currentUser!.displayName.isNotEmpty;
+  }
 }

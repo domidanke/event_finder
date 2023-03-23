@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:event_finder/models/event.dart';
+import 'package:event_finder/services/state.service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -13,38 +15,56 @@ class CreateEventPage2 extends StatefulWidget {
 }
 
 class _CreateEventPage2State extends State<CreateEventPage2> {
-  File? selectedImageFile;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    NewEvent newEvent = StateService().newEvent;
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
               children: [
-                KKButton(
-                    onPressed: () async {
-                      final XFile? image = await ImagePicker()
-                          .pickImage(source: ImageSource.gallery);
-                      if (image == null) return;
-                      setState(() {
-                        selectedImageFile = File(image.path);
-                      });
-                    },
-                    buttonText: 'Bild hochladen'),
-                SizedBox(
-                  width: 100,
-                  child: Text(
-                    selectedImageFile != null ? 'Image ready' : '',
-                    style: const TextStyle(color: Colors.greenAccent),
-                  ),
-                ),
+                const Spacer(),
+                if (newEvent.selectedImageFile == null)
+                  KKButton(
+                      onPressed: () async {
+                        final XFile? image = await ImagePicker()
+                            .pickImage(source: ImageSource.gallery);
+                        if (image == null) return;
+                        setState(() {
+                          newEvent.selectedImageFile = File(image.path);
+                        });
+                      },
+                      buttonText: 'Bild hochladen'),
+                if (newEvent.selectedImageFile != null)
+                  Image.file(newEvent.selectedImageFile!),
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    KKButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      buttonText: 'Zurueck',
+                    ),
+                    Opacity(
+                      opacity: newEvent.selectedImageFile == null ? 0.4 : 1,
+                      child: KKButton(
+                        onPressed: () {
+                          if (newEvent.selectedImageFile == null) {
+                            return;
+                          }
+                          Navigator.pushNamed(context, 'create_event_page_3');
+                        },
+                        buttonText: 'Weiter',
+                      ),
+                    ),
+                  ],
+                )
               ],
-            ),
-            if (selectedImageFile != null) Image.file(selectedImageFile!),
-          ],
-        ));
+            )),
+      ),
+    );
   }
 }

@@ -4,12 +4,13 @@ import 'package:event_finder/views/auth/pre_auth_page.dart';
 import 'package:event_finder/views/auth/register_page.dart';
 import 'package:event_finder/views/auth/verify_email_page.dart';
 import 'package:event_finder/views/feature/artist/artist_page.dart';
-import 'package:event_finder/views/feature/base/base_home_page.dart';
 import 'package:event_finder/views/feature/base/saved_events_page.dart';
-import 'package:event_finder/views/feature/host/create_event/create_event_wrapper.dart';
+import 'package:event_finder/views/feature/host/create_event/create_event_page_1.dart';
+import 'package:event_finder/views/feature/host/create_event/create_event_page_2.dart';
+import 'package:event_finder/views/feature/host/create_event/create_event_page_3.dart';
 import 'package:event_finder/views/feature/host/created_events_page.dart';
 import 'package:event_finder/views/feature/host/edit_event_form.dart';
-import 'package:event_finder/views/feature/host/event_form.dart';
+import 'package:event_finder/views/feature/host/host_home_page.dart';
 import 'package:event_finder/views/feature/host/host_page.dart';
 import 'package:event_finder/views/feature/host/set_main_location_page.dart';
 import 'package:event_finder/views/feature/shared/buy_tickets_page.dart';
@@ -32,12 +33,14 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ActivateAccountPage());
       case 'verify_email':
         return MaterialPageRoute(builder: (_) => const VerifyEmailPage());
-      case 'home':
-        return MaterialPageRoute(builder: (_) => const BaseHomePage());
-      case 'event_form':
-        return MaterialPageRoute(builder: (_) => const EventForm());
-      case 'create_event':
-        return MaterialPageRoute(builder: (_) => const CreateEventWrapper());
+      case 'host_home':
+        return MaterialPageRoute(builder: (_) => const HostHomePage());
+      case 'create_event_page_1':
+        return MaterialPageRoute(builder: (_) => const CreateEventPage1());
+      case 'create_event_page_2':
+        return MaterialPageRoute(builder: (_) => const CreateEventPage2());
+      case 'create_event_page_3':
+        return MaterialPageRoute(builder: (_) => const CreateEventPage3());
       case 'edit_event':
         return MaterialPageRoute(builder: (_) => const EditEventForm());
       case 'profile':

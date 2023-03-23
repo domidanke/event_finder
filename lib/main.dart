@@ -40,12 +40,14 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => AuthService()),
       ChangeNotifierProvider(create: (_) => StateService()),
     ],
-    child: const EventFinder(),
+    child: EventFinder(),
   ));
 }
 
 class EventFinder extends StatelessWidget {
-  const EventFinder({super.key});
+  EventFinder({super.key});
+  final _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
@@ -67,6 +69,7 @@ class EventFinder extends StatelessWidget {
           darkScheme = darkColorScheme;
         }
         return MaterialApp(
+          scaffoldMessengerKey: _scaffoldKey,
           debugShowCheckedModeBanner: false,
           onGenerateRoute: RouteGenerator().generateRoute,
           theme: ThemeData(

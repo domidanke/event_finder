@@ -32,4 +32,6 @@ class StateService extends ChangeNotifier {
     _lastSelectedHost = host;
     notifyListeners();
   }
+
+  NewEvent newEvent = NewEvent();
 }
