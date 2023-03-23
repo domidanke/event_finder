@@ -37,8 +37,7 @@ class SearchAddressInMapState extends State<SearchAddressInMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(
+    return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -94,7 +93,7 @@ class SearchAddressInMapState extends State<SearchAddressInMap> {
             },
           )),
       ],
-    ));
+    );
   }
 
   Future<void> _pinAddress(Location location) async {

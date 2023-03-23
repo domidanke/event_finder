@@ -120,7 +120,11 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  SizedBox(
+                  Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      clipBehavior: Clip.hardEdge,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(12))),
                       height: 200,
                       child: LocationSnippet(
                           coordinates: event.locationCoordinates)),

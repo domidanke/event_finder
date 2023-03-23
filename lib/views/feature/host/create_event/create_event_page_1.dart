@@ -216,10 +216,19 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
               child: Column(
                 children: [
                   Expanded(
-                    child: SearchAddressInMap(onAddressSelected: (coordinates) {
-                      newCoordinates = coordinates;
-                    }),
+                    child: Container(
+                      margin: const EdgeInsets.all(8),
+                      height: 300,
+                      clipBehavior: Clip.hardEdge,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(12))),
+                      child:
+                          SearchAddressInMap(onAddressSelected: (coordinates) {
+                        newCoordinates = coordinates;
+                      }),
+                    ),
                   ),
+                  const Divider(),
                   KKButton(
                     onPressed: () {
                       if (newCoordinates == null) return;

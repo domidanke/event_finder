@@ -37,8 +37,7 @@ class LocationSnippetState extends State<LocationSnippet> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: GoogleMap(
+    return GoogleMap(
       rotateGesturesEnabled: false,
       scrollGesturesEnabled: false,
       myLocationButtonEnabled: false,
@@ -55,6 +54,6 @@ class LocationSnippetState extends State<LocationSnippet> {
         controller.setMapStyle(json);
         _controller.complete(controller);
       },
-    ));
+    );
   }
 }
