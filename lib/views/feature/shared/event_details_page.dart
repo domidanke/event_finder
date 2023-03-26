@@ -1,12 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/services/storage.service.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/app_user.dart';
+import '../../../services/firestore_service.dart';
 import 'location_snippet.dart';
 
 class EventDetailsPage extends StatefulWidget {
@@ -17,6 +22,7 @@ class EventDetailsPage extends StatefulWidget {
 }
 
 class _EventDetailsPageState extends State<EventDetailsPage> {
+  late Future<String> _imageUrl;
   @override
   Widget build(BuildContext context) {
     final Event event = Provider.of<StateService>(context).lastSelectedEvent!;
@@ -105,17 +111,149 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       ],
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Row(
-                      children: [
-                        const KKIcon(icon: Icon(Icons.music_note)),
-                        const SizedBox(
-                          width: 20,
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          children: [
+                            const KKIcon(icon: Icon(Icons.music_note)),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Text(event.genre),
+                          ],
                         ),
-                        Text(event.genre),
-                      ],
-                    ),
+                      ),
+                      const Spacer(),
+                      if (event.artists.isNotEmpty)
+                        Container(
+                          margin: const EdgeInsets.only(right: 12),
+                          child: IconButton(
+                              onPressed: () {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) => Dialog(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: FirestoreListView<AppUser>(
+                                              emptyBuilder: (context) {
+                                                return const Center(
+                                                  child: Text('Keine Artists'),
+                                                );
+                                              },
+                                              query: FirestoreService()
+                                                  .usersCollection
+                                                  .where(
+                                                    FieldPath.documentId,
+                                                    whereIn: event.artists,
+                                                  ),
+                                              itemBuilder: (context, snapshot) {
+                                                final artist = snapshot.data();
+                                                _imageUrl = StorageService()
+                                                    .getUserImageUrl(
+                                                        artist.uid);
+
+                                                /// This is used twice, also in saved artists page TODO: merge into one widget
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    StateService()
+                                                            .lastSelectedArtist =
+                                                        artist;
+                                                    Navigator.pushNamed(
+                                                        context, 'artist_page');
+                                                  },
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: ListTile(
+                                                      visualDensity:
+                                                          const VisualDensity(
+                                                              vertical: 4),
+                                                      leading: FutureBuilder(
+                                                          future: _imageUrl,
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (snapshot
+                                                                .hasError) {
+                                                              return CircleAvatar(
+                                                                radius: 30,
+                                                                backgroundImage:
+                                                                    Image.asset(
+                                                                            'assets/images/profile_placeholder.png')
+                                                                        .image,
+                                                              );
+                                                            }
+                                                            artist.imageUrl =
+                                                                snapshot.data;
+                                                            return CircleAvatar(
+                                                              radius: 30,
+                                                              backgroundImage: snapshot
+                                                                          .connectionState ==
+                                                                      ConnectionState
+                                                                          .waiting
+                                                                  ? null
+                                                                  : artist.imageUrl !=
+                                                                          null
+                                                                      ? NetworkImage(
+                                                                          artist
+                                                                              .imageUrl!)
+                                                                      : Image.asset(
+                                                                              'assets/images/profile_placeholder.png')
+                                                                          .image,
+                                                              child: snapshot
+                                                                          .connectionState ==
+                                                                      ConnectionState
+                                                                          .waiting
+                                                                  ? const SizedBox(
+                                                                      height:
+                                                                          18,
+                                                                      width: 18,
+                                                                      child:
+                                                                          CircularProgressIndicator(),
+                                                                    )
+                                                                  : null,
+                                                            );
+                                                          }),
+                                                      title: Text(
+                                                          artist.displayName),
+                                                      trailing: const Icon(
+                                                        Icons.arrow_forward_ios,
+                                                        size: 15,
+                                                      ),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        side:
+                                                            const BorderSide(),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Schliessen'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.people)),
+                        )
+                    ],
                   ),
                   const SizedBox(
                     height: 10,

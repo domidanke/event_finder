@@ -16,6 +16,7 @@ class SavedArtistsPage extends StatefulWidget {
 }
 
 class _SavedArtistsPageState extends State<SavedArtistsPage> {
+  late Future<String> _imageUrl;
   @override
   void initState() {
     super.initState();
@@ -41,6 +42,7 @@ class _SavedArtistsPageState extends State<SavedArtistsPage> {
                   whereIn: currentUser.savedArtists),
           itemBuilder: (context, snapshot) {
             AppUser artist = snapshot.data();
+            _imageUrl = StorageService().getUserImageUrl(artist.uid);
             return GestureDetector(
               onTap: () {
                 StateService().lastSelectedArtist = artist;
@@ -51,7 +53,7 @@ class _SavedArtistsPageState extends State<SavedArtistsPage> {
                 child: ListTile(
                   visualDensity: const VisualDensity(vertical: 4),
                   leading: FutureBuilder(
-                      future: StorageService().getUserImageUrl(artist.uid),
+                      future: _imageUrl,
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           return CircleAvatar(
