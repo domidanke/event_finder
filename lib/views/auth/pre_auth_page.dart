@@ -1,3 +1,4 @@
+import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/views/auth/verify_email_page.dart';
@@ -9,8 +10,22 @@ import '../../services/auth.service.dart';
 import '../feature/base/base_home_page.dart';
 import 'login_page.dart';
 
-class PreAuthPage extends StatelessWidget {
+class PreAuthPage extends StatefulWidget {
   const PreAuthPage({super.key});
+
+  @override
+  State<PreAuthPage> createState() => _PreAuthPageState();
+}
+
+class _PreAuthPageState extends State<PreAuthPage> {
+  late Future<AppUser?> _user;
+
+  @override
+  void initState() {
+    _user = FirestoreService().getUserData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var user = AuthService().getCurrentFirebaseUser();
@@ -21,7 +36,7 @@ class PreAuthPage extends StatelessWidget {
     } else {
       debugPrint('User is logged in as ${user.displayName} with ${user.email}');
       return FutureBuilder(
-          future: FirestoreService().getUserData(),
+          future: _user,
           builder: (context, snapshot) {
             AuthService().currentUser = snapshot.data;
             if (AuthService().currentUser != null) {

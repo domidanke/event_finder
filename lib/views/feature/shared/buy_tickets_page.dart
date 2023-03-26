@@ -410,10 +410,8 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                                   children: [
                                     TextButton(
                                       onPressed: () {
-                                        var count = 0;
-                                        Navigator.popUntil(context, (route) {
-                                          return count++ == 3;
-                                        });
+                                        Navigator.popUntil(
+                                            context, ModalRoute.withName('/'));
                                       },
                                       child: const Text('Schliessen'),
                                     ),
