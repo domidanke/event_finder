@@ -117,10 +117,16 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 50,
                     ),
                     if (currentUser.type == UserType.base)
-                      ListTile(
-                        leading: const Icon(Icons.receipt),
-                        title: const Text('Meine Tickets'),
-                        onTap: () {},
+                      Opacity(
+                        opacity: currentUser.allTickets.isEmpty ? 0.4 : 1,
+                        child: ListTile(
+                          leading: const Icon(Icons.receipt),
+                          title: const Text('Meine Tickets'),
+                          onTap: () {
+                            if (currentUser.allTickets.isEmpty) return;
+                            Navigator.pushNamed(context, 'tickets');
+                          },
+                        ),
                       ),
                     Opacity(
                       opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
@@ -205,14 +211,6 @@ class _ProfilePageState extends State<ProfilePage> {
             },
             buttonText: 'Activate Account'),
         const Spacer(),
-        Opacity(
-          opacity: 0.2,
-          child: ListTile(
-            leading: const Icon(Icons.receipt),
-            title: const Text('Meine Tickets'),
-            onTap: () {},
-          ),
-        ),
         Opacity(
           opacity: 0.2,
           child: ListTile(

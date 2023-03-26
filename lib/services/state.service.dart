@@ -1,5 +1,6 @@
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/models/event.dart';
+import 'package:event_finder/models/ticket_info.dart';
 import 'package:flutter/material.dart';
 
 class StateService extends ChangeNotifier {
@@ -30,6 +31,14 @@ class StateService extends ChangeNotifier {
 
   set lastSelectedHost(AppUser? host) {
     _lastSelectedHost = host;
+    notifyListeners();
+  }
+
+  TicketInfo? _lastSelectedTicket;
+  TicketInfo? get lastSelectedTicket => _lastSelectedTicket;
+
+  set lastSelectedTicket(TicketInfo? ticketInfo) {
+    _lastSelectedTicket = ticketInfo;
     notifyListeners();
   }
 

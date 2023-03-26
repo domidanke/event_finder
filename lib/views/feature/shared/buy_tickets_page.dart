@@ -1,7 +1,10 @@
 import 'package:event_finder/models/event.dart';
+import 'package:event_finder/models/ticket_info.dart';
+import 'package:event_finder/services/auth.service.dart';
+import 'package:event_finder/services/firestore_service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
-import 'package:event_finder/widgets/kk_button.dart';
+import 'package:event_finder/widgets/kk_button_async.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +19,7 @@ class BuyTicketsPage extends StatefulWidget {
 class _BuyTicketsPageState extends State<BuyTicketsPage> {
   String? selectedPaymentMethod;
   int numberOfTickets = 1;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -311,13 +315,122 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.symmetric(vertical: 20),
+              margin: const EdgeInsets.all(20),
               child: Opacity(
                 opacity: selectedPaymentMethod == null ? 0.4 : 1,
-                child: KKButton(
-                  onPressed: () {
+                child: KKButtonAsync(
+                  loading: _isLoading,
+                  onPressed: () async {
                     if (selectedPaymentMethod == null) return;
-                    print('Buying tickets via 3rd Party');
+                    setState(() {
+                      _isLoading = true;
+                    });
+
+                    /// TODO: Add Payment
+                    await Future.delayed(const Duration(seconds: 1));
+                    final ticketInfos = createIdsForQrCode();
+                    await FirestoreService().addTicketsToUser(ticketInfos);
+                    await FirestoreService()
+                        .addTicketsToEvent(ticketInfos, event.uid);
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    if (mounted) {
+                      showDialog<String>(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) => Dialog(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                const SizedBox(height: 10),
+                                const Text('Ticketkauf erfolgreich'),
+                                const SizedBox(height: 25),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('Event: '),
+                                            Text(event.title),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('Datum: '),
+                                            Text(event.date
+                                                .toString()
+                                                .substring(0, 16)),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('Tickets: '),
+                                            Text(numberOfTickets.toString()),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('Preis: '),
+                                            Text(
+                                                '${numberOfTickets * event.ticketPrice}€'),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 25),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                        var count = 0;
+                                        Navigator.popUntil(context, (route) {
+                                          return count++ == 3;
+                                        });
+                                      },
+                                      child: const Text('Schliessen'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Meine Tickets'),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
                   },
                   buttonText:
                       'Tickets jetzt kaufen ${event.ticketPrice * numberOfTickets}€',
@@ -328,5 +441,19 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
         ),
       ),
     );
+  }
+
+  List<TicketInfo> createIdsForQrCode() {
+    List<TicketInfo> ticketInfos = [];
+    var dateAndTime = DateTime.now().toString().substring(0, 19);
+    var event = StateService().lastSelectedEvent!;
+    for (var i = 0; i < numberOfTickets; i++) {
+      final ticketInfo = TicketInfo(
+          id: '${AuthService().currentUser!.uid}_${event.uid}_${dateAndTime}_${i + 1}/$numberOfTickets',
+          eventTitle: event.title,
+          eventDate: event.date);
+      ticketInfos.add(ticketInfo);
+    }
+    return ticketInfos;
   }
 }

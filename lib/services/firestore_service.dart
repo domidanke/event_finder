@@ -4,9 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
+import 'package:event_finder/models/ticket_info.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../models/event_ticket.dart';
 
 class FirestoreService {
   factory FirestoreService() {
@@ -54,6 +57,9 @@ class FirestoreService {
 
   Future<String> addEventDocument(Event event) async {
     final ref = await eventsCollection.add(event);
+    await eventTicketsCollection
+        .doc(ref.id)
+        .set(EventTicket(allTickets: [], usedTickets: []));
     return ref.id;
   }
 
@@ -134,6 +140,23 @@ class FirestoreService {
         .update({'mainLocationCoordinates': coordinates.toJson()});
   }
 
+  Future<void> addTicketsToUser(List<TicketInfo> ticketInfos) async {
+    await usersCollection.doc(AuthService().currentUser!.uid).update({
+      'allTickets':
+          FieldValue.arrayUnion(ticketInfos.map((e) => e.toJson()).toList())
+    });
+    AuthService().currentUser!.allTickets =
+        List.from(AuthService().currentUser!.allTickets)..addAll(ticketInfos);
+  }
+
+  Future<void> addTicketsToEvent(
+      List<TicketInfo> ticketInfos, String eventId) async {
+    var ids = ticketInfos.map((e) => e.id).toList();
+    await eventTicketsCollection
+        .doc(eventId)
+        .update({'allTickets': FieldValue.arrayUnion(ids)});
+  }
+
   final usersCollection = db.collection('Users').withConverter<AppUser>(
         fromFirestore: (snapshot, _) {
           if (snapshot.exists) {
@@ -153,4 +176,15 @@ class FirestoreService {
         },
         toFirestore: (event, _) => event.toJson(),
       );
+
+  final eventTicketsCollection =
+      db.collection('EventTickets').withConverter<EventTicket>(
+            fromFirestore: (snapshot, _) {
+              if (snapshot.exists) {
+                return EventTicket.fromJson(snapshot.data()!);
+              }
+              throw Exception('RIP');
+            },
+            toFirestore: (eventTicket, _) => eventTicket.toJson(),
+          );
 }

@@ -1,5 +1,8 @@
 import 'package:event_finder/models/enums.dart';
+import 'package:event_finder/models/ticket_info.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'external_links.dart';
 
 class AppUser {
   AppUser({
@@ -10,6 +13,8 @@ class AppUser {
     this.savedArtists = const [],
     this.savedHosts = const [],
     this.follower = const [],
+    this.allTickets = const [],
+    this.usedTickets = const [],
     this.externalLinks = const ExternalLinks(),
     this.mainLocationCoordinates = const LatLng(0, 0),
   });
@@ -21,6 +26,8 @@ class AppUser {
   late List<String> savedEvents = [];
   late List<String> savedArtists = [];
   late List<String> savedHosts = [];
+  late List<TicketInfo> allTickets = [];
+  late List<String> usedTickets = [];
   late List<String> follower = [];
   late LatLng mainLocationCoordinates;
   String? imageUrl;
@@ -39,6 +46,13 @@ class AppUser {
                 : [],
             follower: json['follower'] != null
                 ? List.from(json['follower'] as List<dynamic>)
+                : [],
+            allTickets: json['allTickets'] != null
+                ? List<TicketInfo>.from((json['allTickets'] as List<dynamic>)
+                    .map((model) => TicketInfo.fromJson(model)))
+                : [],
+            usedTickets: json['usedTickets'] != null
+                ? List.from(json['usedTickets'] as List<dynamic>)
                 : [],
             type: json['type'] != null
                 ? UserType.fromString(json['type'] as String)
@@ -62,35 +76,11 @@ class AppUser {
       'savedArtists': savedArtists,
       'savedHosts': savedHosts,
       'follower': follower,
+      'allTickets': allTickets.map((e) => e.toJson()).toList(),
+      'usedTickets': usedTickets,
       'externalLinks': externalLinks.toJson(),
       'mainLocationCoordinates': mainLocationCoordinates.toJson(),
       'type': type.name
-    };
-  }
-}
-
-class ExternalLinks {
-  const ExternalLinks({
-    this.instagram = '',
-    this.facebook = '',
-    this.soundCloud = '',
-  });
-
-  final String instagram;
-  final String facebook;
-  final String soundCloud;
-
-  ExternalLinks.fromJson(Map<String, Object?> json)
-      : this(
-            instagram: json['instagram'] as String,
-            facebook: json['facebook'] as String,
-            soundCloud: json['soundCloud'] as String);
-
-  Map<String, Object?> toJson() {
-    return {
-      'instagram': instagram,
-      'facebook': facebook,
-      'soundCloud': soundCloud,
     };
   }
 }
