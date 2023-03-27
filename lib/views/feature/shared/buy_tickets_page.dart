@@ -336,98 +336,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                       _isLoading = false;
                     });
                     if (mounted) {
-                      showDialog<String>(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (BuildContext context) => Dialog(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                const SizedBox(height: 10),
-                                const Text('Ticketkauf erfolgreich'),
-                                const SizedBox(height: 25),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text('Event: '),
-                                            Text(event.title),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text('Datum: '),
-                                            Text(event.date
-                                                .toString()
-                                                .substring(0, 16)),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text('Tickets: '),
-                                            Text(numberOfTickets.toString()),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text('Preis: '),
-                                            Text(
-                                                '${numberOfTickets * event.ticketPrice}€'),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 25),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.popUntil(
-                                            context, ModalRoute.withName('/'));
-                                      },
-                                      child: const Text('Schliessen'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Meine Tickets'),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
+                      _showConfirmationDialog();
                     }
                   },
                   buttonText:
@@ -436,6 +345,93 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showConfirmationDialog() {
+    final event = StateService().lastSelectedEvent!;
+    showDialog<String>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(height: 10),
+              const Text('Ticketkauf erfolgreich'),
+              const SizedBox(height: 25),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Event: '),
+                          Text(event.title),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Datum: '),
+                          Text(event.date.toString().substring(0, 16)),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Tickets: '),
+                          Text(numberOfTickets.toString()),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Preis: '),
+                          Text('${numberOfTickets * event.ticketPrice}€'),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.popUntil(context, ModalRoute.withName('/'));
+                    },
+                    child: const Text('Schliessen'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Meine Tickets'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

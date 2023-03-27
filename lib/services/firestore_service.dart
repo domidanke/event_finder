@@ -6,6 +6,7 @@ import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/models/ticket_info.dart';
 import 'package:event_finder/services/auth.service.dart';
+import 'package:event_finder/services/state.service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -70,6 +71,14 @@ class FirestoreService {
 
   Future<void> deleteEventDocument(Event event) async {
     await eventsCollection.doc(event.uid).delete();
+  }
+
+  Future<void> updateEventArtists() async {
+    final artistIds = StateService().lastSelectedEvent!.artists;
+    // Array Union is for safety here
+    await eventsCollection
+        .doc(StateService().lastSelectedEvent!.uid)
+        .update({'artists': FieldValue.arrayUnion(artistIds)});
   }
 
   Future<void> toggleSaveEventForUser() async {
