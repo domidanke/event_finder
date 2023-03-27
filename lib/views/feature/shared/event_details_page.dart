@@ -435,6 +435,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   ),
                   TextButton(
                     onPressed: () {
+                      /// TODO: Add function that checks if arrays are identical (== not working)
                       FirestoreService().updateEventArtists();
                       Navigator.pop(context);
                     },

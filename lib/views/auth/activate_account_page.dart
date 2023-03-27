@@ -29,8 +29,7 @@ class _ActivateAccountPageState extends State<ActivateAccountPage> {
         key: formKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: ListView(
             children: <Widget>[
               const Text(
                 'Willkommen auf Event Finder, eine Plattform für Künstler, Veranstalter und Fans...',

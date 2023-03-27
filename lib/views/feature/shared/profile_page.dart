@@ -187,7 +187,9 @@ class _ProfilePageState extends State<ProfilePage> {
               if (image == null) return;
               await StorageService()
                   .saveProfileImageToStorage(File(image.path));
-              setState(() {});
+              setState(() {
+                _imageUrl = StorageService().getProfileImageUrl();
+              });
             },
           ),
           const Text('Profilbild hinzufuegen')

@@ -49,11 +49,12 @@ class FirestoreService {
         .set(user);
   }
 
-  Future<AppUser> getUserData() async {
+  Future<AppUser?> getUserData() async {
+    if (AuthService().getCurrentFirebaseUser() == null) return null;
     final doc = await usersCollection
         .doc(AuthService().getCurrentFirebaseUser()!.uid)
         .get();
-    return doc.data()!;
+    return doc.data();
   }
 
   Future<String> addEventDocument(Event event) async {
