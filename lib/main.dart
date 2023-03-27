@@ -26,9 +26,10 @@ Future<void> main() async {
 
   if (kDebugMode) {
     try {
-      FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
-      await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
-      await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+      var ip = '192.168.2.191';
+      FirebaseFirestore.instance.useFirestoreEmulator(ip, 8080);
+      await FirebaseStorage.instance.useStorageEmulator(ip, 9199);
+      await FirebaseAuth.instance.useAuthEmulator(ip, 9099);
     } catch (e) {
       // ignore: avoid_print
       print(e);
