@@ -49,7 +49,6 @@ class _SearchPageState extends State<SearchPage>
             Tab(icon: Icon(Icons.house)),
             Tab(icon: Icon(Icons.people)),
           ],
-          unselectedLabelColor: Colors.black,
           indicator: BoxDecoration(
             borderRadius: BorderRadius.circular(80.0),
           ),
