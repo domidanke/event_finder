@@ -18,6 +18,7 @@ import 'package:event_finder/views/feature/host/edit_event_form.dart';
 import 'package:event_finder/views/feature/host/host_events_page.dart';
 import 'package:event_finder/views/feature/host/host_home_page.dart';
 import 'package:event_finder/views/feature/host/host_page.dart';
+import 'package:event_finder/views/feature/host/scan_qr_code_page.dart';
 import 'package:event_finder/views/feature/host/set_main_location_page.dart';
 import 'package:event_finder/views/feature/shared/event_details_page.dart';
 import 'package:event_finder/views/feature/shared/profile_page.dart';
@@ -76,6 +77,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const EventDetailsPage());
       case 'buy_tickets':
         return MaterialPageRoute(builder: (_) => const BuyTicketsPage());
+      case 'scan_qr_code':
+        return MaterialPageRoute(builder: (_) => const ScanQrCodePage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

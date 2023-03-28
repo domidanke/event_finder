@@ -91,26 +91,40 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      children: [
-                        const KKIcon(
-                          icon: Icon(Icons.access_time),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
                           children: [
-                            Text(event.date.toString().substring(0, 10)),
-                            Text(
-                                '${event.date.toString().substring(11, 16)} Uhr')
+                            const KKIcon(
+                              icon: Icon(Icons.access_time),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(event.date.toString().substring(0, 10)),
+                                Text(
+                                    '${event.date.toString().substring(11, 16)} Uhr')
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                      const Spacer(),
+                      if (currentUser.type == UserType.host)
+                        Container(
+                          margin: const EdgeInsets.only(right: 12),
+                          child: IconButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, 'scan_qr_code');
+                              },
+                              icon: const Icon(Icons.qr_code)),
+                        )
+                    ],
                   ),
                   Row(
                     children: [
