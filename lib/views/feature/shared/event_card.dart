@@ -1,10 +1,9 @@
 import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
-import 'package:event_finder/services/auth.service.dart';
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/services/storage.service.dart';
+import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:flutter/material.dart';
 
 class EventCard extends StatefulWidget {
@@ -90,19 +89,19 @@ class _EventCardState extends State<EventCard> {
                               ),
                             ),
                           ),
-                          if (AuthService().currentUser?.type == UserType.base)
+                          if (StateService().currentUser?.type == UserType.base)
                             StatefulBuilder(builder:
                                 (BuildContext context, StateSetter setState) {
                               return IconButton(
                                   onPressed: () async {
+                                    await UserDocService()
+                                        .saveEvent(widget.event.uid);
                                     setState(() {
-                                      AuthService()
+                                      StateService()
                                           .toggleSavedEvent(widget.event.uid);
                                     });
-                                    await FirestoreService()
-                                        .toggleSaveEventForUser();
                                   },
-                                  icon: AuthService()
+                                  icon: StateService()
                                           .currentUser!
                                           .savedEvents
                                           .contains(widget.event.uid)

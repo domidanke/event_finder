@@ -1,12 +1,14 @@
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/alert.service.dart';
+import 'package:event_finder/services/firestore/event_doc.service.dart';
+import 'package:event_finder/services/firestore/event_ticket_doc.service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../models/app_user.dart';
-import '../../../../services/firestore_service.dart';
 import '../../../../services/state.service.dart';
-import '../../../../services/storage.service.dart';
+import '../../../../services/storage/storage.service.dart';
 import '../../../../widgets/kk_button.dart';
 
 class CreateEventPage3 extends StatefulWidget {
@@ -33,7 +35,7 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
                     child: Text('Keine Artists'),
                   );
                 },
-                query: FirestoreService().usersCollection.where(
+                query: UserDocService().usersCollection.where(
                       'type',
                       isEqualTo: 'artist',
                     ),
@@ -135,28 +137,24 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
                 KKButton(
                   onPressed: () async {
                     final event = newEvent.toEvent();
-                    await FirestoreService()
-                        .addEventDocument(event)
-                        .then((String eventId) async {
-                      await StorageService()
-                          .saveEventImageToStorage(
-                              eventId, newEvent.selectedImageFile!)
-                          .then((value) => {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Event erstellt.')),
-                                ),
-                                Navigator.pushNamed(context, 'host_home'),
-                              })
-                          .catchError((e) {
-                        AlertService().showAlert(
-                            'Event Bild hochladen fehlgeschlagen',
-                            e.toString(),
-                            context);
-                      });
-                    }).catchError((e) {
-                      AlertService().showAlert('Event erstellen fehlgeschlagen',
-                          e.toString(), context);
+                    final eventId =
+                        await EventDocService().addEventDocument(event);
+                    await EventTicketDocService().addTicketDocument(eventId);
+                    await StorageService()
+                        .saveEventImageToStorage(
+                            eventId, newEvent.selectedImageFile!)
+                        .then((value) => {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Event erstellt.')),
+                              ),
+                              Navigator.pushNamed(context, 'host_home'),
+                            })
+                        .catchError((e) {
+                      AlertService().showAlert(
+                          'Event Bild hochladen fehlgeschlagen',
+                          e.toString(),
+                          context);
                     });
                   },
                   buttonText: 'Erstellen',

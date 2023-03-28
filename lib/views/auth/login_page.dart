@@ -1,5 +1,5 @@
 import 'package:event_finder/services/alert.service.dart';
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/widgets/kk_button_async.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                           await AuthService()
                               .signInAsGuest()
                               .then((value) async {
-                            await FirestoreService().addUserDocument(
+                            await UserDocService().addUserDocument(
                                 AuthService().getCurrentFirebaseUser()!);
                             if (mounted) Navigator.pushNamed(context, '/');
                           });

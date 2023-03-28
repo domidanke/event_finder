@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
-import 'package:event_finder/services/auth.service.dart';
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/services/storage.service.dart';
+import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +24,7 @@ class _SavedArtistsPageState extends State<SavedArtistsPage> {
   @override
   Widget build(BuildContext context) {
     /// Doing this, so in case of unfollow of an artist, the list gets refetched
-    final AppUser currentUser = Provider.of<AuthService>(context).currentUser!;
+    final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
     return Scaffold(
       body: SafeArea(
         child: FirestoreListView<AppUser>(
@@ -35,10 +34,10 @@ class _SavedArtistsPageState extends State<SavedArtistsPage> {
             );
           },
           query: currentUser.savedArtists.isEmpty
-              ? FirestoreService()
+              ? UserDocService()
                   .usersCollection
                   .where(FieldPath.documentId, whereIn: ['EMPTY'])
-              : FirestoreService().usersCollection.where(FieldPath.documentId,
+              : UserDocService().usersCollection.where(FieldPath.documentId,
                   whereIn: currentUser.savedArtists),
           itemBuilder: (context, snapshot) {
             AppUser artist = snapshot.data();

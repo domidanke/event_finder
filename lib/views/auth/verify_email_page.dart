@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:event_finder/services/auth.service.dart';
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/theme.dart';
@@ -27,7 +27,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       await AuthService().getCurrentFirebaseUser()!.reload();
       var user = AuthService().getCurrentFirebaseUser()!;
       if (user.emailVerified) {
-        await FirestoreService().addUserDocument(user);
+        await UserDocService().addUserDocument(user);
         if (mounted) Navigator.pushNamed(context, '/');
         timer.cancel();
       }

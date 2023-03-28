@@ -1,5 +1,5 @@
 import 'package:event_finder/models/enums.dart';
-import 'package:event_finder/services/auth.service.dart';
+import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/base/search_page.dart';
 import 'package:event_finder/views/feature/shared/events_page.dart';
 import 'package:event_finder/views/feature/shared/profile_page.dart';
@@ -20,7 +20,8 @@ class _BaseHomePageState extends State<BaseHomePage> {
   ];
 
   void _onItemTapped(int index) {
-    if (AuthService().currentUser!.type == UserType.guest && index == 0) return;
+    if (StateService().currentUser!.type == UserType.guest && index == 0)
+      return;
     setState(() {
       _selectedIndex = index;
     });
@@ -38,17 +39,17 @@ class _BaseHomePageState extends State<BaseHomePage> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Opacity(
-                  opacity: AuthService().currentUser!.type == UserType.guest
+                  opacity: StateService().currentUser!.type == UserType.guest
                       ? 0.2
                       : 1,
-                  child: Icon(Icons.search)),
+                  child: const Icon(Icons.search)),
               label: 'Suche',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.event),
               label: 'Events',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Profil',
             ),

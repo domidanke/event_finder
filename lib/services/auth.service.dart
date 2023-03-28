@@ -1,4 +1,3 @@
-import 'package:event_finder/models/app_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -18,9 +17,6 @@ class AuthService extends ChangeNotifier {
       'https://www.googleapis.com/auth/user.gender.read'
     ],
   );
-
-  /// TODO: Move to separate User service class
-  AppUser? currentUser;
 
   bool _loginLoading = false;
   bool _registerLoading = false;
@@ -42,6 +38,7 @@ class AuthService extends ChangeNotifier {
     return await _googleSignIn.signIn();
   }
 
+  /// TODO: Check if this is needed when logging out from google provider
   Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
   Future<void> signInNative(String email, String password) async {
@@ -106,45 +103,7 @@ class AuthService extends ChangeNotifier {
     return _firebaseAuth.currentUser;
   }
 
-  Future<String>? getToken() {
-    return _firebaseAuth.currentUser?.getIdToken();
-  }
-
   Future<void> sendEmailVerificationEmail() async {
     await _firebaseAuth.currentUser!.sendEmailVerification();
-  }
-
-  /// TODO: Move to separate User service class
-  void toggleSavedEvent(String eventUid) {
-    if (currentUser!.savedEvents.contains(eventUid)) {
-      currentUser!.savedEvents.remove(eventUid);
-    } else {
-      currentUser!.savedEvents.add(eventUid);
-    }
-  }
-
-  /// TODO: Move to separate User service class
-  void toggleSavedArtist(String artistUid) {
-    if (currentUser!.savedArtists.contains(artistUid)) {
-      currentUser!.savedArtists.remove(artistUid);
-    } else {
-      currentUser!.savedArtists.add(artistUid);
-    }
-    notifyListeners();
-  }
-
-  /// TODO: Move to separate User service class
-  void toggleSavedHost(String hostUid) {
-    if (currentUser!.savedHosts.contains(hostUid)) {
-      currentUser!.savedHosts.remove(hostUid);
-    } else {
-      currentUser!.savedHosts.add(hostUid);
-    }
-    notifyListeners();
-  }
-
-  bool isProfileComplete() {
-    return currentUser!.mainLocationCoordinates.latitude != 0 &&
-        currentUser!.displayName.isNotEmpty;
   }
 }

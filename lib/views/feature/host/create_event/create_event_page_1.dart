@@ -1,5 +1,4 @@
 import 'package:event_finder/models/consts.dart';
-import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/date.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/shared/search_address_in_map.dart';
@@ -26,9 +25,9 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
   @override
   void initState() {
     StateService().newEvent = NewEvent();
-    _getPlaceMarkers = placemarkFromCoordinates(
-        AuthService().currentUser!.mainLocationCoordinates.latitude,
-        AuthService().currentUser!.mainLocationCoordinates.longitude);
+    final coordinates = StateService().currentUser!.mainLocationCoordinates;
+    _getPlaceMarkers =
+        placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
     super.initState();
   }
 
@@ -241,7 +240,7 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: KKButton(
                     onPressed: () {
                       if (newCoordinates == null) return;

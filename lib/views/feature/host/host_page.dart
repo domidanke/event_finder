@@ -1,6 +1,5 @@
 import 'package:event_finder/models/app_user.dart';
-import 'package:event_finder/services/auth.service.dart';
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/shared/location_snippet.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
@@ -61,26 +60,27 @@ class _HostPageState extends State<HostPage> {
             const SizedBox(
               height: 20,
             ),
-            FloatingActionButton.extended(
-              onPressed: () async {
-                await FirestoreService().toggleSaveHostForUser(host.uid);
-                await FirestoreService().toggleFollowerForHost(host.uid);
-                setState(() {
-                  AuthService().toggleSavedHost(host.uid);
-                });
-              },
-              backgroundColor:
-                  AuthService().currentUser!.savedHosts.contains(host.uid)
-                      ? Colors.grey
-                      : null,
-              elevation: 0,
-              label: AuthService().currentUser!.savedHosts.contains(host.uid)
-                  ? const Text('Unfollow')
-                  : const Text('Follow'),
-              icon: AuthService().currentUser!.savedHosts.contains(host.uid)
-                  ? const Icon(Icons.cancel_outlined)
-                  : const Icon(Icons.person_add_alt_1),
-            ),
+            StatefulBuilder(builder: (context, setState) {
+              final currentUser = StateService().currentUser!;
+              return FloatingActionButton.extended(
+                onPressed: () async {
+                  await UserDocService().followHost(host);
+                  setState(() {
+                    StateService().toggleSavedHost(host.uid);
+                  });
+                },
+                backgroundColor: currentUser.savedHosts.contains(host.uid)
+                    ? Colors.grey
+                    : null,
+                elevation: 0,
+                label: currentUser.savedHosts.contains(host.uid)
+                    ? const Text('Unfollow')
+                    : const Text('Follow'),
+                icon: currentUser.savedHosts.contains(host.uid)
+                    ? const Icon(Icons.cancel_outlined)
+                    : const Icon(Icons.person_add_alt_1),
+              );
+            }),
             const SizedBox(
               height: 20,
             ),
@@ -91,7 +91,7 @@ class _HostPageState extends State<HostPage> {
 
                 /// Maybe not the best solution, but shows live number of followers
                 StreamBuilder(
-                    stream: FirestoreService()
+                    stream: UserDocService()
                         .usersCollection
                         .doc(host.uid)
                         .snapshots(),

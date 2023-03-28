@@ -1,11 +1,11 @@
 import 'package:event_finder/models/app_user.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../services/firestore_service.dart';
 import '../../../services/state.service.dart';
-import '../../../services/storage.service.dart';
+import '../../../services/storage/storage.service.dart';
 
 class HostSearch extends StatefulWidget {
   const HostSearch({super.key});
@@ -65,7 +65,7 @@ class _HostSearchState extends State<HostSearch> {
                 child: Text('Keine Hosts'),
               );
             },
-            query: FirestoreService().usersCollection.where(
+            query: UserDocService().usersCollection.where(
                   'type',
                   isEqualTo: 'host',
                 ),

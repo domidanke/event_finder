@@ -1,6 +1,6 @@
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/alert.service.dart';
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +106,7 @@ class _EditEventFormState extends State<EditEventForm> {
                       final map = generateMap();
                       if (map.isEmpty) return;
                       try {
-                        await FirestoreService()
+                        await EventDocService()
                             .updateEventDocument(map, event.uid)
                             .then((value) {
                           ScaffoldMessenger.of(context).showSnackBar(

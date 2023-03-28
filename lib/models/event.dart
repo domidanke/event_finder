@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:event_finder/services/auth.service.dart';
+import 'package:event_finder/services/state.service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'consts.dart';
@@ -87,6 +88,6 @@ class NewEvent {
         ticketPrice: ticketPrice,
         artists: enlistedArtists,
         locationCoordinates: locationCoordinates ??
-            AuthService().currentUser!.mainLocationCoordinates);
+            StateService().currentUser!.mainLocationCoordinates);
   }
 }

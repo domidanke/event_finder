@@ -10,6 +10,8 @@ class StateService extends ChangeNotifier {
   StateService._internal();
   static final StateService _singleton = StateService._internal();
 
+  AppUser? currentUser;
+
   Event? _lastSelectedEvent;
   Event? get lastSelectedEvent => _lastSelectedEvent;
 
@@ -43,4 +45,38 @@ class StateService extends ChangeNotifier {
   }
 
   NewEvent newEvent = NewEvent();
+
+  /// TODO: Move to separate User State service class
+  void toggleSavedEvent(String eventUid) {
+    if (currentUser!.savedEvents.contains(eventUid)) {
+      currentUser!.savedEvents.remove(eventUid);
+    } else {
+      currentUser!.savedEvents.add(eventUid);
+    }
+  }
+
+  /// TODO: Move to separate User State service class
+  void toggleSavedArtist(String artistUid) {
+    if (currentUser!.savedArtists.contains(artistUid)) {
+      currentUser!.savedArtists.remove(artistUid);
+    } else {
+      currentUser!.savedArtists.add(artistUid);
+    }
+  }
+
+  /// TODO: Move to separate User State service class
+  void toggleSavedHost(String hostUid) {
+    if (currentUser!.savedHosts.contains(hostUid)) {
+      currentUser!.savedHosts.remove(hostUid);
+    } else {
+      currentUser!.savedHosts.add(hostUid);
+    }
+  }
+
+  /// TODO: Move to separate User State service class
+  bool isProfileComplete() {
+    return currentUser!.mainLocationCoordinates.latitude != 0 &&
+        currentUser!.mainLocationCoordinates.longitude != 0 &&
+        currentUser!.displayName.isNotEmpty;
+  }
 }

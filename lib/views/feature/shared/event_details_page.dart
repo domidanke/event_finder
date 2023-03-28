@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
-import 'package:event_finder/services/auth.service.dart';
+import 'package:event_finder/services/firestore/event_doc.service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/services/storage.service.dart';
+import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/app_user.dart';
-import '../../../services/firestore_service.dart';
 import 'location_snippet.dart';
 
 class EventDetailsPage extends StatefulWidget {
@@ -26,6 +26,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final Event event = Provider.of<StateService>(context).lastSelectedEvent!;
+    final currentUser = StateService().currentUser!;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -126,7 +127,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         ),
                       ),
                       const Spacer(),
-                      if (AuthService().currentUser!.type != UserType.host &&
+                      if (currentUser.type != UserType.host &&
                           event.artists.isNotEmpty)
                         Container(
                           margin: const EdgeInsets.only(right: 12),
@@ -136,7 +137,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                               },
                               icon: const Icon(Icons.people)),
                         ),
-                      if (AuthService().currentUser!.type == UserType.host)
+                      if (currentUser.type == UserType.host)
                         Container(
                           margin: const EdgeInsets.only(right: 12),
                           child: IconButton(
@@ -175,7 +176,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 ],
               ),
             ),
-            if (AuthService().currentUser?.type == UserType.base)
+            if (currentUser.type == UserType.base)
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 child: KKButton(
@@ -185,7 +186,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   buttonText: 'Tickets hier kaufen',
                 ),
               ),
-            if (AuthService().currentUser?.type == UserType.guest)
+            if (currentUser.type == UserType.guest)
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 child: Column(
@@ -204,7 +205,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   ],
                 ),
               ),
-            if (event.creatorId == AuthService().currentUser!.uid)
+            if (event.creatorId == currentUser.uid)
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 child: SizedBox(
@@ -238,7 +239,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       child: Text('Keine Artists'),
                     );
                   },
-                  query: FirestoreService().usersCollection.where(
+                  query: UserDocService().usersCollection.where(
                         FieldPath.documentId,
                         whereIn: StateService().lastSelectedEvent!.artists,
                       ),
@@ -333,7 +334,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       child: Text('Keine Artists'),
                     );
                   },
-                  query: FirestoreService().usersCollection.where(
+                  query: UserDocService().usersCollection.where(
                         'type',
                         isEqualTo: 'artist',
                       ),
@@ -436,7 +437,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   TextButton(
                     onPressed: () {
                       /// TODO: Add function that checks if arrays are identical (== not working)
-                      FirestoreService().updateEventArtists();
+                      EventDocService().updateEventArtists();
                       Navigator.pop(context);
                     },
                     child: const Text('Speichern'),

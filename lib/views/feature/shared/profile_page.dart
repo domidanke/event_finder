@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/auth.service.dart';
-import 'package:event_finder/services/storage.service.dart';
+import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/views/feature/shared/popup_menu.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final AppUser currentUser = Provider.of<AuthService>(context).currentUser!;
+    final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -100,7 +101,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         const Spacer(),
                         KKPopupMenu(
                           onItemSelect: (int index) async {
-                            print(index);
                             if (index == 2) {
                               await AuthService().signOut().then((value) => {
                                     Navigator.pushNamedAndRemoveUntil(

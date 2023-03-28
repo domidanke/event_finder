@@ -1,6 +1,7 @@
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/models/enums.dart';
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
+import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/auth/verify_email_page.dart';
 import 'package:event_finder/views/feature/artist/artist_home_page.dart';
 import 'package:event_finder/views/feature/host/host_home_page.dart';
@@ -22,7 +23,7 @@ class _PreAuthPageState extends State<PreAuthPage> {
 
   @override
   void initState() {
-    _user = FirestoreService().getUserData();
+    _user = UserDocService().getUserData();
     super.initState();
   }
 
@@ -38,9 +39,10 @@ class _PreAuthPageState extends State<PreAuthPage> {
       return FutureBuilder(
           future: _user,
           builder: (context, snapshot) {
-            AuthService().currentUser = snapshot.data;
-            if (AuthService().currentUser != null) {
-              switch (AuthService().currentUser!.type) {
+            var currentUser = StateService().currentUser;
+            currentUser = snapshot.data;
+            if (currentUser != null) {
+              switch (currentUser.type) {
                 case UserType.guest:
                 case UserType.base:
                   return const BaseHomePage();

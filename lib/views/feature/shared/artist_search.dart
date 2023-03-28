@@ -1,11 +1,10 @@
 import 'package:event_finder/models/app_user.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/services/storage.service.dart';
+import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../../services/firestore_service.dart';
 
 class ArtistSearch extends StatefulWidget {
   const ArtistSearch({super.key});
@@ -65,7 +64,7 @@ class _ArtistSearchState extends State<ArtistSearch> {
                 child: Text('Keine Artists'),
               );
             },
-            query: FirestoreService().usersCollection.where(
+            query: UserDocService().usersCollection.where(
                   'type',
                   isEqualTo: 'artist',
                 ),

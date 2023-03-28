@@ -1,4 +1,4 @@
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/views/feature/shared/search_address_in_map.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +23,6 @@ class _SetMainLocationPageState extends State<SetMainLocationPage> {
               flex: 7,
               child: SearchAddressInMap(
                 onAddressSelected: (LatLng coordinates) {
-                  print(coordinates.latitude);
-                  print(coordinates.longitude);
                   setState(() {
                     _selectedCoordinates = coordinates;
                   });
@@ -39,7 +37,7 @@ class _SetMainLocationPageState extends State<SetMainLocationPage> {
               child: KKButton(
                 onPressed: () async {
                   if (_selectedCoordinates == null) return;
-                  await FirestoreService()
+                  await UserDocService()
                       .saveMainLocationData(_selectedCoordinates!);
                 },
                 buttonText: 'Speichern',

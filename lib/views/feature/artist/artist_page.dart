@@ -1,6 +1,5 @@
 import 'package:event_finder/models/app_user.dart';
-import 'package:event_finder/services/auth.service.dart';
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
@@ -69,27 +68,28 @@ class _ArtistPageState extends State<ArtistPage> {
             const SizedBox(
               height: 20,
             ),
-            FloatingActionButton.extended(
-              onPressed: () async {
-                await FirestoreService().toggleSaveArtistForUser(artist.uid);
-                await FirestoreService().toggleFollowerForArtist(artist.uid);
-                setState(() {
-                  AuthService().toggleSavedArtist(artist.uid);
-                });
-              },
-              backgroundColor:
-                  AuthService().currentUser!.savedArtists.contains(artist.uid)
-                      ? Colors.grey
-                      : null,
-              elevation: 0,
-              label:
-                  AuthService().currentUser!.savedArtists.contains(artist.uid)
-                      ? const Text('Unfollow')
-                      : const Text('Follow'),
-              icon: AuthService().currentUser!.savedArtists.contains(artist.uid)
-                  ? const Icon(Icons.cancel_outlined)
-                  : const Icon(Icons.person_add_alt_1),
-            ),
+            StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              final currentUser = StateService().currentUser!;
+              return FloatingActionButton.extended(
+                onPressed: () async {
+                  await UserDocService().followArtist(artist);
+                  setState(() {
+                    StateService().toggleSavedArtist(artist.uid);
+                  });
+                },
+                backgroundColor: currentUser.savedArtists.contains(artist.uid)
+                    ? Colors.grey
+                    : null,
+                elevation: 0,
+                label: currentUser.savedArtists.contains(artist.uid)
+                    ? const Text('Unfollow')
+                    : const Text('Follow'),
+                icon: currentUser.savedArtists.contains(artist.uid)
+                    ? const Icon(Icons.cancel_outlined)
+                    : const Icon(Icons.person_add_alt_1),
+              );
+            }),
             const SizedBox(
               height: 20,
             ),
@@ -100,7 +100,7 @@ class _ArtistPageState extends State<ArtistPage> {
 
                 /// Maybe not the best solution, but shows live number of followers
                 StreamBuilder(
-                    stream: FirestoreService()
+                    stream: UserDocService()
                         .usersCollection
                         .doc(artist.uid)
                         .snapshots(),

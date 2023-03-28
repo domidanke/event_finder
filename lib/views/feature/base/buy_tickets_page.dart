@@ -1,7 +1,7 @@
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/models/ticket_info.dart';
-import 'package:event_finder/services/auth.service.dart';
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/firestore/event_ticket_doc.service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/kk_button_async.dart';
@@ -329,8 +329,8 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                     /// TODO: Add Payment
                     await Future.delayed(const Duration(seconds: 1));
                     final ticketInfos = createIdsForQrCode();
-                    await FirestoreService().addTicketsToUser(ticketInfos);
-                    await FirestoreService()
+                    await UserDocService().addUserTickets(ticketInfos);
+                    await EventTicketDocService()
                         .addTicketsToEvent(ticketInfos, event.uid);
                     setState(() {
                       _isLoading = false;
@@ -443,7 +443,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
     var event = StateService().lastSelectedEvent!;
     for (var i = 0; i < numberOfTickets; i++) {
       final ticketInfo = TicketInfo(
-          id: '${AuthService().currentUser!.uid}_${event.uid}_${dateAndTime}_${i + 1}/$numberOfTickets',
+          id: '${StateService().currentUser!.uid}_${event.uid}_${dateAndTime}_${i + 1}/$numberOfTickets',
           eventTitle: event.title,
           eventDate: event.date);
       ticketInfos.add(ticketInfo);

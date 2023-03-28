@@ -1,4 +1,3 @@
-import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +16,7 @@ class _TicketsPageState extends State<TicketsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var tickets = AuthService().currentUser!.allTickets;
+    var tickets = StateService().currentUser!.allTickets;
     return Scaffold(
       body: SafeArea(
           child: ListView.builder(

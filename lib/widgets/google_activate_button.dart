@@ -1,5 +1,5 @@
 import 'package:event_finder/services/auth.service.dart';
-import 'package:event_finder/services/firestore_service.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:flutter/material.dart';
 
 import '../services/alert.service.dart';
@@ -33,7 +33,7 @@ class _GoogleActivateButtonState extends State<GoogleActivateButton> {
             });
             try {
               await AuthService().activateAccountWithGoogle();
-              await FirestoreService().upgradeUserDocument();
+              await UserDocService().upgradeUserDocument();
               if (mounted) Navigator.pushNamed(context, '/');
             } catch (e) {
               AlertService()

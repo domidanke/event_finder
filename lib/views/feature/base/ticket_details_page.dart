@@ -1,5 +1,5 @@
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/views/feature/shared/qr_code.dart';
+import 'package:event_finder/widgets/qr_code.dart';
 import 'package:flutter/material.dart';
 
 class TicketDetailsPage extends StatelessWidget {
