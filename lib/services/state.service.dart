@@ -62,6 +62,9 @@ class StateService extends ChangeNotifier {
     } else {
       currentUser!.savedArtists.add(artistUid);
     }
+    // This is currently used in saved artists; when popping the screen,
+    // the saved artists need to know about the unfollow change and disappear
+    notifyListeners();
   }
 
   /// TODO: Move to separate User State service class
@@ -71,6 +74,7 @@ class StateService extends ChangeNotifier {
     } else {
       currentUser!.savedHosts.add(hostUid);
     }
+    notifyListeners();
   }
 
   /// TODO: Move to separate User State service class
