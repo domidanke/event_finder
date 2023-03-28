@@ -130,8 +130,5 @@ class UserDocService {
       'allTickets':
           FieldValue.arrayUnion(ticketInfos.map((e) => e.toJson()).toList())
     });
-    currentUser.allTickets.addAll(ticketInfos);
-    // AuthService().currentUser!.allTickets =
-    //     List.from(AuthService().currentUser!.allTickets)..addAll(ticketInfos);
   }
 }

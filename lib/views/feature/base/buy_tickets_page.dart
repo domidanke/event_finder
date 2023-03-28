@@ -330,6 +330,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                     await Future.delayed(const Duration(seconds: 1));
                     final ticketInfos = createIdsForQrCode();
                     await UserDocService().addUserTickets(ticketInfos);
+                    StateService().addTickets(ticketInfos);
                     await EventTicketDocService()
                         .addTicketsToEvent(ticketInfos, event.uid);
                     setState(() {

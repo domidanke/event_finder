@@ -83,4 +83,11 @@ class StateService extends ChangeNotifier {
         currentUser!.mainLocationCoordinates.longitude != 0 &&
         currentUser!.displayName.isNotEmpty;
   }
+
+  void addTickets(List<TicketInfo> ticketInfos) {
+    currentUser!.allTickets.addAll(ticketInfos);
+    notifyListeners();
+    // AuthService().currentUser!.allTickets =
+    //     List.from(AuthService().currentUser!.allTickets)..addAll(ticketInfos);
+  }
 }
