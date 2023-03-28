@@ -87,7 +87,5 @@ class StateService extends ChangeNotifier {
   void addTickets(List<TicketInfo> ticketInfos) {
     currentUser!.allTickets.addAll(ticketInfos);
     notifyListeners();
-    // AuthService().currentUser!.allTickets =
-    //     List.from(AuthService().currentUser!.allTickets)..addAll(ticketInfos);
   }
 }
