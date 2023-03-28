@@ -39,8 +39,8 @@ class _PreAuthPageState extends State<PreAuthPage> {
       return FutureBuilder(
           future: _user,
           builder: (context, snapshot) {
-            var currentUser = StateService().currentUser;
-            currentUser = snapshot.data;
+            StateService().currentUser = snapshot.data;
+            final currentUser = StateService().currentUser;
             if (currentUser != null) {
               switch (currentUser.type) {
                 case UserType.guest:
