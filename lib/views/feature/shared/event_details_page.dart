@@ -165,25 +165,26 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Row(
-                          children: [
-                            const KKIcon(icon: Icon(Icons.house)),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            TextButton(
-                              onPressed: _navigateToHost,
-                              child: Text(event.creatorName),
-                            ),
-                          ],
+                  if (currentUser.type != UserType.host)
+                    Row(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Row(
+                            children: [
+                              const KKIcon(icon: Icon(Icons.house)),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              TextButton(
+                                onPressed: _navigateToHost,
+                                child: Text(event.creatorName),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                   const SizedBox(
                     height: 10,
                   ),
