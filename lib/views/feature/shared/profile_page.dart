@@ -128,19 +128,34 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         ),
                       ),
-                    Opacity(
-                      opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
-                      child: ListTile(
-                        leading: const Icon(Icons.people),
-                        title: const Text('Meine Follows'),
-                        onTap: () {
-                          if (currentUser.savedArtists.isEmpty) {
-                            return;
-                          }
-                          Navigator.pushNamed(context, 'saved_artists');
-                        },
+                    if (currentUser.type != UserType.artist)
+                      Opacity(
+                        opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
+                        child: ListTile(
+                          leading: const Icon(Icons.people),
+                          title: const Text('Meine Artists'),
+                          onTap: () {
+                            if (currentUser.savedArtists.isEmpty) {
+                              return;
+                            }
+                            Navigator.pushNamed(context, 'saved_artists');
+                          },
+                        ),
                       ),
-                    ),
+                    if (currentUser.type != UserType.host)
+                      Opacity(
+                        opacity: currentUser.savedHosts.isEmpty ? 0.4 : 1,
+                        child: ListTile(
+                          leading: const Icon(Icons.house),
+                          title: const Text('Meine Hosts'),
+                          onTap: () {
+                            if (currentUser.savedHosts.isEmpty) {
+                              return;
+                            }
+                            Navigator.pushNamed(context, 'saved_hosts');
+                          },
+                        ),
+                      ),
                     if (currentUser.type == UserType.base)
                       Opacity(
                         opacity: currentUser.savedEvents.isEmpty ? 0.4 : 1,

@@ -49,11 +49,16 @@ class UserDocService {
         .update({'type': UserType.base});
   }
 
-  Future<AppUser?> getUserData() async {
+  Future<AppUser?> getCurrentUserData() async {
     if (AuthService().getCurrentFirebaseUser() == null) return null;
     final doc = await usersCollection
         .doc(AuthService().getCurrentFirebaseUser()!.uid)
         .get();
+    return doc.data();
+  }
+
+  Future<AppUser?> getUserData(String userId) async {
+    final doc = await usersCollection.doc(userId).get();
     return doc.data();
   }
 

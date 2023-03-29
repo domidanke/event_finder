@@ -165,6 +165,28 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   const SizedBox(
                     height: 10,
                   ),
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          children: [
+                            const KKIcon(icon: Icon(Icons.house)),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            TextButton(
+                              onPressed: _navigateToHost,
+                              child: Text(event.creatorName),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       clipBehavior: Clip.hardEdge,
@@ -463,5 +485,23 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _navigateToHost() async {
+    var lastHost = StateService().lastSelectedHost;
+    var lastEvent = StateService().lastSelectedEvent!;
+    if (lastHost == null) {
+      final host = await UserDocService().getUserData(lastEvent.creatorId);
+      if (host == null) return;
+      StateService().lastSelectedHost = host;
+      if (mounted) {
+        Navigator.pushNamed(context, 'host_page');
+      }
+    } else {
+      // Possibly saving a firestore read here?
+      if (lastHost.uid == lastEvent.creatorId) {
+        Navigator.pushNamed(context, 'host_page');
+      }
+    }
   }
 }

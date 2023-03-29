@@ -24,7 +24,8 @@ import 'package:event_finder/views/feature/shared/event_details_page.dart';
 import 'package:event_finder/views/feature/shared/profile_page.dart';
 import 'package:flutter/material.dart';
 
-import 'views/feature/base/saved_artists_page.dart';
+import 'views/feature/shared/saved_artists_page.dart';
+import 'views/feature/shared/saved_hosts_page.dart';
 
 class RouteGenerator {
   Route<dynamic> generateRoute(RouteSettings settings) {
@@ -67,6 +68,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SavedEventsPage());
       case 'saved_artists':
         return MaterialPageRoute(builder: (_) => const SavedArtistsPage());
+      case 'saved_hosts':
+        return MaterialPageRoute(builder: (_) => const SavedHostsPage());
       case 'tickets':
         return MaterialPageRoute(builder: (_) => const TicketsPage());
       case 'ticket_details':

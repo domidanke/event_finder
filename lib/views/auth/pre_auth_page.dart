@@ -23,7 +23,7 @@ class _PreAuthPageState extends State<PreAuthPage> {
 
   @override
   void initState() {
-    _user = UserDocService().getUserData();
+    _user = UserDocService().getCurrentUserData();
     super.initState();
   }
 
