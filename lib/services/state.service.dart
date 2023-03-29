@@ -2,6 +2,7 @@ import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/models/ticket_info.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class StateService extends ChangeNotifier {
   factory StateService() {
@@ -10,13 +11,29 @@ class StateService extends ChangeNotifier {
   StateService._internal();
   static final StateService _singleton = StateService._internal();
 
-  AppUser? currentUser;
+  AppUser? _currentUser;
+  AppUser? get currentUser => _currentUser;
+
+  set currentUser(AppUser? user) {
+    _currentUser = user;
+    notifyListeners();
+  }
+
+  set currentUserMainLocation(LatLng coordinates) {
+    _currentUser!.mainLocationCoordinates = coordinates;
+    notifyListeners();
+  }
 
   Event? _lastSelectedEvent;
   Event? get lastSelectedEvent => _lastSelectedEvent;
 
   set lastSelectedEvent(Event? event) {
     _lastSelectedEvent = event;
+    notifyListeners();
+  }
+
+  set lastSelectedEventDetails(String newDetails) {
+    _lastSelectedEvent!.details = newDetails;
     notifyListeners();
   }
 

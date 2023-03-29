@@ -40,7 +40,7 @@ class Event {
 
   final String uid;
   final String title;
-  final String details;
+  late String details;
   final String genre;
   final int ticketPrice;
   final DateTime date;

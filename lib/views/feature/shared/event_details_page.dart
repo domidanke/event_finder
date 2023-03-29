@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
+import 'package:event_finder/services/firestore/event_ticket_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
@@ -185,8 +186,26 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         ),
                       ],
                     ),
+
+                  /// Maybe not the best solution, but shows live number of bought tickets
+                  Center(
+                    child: StreamBuilder(
+                        stream: EventTicketDocService()
+                            .eventTicketsCollection
+                            .doc(event.uid)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Text('Verkaufte Tickets: -');
+                          } else {
+                            final x = snapshot.data!.data()!;
+                            return Text(
+                                'Verkaufte Tickets: ${x.allTickets.length}');
+                          }
+                        }),
+                  ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -244,15 +263,12 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               ),
             if (event.creatorId == currentUser.uid)
               Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                child: SizedBox(
-                  width: 200,
-                  child: KKButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'edit_event');
-                    },
-                    buttonText: 'Event bearbeiten',
-                  ),
+                margin: const EdgeInsets.all(20),
+                child: KKButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'edit_event');
+                  },
+                  buttonText: 'Beschreibung bearbeiten',
                 ),
               ),
           ],

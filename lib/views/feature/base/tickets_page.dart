@@ -1,5 +1,8 @@
+import 'package:event_finder/models/app_user.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TicketsPage extends StatefulWidget {
   const TicketsPage({super.key});
@@ -16,32 +19,39 @@ class _TicketsPageState extends State<TicketsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var allTickets = StateService().currentUser!.allTickets;
-    var usedTickets = StateService().currentUser!.usedTickets;
-    return Scaffold(
-      body: SafeArea(
-          child: ListView.builder(
-        itemCount: allTickets.length,
-        prototypeItem: ListTile(
-          title: Text(allTickets.first.eventTitle),
-        ),
-        itemBuilder: (context, index) {
-          var ticketNumber = allTickets[index].id.split('_')[3];
-          return ListTile(
-            title: Text(
-                '${allTickets[index].eventTitle} ($ticketNumber) ${usedTickets.contains(allTickets[index].id) ? '-- Eingeloest' : ''}'),
-            subtitle:
-                Text(allTickets[index].eventDate.toString().substring(0, 16)),
-            trailing: IconButton(
-              onPressed: () {
-                StateService().lastSelectedTicket = allTickets[index];
-                Navigator.pushNamed(context, 'ticket_details');
-              },
-              icon: const Icon(Icons.qr_code),
-            ),
-          );
-        },
-      )),
+    final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
+    return RefreshIndicator(
+      onRefresh: () async {
+        StateService().currentUser =
+            await UserDocService().getCurrentUserData();
+      },
+      child: Scaffold(
+        body: SafeArea(
+            child: ListView.builder(
+          itemCount: currentUser.allTickets.length,
+          prototypeItem: ListTile(
+            title: Text(currentUser.allTickets.first.eventTitle),
+          ),
+          itemBuilder: (context, index) {
+            var ticketNumber = currentUser.allTickets[index].id.split('_')[3];
+            return ListTile(
+              title: Text(
+                  '${currentUser.allTickets[index].eventTitle} ($ticketNumber) ${currentUser.usedTickets.contains(currentUser.allTickets[index].id) ? '-- Eingeloest' : ''}'),
+              subtitle: Text(currentUser.allTickets[index].eventDate
+                  .toString()
+                  .substring(0, 16)),
+              trailing: IconButton(
+                onPressed: () {
+                  StateService().lastSelectedTicket =
+                      currentUser.allTickets[index];
+                  Navigator.pushNamed(context, 'ticket_details');
+                },
+                icon: const Icon(Icons.qr_code),
+              ),
+            );
+          },
+        )),
+      ),
     );
   }
 }

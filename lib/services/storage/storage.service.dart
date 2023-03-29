@@ -42,21 +42,21 @@ class StorageService {
   }
 
   Future<void> saveProfileImageToStorage(File file) async {
+    SettableMetadata metadata = SettableMetadata(contentType: 'image/jpg');
     await storage
-        .ref('profile/${AuthService().getCurrentFirebaseUser()!.uid}/image')
-        .putFile(file);
+        .ref('${AuthService().getCurrentFirebaseUser()!.uid}/profile_pic.jpeg')
+        .putFile(file, metadata);
   }
 
   Future<String> getProfileImageUrl() async {
     await Future.delayed(const Duration(milliseconds: 1500));
-    final ref = storage
-        .ref()
-        .child('profile/${AuthService().getCurrentFirebaseUser()!.uid}/image');
+    final ref = storage.ref().child(
+        '${AuthService().getCurrentFirebaseUser()!.uid}/profile_pic.jpeg');
     return await ref.getDownloadURL();
   }
 
   Future<String> getUserImageUrl(String uid) async {
-    final ref = storage.ref().child('profile/$uid/image');
+    final ref = storage.ref().child('$uid/profile_pic.jpeg');
     return await ref.getDownloadURL();
   }
 }

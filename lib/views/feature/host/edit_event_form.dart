@@ -4,7 +4,6 @@ import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class EditEventForm extends StatefulWidget {
@@ -15,20 +14,12 @@ class EditEventForm extends StatefulWidget {
 }
 
 class _EditEventFormState extends State<EditEventForm> {
-  String title = '';
   String details = '';
-  int? ticketPrice;
 
   Map<String, Object> generateMap() {
     Map<String, Object> map = {};
-    if (title.isNotEmpty) {
-      map.addAll({'title': title});
-    }
     if (details.isNotEmpty) {
       map.addAll({'details': details});
-    }
-    if (ticketPrice != null) {
-      map.addAll({'ticketPrice': ticketPrice!});
     }
     return map;
   }
@@ -46,43 +37,11 @@ class _EditEventFormState extends State<EditEventForm> {
                 style: TextStyle(
                     color: Theme.of(context).textTheme.bodyMedium?.color),
                 decoration: const InputDecoration(
-                  labelText: 'Titel',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  title = value;
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium?.color),
-                decoration: const InputDecoration(
                   labelText: 'Beschreibung',
                   border: OutlineInputBorder(),
                 ),
                 onChanged: (value) {
                   details = value;
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium?.color),
-                decoration: const InputDecoration(
-                  labelText: 'Ticket Preis',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                onChanged: (value) {
-                  ticketPrice = int.parse(value);
                 },
               ),
               const SizedBox(
@@ -110,13 +69,11 @@ class _EditEventFormState extends State<EditEventForm> {
                             .updateEventDocument(map, event.uid)
                             .then((value) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Event gespeichert.')),
+                            const SnackBar(
+                                content: Text('Beschreibung aktualisiert.')),
                           );
-                          Future.delayed(const Duration(seconds: 1))
-                              .then((value) {
-                            int count = 0;
-                            Navigator.of(context).popUntil((_) => count++ >= 2);
-                          });
+                          StateService().lastSelectedEventDetails = details;
+                          Navigator.of(context).pop();
                         });
                       } catch (e) {
                         if (mounted) {
