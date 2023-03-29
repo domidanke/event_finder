@@ -16,22 +16,25 @@ class _TicketsPageState extends State<TicketsPage> {
 
   @override
   Widget build(BuildContext context) {
-    var tickets = StateService().currentUser!.allTickets;
+    var allTickets = StateService().currentUser!.allTickets;
+    var usedTickets = StateService().currentUser!.usedTickets;
     return Scaffold(
       body: SafeArea(
           child: ListView.builder(
-        itemCount: tickets.length,
+        itemCount: allTickets.length,
         prototypeItem: ListTile(
-          title: Text(tickets.first.eventTitle),
+          title: Text(allTickets.first.eventTitle),
         ),
         itemBuilder: (context, index) {
+          var ticketNumber = allTickets[index].id.split('_')[3];
           return ListTile(
-            title: Text(tickets[index].eventTitle),
+            title: Text(
+                '${allTickets[index].eventTitle} ($ticketNumber) ${usedTickets.contains(allTickets[index].id) ? '-- Eingeloest' : ''}'),
             subtitle:
-                Text(tickets[index].eventDate.toString().substring(0, 16)),
+                Text(allTickets[index].eventDate.toString().substring(0, 16)),
             trailing: IconButton(
               onPressed: () {
-                StateService().lastSelectedTicket = tickets[index];
+                StateService().lastSelectedTicket = allTickets[index];
                 Navigator.pushNamed(context, 'ticket_details');
               },
               icon: const Icon(Icons.qr_code),

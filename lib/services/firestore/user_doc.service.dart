@@ -131,4 +131,12 @@ class UserDocService {
           FieldValue.arrayUnion(ticketInfos.map((e) => e.toJson()).toList())
     });
   }
+
+  Future<void> redeemUserTickets(String qrCodeId) async {
+    // Extract user ID from qr code id
+    var userId = qrCodeId.split('_')[0];
+    await usersCollection.doc(userId).update({
+      'usedTickets': FieldValue.arrayUnion([qrCodeId])
+    });
+  }
 }
