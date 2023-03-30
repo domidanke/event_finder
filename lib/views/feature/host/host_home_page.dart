@@ -1,6 +1,6 @@
 import 'package:event_finder/views/feature/host/created_events_page.dart';
+import 'package:event_finder/views/feature/host/host_profile_page.dart';
 import 'package:event_finder/views/feature/shared/artist_search.dart';
-import 'package:event_finder/views/feature/shared/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class HostHomePage extends StatefulWidget {
@@ -14,7 +14,7 @@ class _HostHomePageState extends State<HostHomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     ArtistSearch(),
     CreatedEventsPage(),
-    ProfilePage()
+    HostProfilePage()
   ];
 
   void _onItemTapped(int index) {

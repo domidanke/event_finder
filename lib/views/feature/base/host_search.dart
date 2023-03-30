@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
-import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -16,47 +16,37 @@ class HostSearch extends StatefulWidget {
 
 class _HostSearchState extends State<HostSearch> {
   late Future<String> _imageUrl;
-
-  void _showFilters() {
-    showModalBottomSheet(
-        context: context,
-        builder: (builder) {
-          return Container(
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0))),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text('Host Filters'),
-                  KKButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    buttonText: 'Anwenden',
-                  )
-                ],
-              ));
-        });
-  }
+  final _hostSearchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(
-            flex: 1,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      _showFilters();
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _hostSearchController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Suche',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: () async {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      setState(() {});
                     },
-                    icon: const Icon(Icons.filter_alt))
-              ],
-            )),
+                    child: const Icon(Icons.search)),
+              )
+            ],
+          ),
+        ),
         Expanded(
           flex: 9,
           child: FirestoreListView<AppUser>(
@@ -65,10 +55,7 @@ class _HostSearchState extends State<HostSearch> {
                 child: Text('Keine Hosts'),
               );
             },
-            query: UserDocService().usersCollection.where(
-                  'type',
-                  isEqualTo: 'host',
-                ),
+            query: _getQuery(),
             itemBuilder: (context, snapshot) {
               final host = snapshot.data();
               _imageUrl = StorageService().getUserImageUrl(host.uid);
@@ -130,5 +117,22 @@ class _HostSearchState extends State<HostSearch> {
         ),
       ],
     );
+  }
+
+  Query<AppUser> _getQuery() {
+    var query = UserDocService()
+        .usersCollection
+        .where(
+          'type',
+          isEqualTo: 'host',
+        )
+        .orderBy('displayName');
+    if (_hostSearchController.text.isNotEmpty) {
+      query = query
+          .where('displayName',
+              isGreaterThanOrEqualTo: _hostSearchController.text)
+          .where('displayName', isLessThan: '${_hostSearchController.text}z');
+    }
+    return query;
   }
 }

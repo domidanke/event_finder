@@ -30,7 +30,7 @@ class UserDocService {
 
   Future<bool> userExists() {
     return usersCollection
-        .doc(StateService().currentUser!.uid)
+        .doc(AuthService().getCurrentFirebaseUser()!.uid)
         .get()
         .then((docSnapshot) => docSnapshot.exists);
   }
@@ -50,6 +50,7 @@ class UserDocService {
   }
 
   Future<AppUser?> getCurrentUserData() async {
+    print('Getting User Data');
     if (AuthService().getCurrentFirebaseUser() == null) return null;
     final doc = await usersCollection
         .doc(AuthService().getCurrentFirebaseUser()!.uid)

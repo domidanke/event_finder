@@ -7,7 +7,7 @@ import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/color_schemes.g.dart';
 import 'package:event_finder/theme/custom_color.g.dart';
-import 'package:event_finder/views/auth/pre_auth_page.dart';
+import 'package:event_finder/views/auth/auth_startup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -83,7 +83,7 @@ class EventFinder extends StatelessWidget {
             colorScheme: darkScheme,
             extensions: [darkCustomColors],
           ),
-          home: const PreAuthPage(),
+          home: const AuthStartupPage(),
         );
       },
     );

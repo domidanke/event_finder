@@ -1,10 +1,12 @@
 import 'package:event_finder/views/auth/activate_account_page.dart';
+import 'package:event_finder/views/auth/auth_startup_page.dart';
 import 'package:event_finder/views/auth/login_page.dart';
-import 'package:event_finder/views/auth/pre_auth_page.dart';
 import 'package:event_finder/views/auth/register_page.dart';
 import 'package:event_finder/views/auth/verify_email_page.dart';
 import 'package:event_finder/views/feature/artist/artist_events_page.dart';
+import 'package:event_finder/views/feature/artist/artist_home_page.dart';
 import 'package:event_finder/views/feature/artist/artist_page.dart';
+import 'package:event_finder/views/feature/artist/artist_profile_page.dart';
 import 'package:event_finder/views/feature/base/base_home_page.dart';
 import 'package:event_finder/views/feature/base/buy_tickets_page.dart';
 import 'package:event_finder/views/feature/base/saved_events_page.dart';
@@ -21,7 +23,6 @@ import 'package:event_finder/views/feature/host/host_page.dart';
 import 'package:event_finder/views/feature/host/scan_qr_code_page.dart';
 import 'package:event_finder/views/feature/host/set_main_location_page.dart';
 import 'package:event_finder/views/feature/shared/event_details_page.dart';
-import 'package:event_finder/views/feature/shared/profile_page.dart';
 import 'package:flutter/material.dart';
 
 import 'views/feature/shared/saved_artists_page.dart';
@@ -31,7 +32,7 @@ class RouteGenerator {
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => const PreAuthPage());
+        return MaterialPageRoute(builder: (_) => const AuthStartupPage());
       case 'login':
         return MaterialPageRoute(builder: (_) => const LoginPage());
       case 'register':
@@ -44,6 +45,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const BaseHomePage());
       case 'host_home':
         return MaterialPageRoute(builder: (_) => const HostHomePage());
+      case 'artist_home':
+        return MaterialPageRoute(builder: (_) => const ArtistHomePage());
       case 'create_event_page_1':
         return MaterialPageRoute(builder: (_) => const CreateEventPage1());
       case 'create_event_page_2':
@@ -53,7 +56,7 @@ class RouteGenerator {
       case 'edit_event':
         return MaterialPageRoute(builder: (_) => const EditEventForm());
       case 'profile':
-        return MaterialPageRoute(builder: (_) => const ProfilePage());
+        return MaterialPageRoute(builder: (_) => const ArtistProfilePage());
       case 'set_main_location':
         return MaterialPageRoute(builder: (_) => const SetMainLocationPage());
       case 'artist_page':

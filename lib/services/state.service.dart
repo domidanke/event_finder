@@ -19,6 +19,18 @@ class StateService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// This method ensures that a user gets set properly inside the
+  /// auth startup page. We don't want a provider rebuild on init
+  set setCurrentUserSilent(AppUser user) {
+    _currentUser = user;
+  }
+
+  /// This method ensures that the current user gets set to null
+  /// when logging out. We don't want a provider rebuild in the background
+  resetCurrentUserSilent() {
+    _currentUser = null;
+  }
+
   set currentUserMainLocation(LatLng coordinates) {
     _currentUser!.mainLocationCoordinates = coordinates;
     notifyListeners();

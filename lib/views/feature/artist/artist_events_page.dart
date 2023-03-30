@@ -1,3 +1,4 @@
+import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
@@ -20,6 +21,9 @@ class _ArtistEventsPageState extends State<ArtistEventsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final artistId = StateService().currentUser!.type == UserType.artist
+        ? StateService().currentUser!.uid
+        : StateService().lastSelectedArtist!.uid;
     return Scaffold(
       body: SafeArea(
         child: FirestoreListView<Event>(
@@ -30,8 +34,7 @@ class _ArtistEventsPageState extends State<ArtistEventsPage> {
           },
           query: EventDocService()
               .eventsCollection
-              .where('artists',
-                  arrayContains: StateService().lastSelectedArtist!.uid)
+              .where('artists', arrayContains: artistId)
               .orderBy('date'),
           itemBuilder: (context, snapshot) {
             Event event = snapshot.data();

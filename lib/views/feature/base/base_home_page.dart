@@ -1,9 +1,8 @@
-import 'package:event_finder/models/enums.dart';
-import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/views/feature/base/base_profile_page.dart';
 import 'package:event_finder/views/feature/base/search_page.dart';
 import 'package:event_finder/views/feature/shared/events_page.dart';
-import 'package:event_finder/views/feature/shared/profile_page.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class BaseHomePage extends StatefulWidget {
   const BaseHomePage({super.key});
@@ -16,15 +15,19 @@ class _BaseHomePageState extends State<BaseHomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     SearchPage(),
     EventsPage(),
-    ProfilePage()
+    BaseProfilePage()
   ];
 
   void _onItemTapped(int index) {
-    if (StateService().currentUser!.type == UserType.guest && index == 0)
-      return;
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    Geolocator.requestPermission();
+    super.initState();
   }
 
   @override
@@ -36,20 +39,16 @@ class _BaseHomePageState extends State<BaseHomePage> {
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
+          items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Opacity(
-                  opacity: StateService().currentUser!.type == UserType.guest
-                      ? 0.2
-                      : 1,
-                  child: const Icon(Icons.search)),
+              icon: Icon(Icons.search),
               label: 'Suche',
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(Icons.event),
               label: 'Events',
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Profil',
             ),
