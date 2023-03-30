@@ -1,6 +1,6 @@
 import 'package:event_finder/models/enums.dart';
+import 'package:event_finder/models/location_data.dart';
 import 'package:event_finder/models/ticket_info.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'external_links.dart';
 
@@ -16,7 +16,7 @@ class AppUser {
     this.allTickets = const [],
     this.usedTickets = const [],
     this.externalLinks = const ExternalLinks(),
-    this.mainLocationCoordinates = const LatLng(0, 0),
+    this.mainLocation = const LocationData(),
   });
 
   final String uid;
@@ -29,7 +29,7 @@ class AppUser {
   late List<TicketInfo> allTickets = [];
   late List<String> usedTickets = [];
   late List<String> follower = [];
-  late LatLng mainLocationCoordinates;
+  late LocationData mainLocation;
   String? imageUrl;
 
   AppUser.fromJson(Map<String, Object?> json, String uid)
@@ -61,10 +61,10 @@ class AppUser {
                 ? ExternalLinks.fromJson(
                     json['externalLinks'] as Map<String, dynamic>)
                 : const ExternalLinks(),
-            mainLocationCoordinates: json['mainLocationCoordinates'] != null
-                ? LatLng((json['mainLocationCoordinates'] as List<dynamic>)[0],
-                    (json['mainLocationCoordinates'] as List<dynamic>)[1])
-                : const LatLng(0, 0),
+            mainLocation: json['mainLocation'] != null
+                ? LocationData.fromJson(
+                    json['mainLocation'] as Map<String, dynamic>)
+                : const LocationData(),
             displayName: json['displayName'] != null
                 ? json['displayName'] as String
                 : '');
@@ -79,7 +79,6 @@ class AppUser {
       'allTickets': allTickets.map((e) => e.toJson()).toList(),
       'usedTickets': usedTickets,
       'externalLinks': externalLinks.toJson(),
-      'mainLocationCoordinates': mainLocationCoordinates.toJson(),
       'type': type.name
     };
   }

@@ -6,7 +6,7 @@ import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 import '../../../../models/event.dart';
 
@@ -25,9 +25,9 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
   @override
   void initState() {
     StateService().newEvent = NewEvent();
-    final coordinates = StateService().currentUser!.mainLocationCoordinates;
-    _getPlaceMarkers =
-        placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
+    final mainLocation = StateService().currentUser!.mainLocation;
+    _getPlaceMarkers = placemarkFromCoordinates(
+        mainLocation.geoPoint.latitude, mainLocation.geoPoint.longitude);
     super.initState();
   }
 
@@ -216,7 +216,7 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
   }
 
   void _showChangeLocation() {
-    LatLng? newCoordinates;
+    GeoFirePoint? newCoordinates;
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => Dialog(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/alert.service.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
@@ -20,6 +21,7 @@ class CreateEventPage3 extends StatefulWidget {
 
 class _CreateEventPage3State extends State<CreateEventPage3> {
   late Future<String> _imageUrl;
+  final _artistSearchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,32 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
       body: SafeArea(
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _artistSearchController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Suche',
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          /// Remove annoying keyboard
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          setState(() {});
+                        },
+                        child: const Icon(Icons.search)),
+                  )
+                ],
+              ),
+            ),
             Expanded(
               child: FirestoreListView<AppUser>(
                 emptyBuilder: (context) {
@@ -35,10 +63,7 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
                     child: Text('Keine Artists'),
                   );
                 },
-                query: UserDocService().usersCollection.where(
-                      'type',
-                      isEqualTo: 'artist',
-                    ),
+                query: _getQuery(),
                 itemBuilder: (context, snapshot) {
                   final artist = snapshot.data();
                   _imageUrl = StorageService().getUserImageUrl(artist.uid);
@@ -165,5 +190,22 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
         ),
       ),
     );
+  }
+
+  Query<AppUser> _getQuery() {
+    var query = UserDocService()
+        .usersCollection
+        .where(
+          'type',
+          isEqualTo: 'artist',
+        )
+        .orderBy('displayName');
+    if (_artistSearchController.text.isNotEmpty) {
+      query = query
+          .where('displayName',
+              isGreaterThanOrEqualTo: _artistSearchController.text)
+          .where('displayName', isLessThan: '${_artistSearchController.text}z');
+    }
+    return query;
   }
 }

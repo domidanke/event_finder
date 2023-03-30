@@ -10,6 +10,7 @@ import 'package:event_finder/widgets/kk_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/app_user.dart';
@@ -214,7 +215,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           borderRadius: BorderRadius.all(Radius.circular(12))),
                       height: 200,
                       child: LocationSnippet(
-                          coordinates: event.locationCoordinates)),
+                          coordinates: LatLng(event.location.geoPoint.latitude,
+                              event.location.geoPoint.longitude))),
                   const SizedBox(
                     height: 10,
                   ),

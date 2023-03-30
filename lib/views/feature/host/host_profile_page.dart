@@ -128,8 +128,7 @@ class _HostProfilePageState extends State<HostProfilePage> {
                     },
                   ),
                 ),
-                if (currentUser.mainLocationCoordinates.latitude == 0 &&
-                    currentUser.mainLocationCoordinates.longitude == 0)
+                if (currentUser.mainLocation.geoHash.isEmpty)
                   KKButton(
                       onPressed: () {
                         Navigator.pushNamed(context, 'set_main_location');

@@ -7,7 +7,6 @@ import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/views/feature/shared/popup_menu.dart';
-import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -171,14 +170,6 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                       },
                     ),
                   ),
-                if (currentUser.type == UserType.host &&
-                    currentUser.mainLocationCoordinates.latitude == 0 &&
-                    currentUser.mainLocationCoordinates.longitude == 0)
-                  KKButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, 'set_main_location');
-                      },
-                      buttonText: 'Setze deine Main Location'),
               ],
             ),
           ),

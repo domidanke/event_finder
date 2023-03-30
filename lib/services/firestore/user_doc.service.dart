@@ -7,7 +7,7 @@ import 'package:event_finder/models/ticket_info.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 class UserDocService {
   factory UserDocService() {
@@ -124,10 +124,10 @@ class UserDocService {
     }
   }
 
-  Future<void> saveMainLocationData(LatLng coordinates) async {
+  Future<void> saveMainLocationData(GeoFirePoint geoFirePoint) async {
     await usersCollection
         .doc(StateService().currentUser!.uid)
-        .update({'mainLocationCoordinates': coordinates.toJson()});
+        .update({'mainLocation': geoFirePoint.data});
   }
 
   Future<void> addUserTickets(List<TicketInfo> ticketInfos) async {

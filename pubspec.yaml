@@ -50,6 +50,7 @@ dependencies:
   url_launcher: ^6.1.10
   qr_flutter: ^4.0.0
   qr_code_scanner: ^1.0.1
+  geoflutterfire_plus: ^0.0.6
 
 dev_dependencies:
   flutter_test:

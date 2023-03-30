@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:event_finder/models/location_data.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 import 'consts.dart';
 
@@ -17,7 +18,7 @@ class Event {
       required this.creatorId,
       required this.creatorName,
       this.artists = const [],
-      this.locationCoordinates = const LatLng(0, 0)});
+      this.location = const LocationData()});
 
   Event.fromJson(Map<String, Object?> json, String uid)
       : this(
@@ -32,10 +33,9 @@ class Event {
           artists: json['artists'] != null
               ? List.from(json['artists'] as List<dynamic>)
               : [],
-          locationCoordinates: json['locationCoordinates'] != null
-              ? LatLng((json['locationCoordinates'] as List<dynamic>)[0],
-                  (json['locationCoordinates'] as List<dynamic>)[1])
-              : const LatLng(0, 0),
+          location: json['location'] != null
+              ? LocationData.fromJson(json['location'] as Map<String, dynamic>)
+              : const LocationData(),
         );
 
   final String uid;
@@ -46,7 +46,7 @@ class Event {
   final DateTime date;
   final String creatorId;
   final String creatorName;
-  final LatLng locationCoordinates;
+  final LocationData location;
   late List<String> artists = [];
   String? imageUrl;
 
@@ -60,7 +60,7 @@ class Event {
       'artists': artists,
       'genre': genre,
       'ticketPrice': ticketPrice,
-      'locationCoordinates': locationCoordinates.toJson(),
+      'location': location.toJson(),
     };
   }
 }
@@ -75,7 +75,7 @@ class NewEvent {
   DateTime date = DateTime.now();
   File? selectedImageFile;
   List<String> enlistedArtists = [];
-  LatLng? locationCoordinates;
+  GeoFirePoint? locationCoordinates;
 
   Event toEvent() {
     return Event(
@@ -87,7 +87,8 @@ class NewEvent {
         creatorName: AuthService().getCurrentFirebaseUser()!.displayName ?? '',
         ticketPrice: ticketPrice,
         artists: enlistedArtists,
-        locationCoordinates: locationCoordinates ??
-            StateService().currentUser!.mainLocationCoordinates);
+        location: locationCoordinates != null
+            ? locationCoordinates!.data as LocationData
+            : StateService().currentUser!.mainLocation);
   }
 }

@@ -4,6 +4,7 @@ import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/shared/location_snippet.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -118,8 +119,7 @@ class _HostPageState extends State<HostPage> {
             const SizedBox(
               height: 20,
             ),
-            if (host.mainLocationCoordinates.longitude != 0 &&
-                host.mainLocationCoordinates.latitude != 0)
+            if (host.mainLocation.geoHash.isNotEmpty)
               Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   clipBehavior: Clip.hardEdge,
@@ -127,7 +127,8 @@ class _HostPageState extends State<HostPage> {
                       borderRadius: BorderRadius.all(Radius.circular(12))),
                   height: 200,
                   child: LocationSnippet(
-                      coordinates: host.mainLocationCoordinates)),
+                      coordinates: LatLng(host.mainLocation.geoPoint.latitude,
+                          host.mainLocation.geoPoint.longitude))),
           ],
         ),
       ),

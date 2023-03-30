@@ -1,16 +1,18 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/services/alert.service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SearchAddressInMap extends StatefulWidget {
   const SearchAddressInMap({Key? key, required this.onAddressSelected})
       : super(key: key);
 
-  final Function(LatLng coordinates) onAddressSelected;
+  final Function(GeoFirePoint geoFirePoint) onAddressSelected;
 
   @override
   State<SearchAddressInMap> createState() => SearchAddressInMapState();
@@ -22,18 +24,6 @@ class SearchAddressInMapState extends State<SearchAddressInMap> {
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   final _addressController = TextEditingController();
-
-  /// TODO Move to actual gps related widget (does not exist yet)
-  // Future<CameraPosition> getLocation() async {
-  //   await Geolocator.requestPermission();
-  //   Position position = await Geolocator.getCurrentPosition(
-  //       desiredAccuracy: LocationAccuracy.high);
-  //
-  //   return CameraPosition(
-  //     target: LatLng(position.latitude, position.longitude),
-  //     zoom: 14.4746,
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +104,10 @@ class SearchAddressInMapState extends State<SearchAddressInMap> {
     setState(() {
       markers[const MarkerId('address')] = marker;
     });
-    widget.onAddressSelected(coordinates);
+
+    final GeoFirePoint geoFirePoint =
+        GeoFirePoint(GeoPoint(coordinates.latitude, coordinates.longitude));
+    print(geoFirePoint.data);
+    widget.onAddressSelected(geoFirePoint);
   }
 }

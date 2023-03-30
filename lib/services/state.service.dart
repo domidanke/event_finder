@@ -1,8 +1,8 @@
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/models/event.dart';
+import 'package:event_finder/models/location_data.dart';
 import 'package:event_finder/models/ticket_info.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class StateService extends ChangeNotifier {
   factory StateService() {
@@ -31,8 +31,8 @@ class StateService extends ChangeNotifier {
     _currentUser = null;
   }
 
-  set currentUserMainLocation(LatLng coordinates) {
-    _currentUser!.mainLocationCoordinates = coordinates;
+  set currentUserMainLocation(LocationData coordinates) {
+    _currentUser!.mainLocation = coordinates;
     notifyListeners();
   }
 
@@ -108,8 +108,7 @@ class StateService extends ChangeNotifier {
 
   /// TODO: Move to separate User State service class
   bool isProfileComplete() {
-    return currentUser!.mainLocationCoordinates.latitude != 0 &&
-        currentUser!.mainLocationCoordinates.longitude != 0 &&
+    return currentUser!.mainLocation.geoHash.isNotEmpty &&
         currentUser!.displayName.isNotEmpty;
   }
 

@@ -38,6 +38,7 @@ class _ArtistSearchState extends State<ArtistSearch> {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                     onPressed: () async {
+                      FocusManager.instance.primaryFocus?.unfocus();
                       setState(() {});
                     },
                     child: const Icon(Icons.search)),

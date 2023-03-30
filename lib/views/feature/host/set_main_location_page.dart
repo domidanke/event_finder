@@ -1,9 +1,8 @@
 import 'package:event_finder/services/firestore/user_doc.service.dart';
-import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/shared/search_address_in_map.dart';
 import 'package:event_finder/widgets/kk_button_async.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 class SetMainLocationPage extends StatefulWidget {
   const SetMainLocationPage({Key? key}) : super(key: key);
@@ -13,7 +12,7 @@ class SetMainLocationPage extends StatefulWidget {
 }
 
 class _SetMainLocationPageState extends State<SetMainLocationPage> {
-  LatLng? _selectedCoordinates;
+  GeoFirePoint? _selectedCoordinates;
   bool _isSaving = false;
   @override
   Widget build(BuildContext context) {
@@ -24,9 +23,9 @@ class _SetMainLocationPageState extends State<SetMainLocationPage> {
             Expanded(
               flex: 7,
               child: SearchAddressInMap(
-                onAddressSelected: (LatLng coordinates) {
+                onAddressSelected: (GeoFirePoint geoFirePoint) {
                   setState(() {
-                    _selectedCoordinates = coordinates;
+                    _selectedCoordinates = geoFirePoint;
                   });
                 },
               ),
@@ -44,8 +43,8 @@ class _SetMainLocationPageState extends State<SetMainLocationPage> {
                   });
                   await UserDocService()
                       .saveMainLocationData(_selectedCoordinates!);
-                  StateService().currentUserMainLocation =
-                      _selectedCoordinates!;
+                  // StateService().currentUserMainLocation =
+                  //     _selectedCoordinates!;
                   setState(() {
                     _isSaving = false;
                   });
