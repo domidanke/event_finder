@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const primaryColor = Color(0xff9739C8);
+final primaryColorTransparent = primaryColor.withOpacity(0.2);
 const primaryWhite = Colors.white70;
 
 final primaryThemeData = ThemeData(

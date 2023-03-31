@@ -19,18 +19,53 @@ class _EventsPageState extends State<EventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: FirestoreListView<Event>(
-        emptyBuilder: (context) {
-          return const Center(
-            child: Text('Keine Events'),
-          );
-        },
-        query: EventDocService().eventsCollection.orderBy('date'),
-        itemBuilder: (context, snapshot) {
-          return EventCard(event: snapshot.data());
-        },
+    return Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.map,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, 'maps_page');
+            },
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.filter_alt,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              _showFiltersSheet();
+            },
+          )
+        ],
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: FirestoreListView<Event>(
+            emptyBuilder: (context) {
+              return const Center(
+                child: Text('Keine Events'),
+              );
+            },
+            query: EventDocService().eventsCollection.orderBy('date'),
+            itemBuilder: (context, snapshot) {
+              return EventCard(event: snapshot.data());
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showFiltersSheet() {
+    showModalBottomSheet<String>(
+      context: context,
+      builder: (BuildContext context) => const Center(
+        child: Text('Filter'),
       ),
     );
   }
