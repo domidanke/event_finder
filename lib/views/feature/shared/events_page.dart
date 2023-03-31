@@ -1,5 +1,7 @@
+import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
+import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
@@ -21,15 +23,21 @@ class _EventsPageState extends State<EventsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.map,
-              color: Colors.white,
+          Opacity(
+            opacity:
+                StateService().currentUser!.type == UserType.guest ? 0.2 : 1,
+            child: IconButton(
+              icon: const Icon(
+                Icons.map,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                if (StateService().currentUser!.type == UserType.guest) return;
+                Navigator.pushNamed(context, 'maps_page');
+              },
             ),
-            onPressed: () {
-              Navigator.pushNamed(context, 'maps_page');
-            },
           ),
           IconButton(
             icon: const Icon(

@@ -40,7 +40,9 @@ class UserDocService {
       type: user.isAnonymous ? UserType.guest : UserType.base,
       displayName: user.displayName ?? '',
     );
-    await usersCollection.doc(StateService().currentUser!.uid).set(newUser);
+    await usersCollection
+        .doc(AuthService().getCurrentFirebaseUser()!.uid)
+        .set(newUser);
   }
 
   Future<void> upgradeUserDocument() async {

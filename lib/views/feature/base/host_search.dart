@@ -105,10 +105,6 @@ class _HostSearchState extends State<HostSearch> {
                       Icons.arrow_forward_ios,
                       size: 15,
                     ),
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
                   ),
                 ),
               );

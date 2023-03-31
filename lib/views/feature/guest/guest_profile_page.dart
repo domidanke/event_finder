@@ -22,17 +22,24 @@ class _GuestProfilePageState extends State<GuestProfilePage> {
                 backgroundImage:
                     Image.asset('assets/images/profile_placeholder.png').image,
               ),
-              const Spacer(),
+              const SizedBox(
+                height: 30,
+              ),
               KKButton(
                   onPressed: () {
                     Navigator.pushNamed(context, 'activate_account');
                   },
                   buttonText: 'Activate Account'),
-              const Spacer(),
-              ListTile(
-                leading: const Icon(Icons.receipt),
-                title: const Text('Meine Tickets'),
-                onTap: () {},
+              const SizedBox(
+                height: 30,
+              ),
+              Opacity(
+                opacity: 0.2,
+                child: ListTile(
+                  leading: const Icon(Icons.receipt),
+                  title: const Text('Meine Tickets'),
+                  onTap: () {},
+                ),
               ),
               Opacity(
                 opacity: 0.2,
@@ -66,7 +73,6 @@ class _GuestProfilePageState extends State<GuestProfilePage> {
                   onTap: () {},
                 ),
               ),
-              const Spacer(),
             ],
           ),
         ),

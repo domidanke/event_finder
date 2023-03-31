@@ -153,10 +153,12 @@ class _EventCardState extends State<EventCard> {
                                 '${widget.event.date.toString().substring(11, 16)} Uhr',
                                 style: const TextStyle(fontSize: 16),
                               ),
-                              Text(
-                                widget.event.creatorName,
-                                style: const TextStyle(fontSize: 16),
-                              ),
+                              if (StateService().currentUser!.type ==
+                                  UserType.base)
+                                Text(
+                                  widget.event.creatorName,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
                               _getDistanceWidget()
                             ],
                           )
@@ -172,6 +174,11 @@ class _EventCardState extends State<EventCard> {
   }
 
   Widget _getDistanceWidget() {
+    if (StateService().currentUser!.type != UserType.base) {
+      return const SizedBox(
+        width: 70,
+      );
+    }
     final Position? currentPosition =
         Provider.of<StateService>(context).currentUserLocation;
     if (currentPosition == null) {

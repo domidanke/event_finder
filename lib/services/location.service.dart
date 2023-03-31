@@ -46,7 +46,7 @@ class LocationService {
             sin(dLon / 2);
     var c = 2 * atan2(sqrt(a), sqrt(1 - a));
     var d = R * c; // Distance in km
-    return double.parse((d).toStringAsFixed(2));
+    return double.parse((d).toStringAsFixed(1));
   }
 
   double _deg2rad(double deg) {
