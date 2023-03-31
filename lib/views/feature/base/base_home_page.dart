@@ -1,8 +1,8 @@
+import 'package:event_finder/services/location.service.dart';
 import 'package:event_finder/views/feature/base/base_profile_page.dart';
 import 'package:event_finder/views/feature/base/search_page.dart';
 import 'package:event_finder/views/feature/shared/events_page.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 class BaseHomePage extends StatefulWidget {
   const BaseHomePage({super.key});
@@ -26,7 +26,8 @@ class _BaseHomePageState extends State<BaseHomePage> {
 
   @override
   void initState() {
-    Geolocator.requestPermission();
+    LocationService().handlePermission();
+
     super.initState();
   }
 

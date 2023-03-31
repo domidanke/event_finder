@@ -46,6 +46,9 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                   flex: 100,
                   child: ListView(
                     children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
                       TextFormField(
                         style: TextStyle(
                             color:

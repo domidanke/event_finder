@@ -1,31 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_finder/models/event.dart';
-import 'package:event_finder/services/alert.service.dart';
+import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
-import 'package:event_finder/services/firestore/event_ticket_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
+import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../models/app_user.dart';
-import '../../../../services/state.service.dart';
-import '../../../../services/storage/storage.service.dart';
-import '../../../../widgets/kk_button.dart';
-
-class CreateEventPage3 extends StatefulWidget {
-  const CreateEventPage3({Key? key}) : super(key: key);
+class EditEventArtistsPage extends StatefulWidget {
+  const EditEventArtistsPage({super.key});
 
   @override
-  State<CreateEventPage3> createState() => _CreateEventPage3State();
+  State<EditEventArtistsPage> createState() => _EditEventArtistsPageState();
 }
 
-class _CreateEventPage3State extends State<CreateEventPage3> {
+class _EditEventArtistsPageState extends State<EditEventArtistsPage> {
   late Future<String> _imageUrl;
   final _artistSearchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    NewEvent newEvent = StateService().newEvent;
+    final event = StateService().lastSelectedEvent!;
+    final artistsBeforeEdit = List<String>.from(event.artists);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -47,7 +43,6 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                         onPressed: () async {
-                          /// Remove annoying keyboard
                           FocusManager.instance.primaryFocus?.unfocus();
                           setState(() {});
                         },
@@ -57,6 +52,7 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
               ),
             ),
             Expanded(
+              flex: 9,
               child: FirestoreListView<AppUser>(
                 emptyBuilder: (context) {
                   return const Center(
@@ -67,8 +63,6 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
                 itemBuilder: (context, snapshot) {
                   final artist = snapshot.data();
                   _imageUrl = StorageService().getUserImageUrl(artist.uid);
-
-                  /// This is used twice, also in saved artists page TODO: merge into one widget
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 4),
                     child: Row(
@@ -79,16 +73,12 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
                             builder: (BuildContext context,
                                 void Function(void Function()) setState) {
                               return Checkbox(
-                                  value: newEvent.enlistedArtists
-                                      .contains(artist.uid),
+                                  value: event.artists.contains(artist.uid),
                                   onChanged: (v) {
                                     setState(() {
-                                      newEvent.enlistedArtists
-                                              .contains(artist.uid)
-                                          ? newEvent.enlistedArtists
-                                              .remove(artist.uid)
-                                          : newEvent.enlistedArtists
-                                              .add(artist.uid);
+                                      event.artists.contains(artist.uid)
+                                          ? event.artists.remove(artist.uid)
+                                          : event.artists.add(artist.uid);
                                     });
                                   });
                             },
@@ -152,41 +142,27 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                KKButton(
+                TextButton(
                   onPressed: () {
+                    setState(() {
+                      event.artists = artistsBeforeEdit;
+                    });
                     Navigator.pop(context);
                   },
-                  buttonText: 'Zurueck',
+                  child: const Text('Abbrechen'),
                 ),
-                KKButton(
-                  onPressed: () async {
-                    final event = newEvent.toEvent();
-                    final eventId =
-                        await EventDocService().addEventDocument(event);
-                    await EventTicketDocService().addTicketDocument(eventId);
-                    await StorageService()
-                        .saveEventImageToStorage(
-                            eventId, newEvent.selectedImageFile!)
-                        .then((value) => {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Event erstellt.')),
-                              ),
-                              Navigator.pushNamed(context, 'host_home'),
-                            })
-                        .catchError((e) {
-                      AlertService().showAlert(
-                          'Event Bild hochladen fehlgeschlagen',
-                          e.toString(),
-                          context);
-                    });
+                TextButton(
+                  onPressed: () {
+                    /// TODO: Add function that checks if arrays are identical (== not working)
+                    EventDocService().updateEventArtists();
+                    Navigator.pop(context);
                   },
-                  buttonText: 'Erstellen',
+                  child: const Text('Speichern'),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

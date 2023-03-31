@@ -3,6 +3,7 @@ import 'package:event_finder/models/event.dart';
 import 'package:event_finder/models/location_data.dart';
 import 'package:event_finder/models/ticket_info.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class StateService extends ChangeNotifier {
   factory StateService() {
@@ -33,6 +34,14 @@ class StateService extends ChangeNotifier {
 
   set currentUserMainLocation(LocationData coordinates) {
     _currentUser!.mainLocation = coordinates;
+    notifyListeners();
+  }
+
+  Position? _currentUserLocation;
+  Position? get currentUserLocation => _currentUserLocation;
+
+  set currentUserLocation(Position? location) {
+    _currentUserLocation = location;
     notifyListeners();
   }
 

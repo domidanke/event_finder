@@ -2,9 +2,13 @@ import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
+import 'package:event_finder/services/location.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class EventCard extends StatefulWidget {
   final Event event;
@@ -149,17 +153,11 @@ class _EventCardState extends State<EventCard> {
                                 '${widget.event.date.toString().substring(11, 16)} Uhr',
                                 style: const TextStyle(fontSize: 16),
                               ),
-
                               Text(
                                 widget.event.creatorName,
                                 style: const TextStyle(fontSize: 16),
                               ),
-
-                              /// TODO get local distance to address?
-                              const Text(
-                                '1.5km',
-                                style: TextStyle(fontSize: 16),
-                              )
+                              _getDistanceWidget()
                             ],
                           )
                         ],
@@ -170,6 +168,22 @@ class _EventCardState extends State<EventCard> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _getDistanceWidget() {
+    final Position? currentPosition =
+        Provider.of<StateService>(context).currentUserLocation;
+    if (currentPosition == null) {
+      return const Text('GPS deaktiviert');
+    }
+    var currentLatLng =
+        LatLng(currentPosition.latitude, currentPosition.longitude);
+    var eventLatLng = LatLng(widget.event.location.geoPoint.latitude,
+        widget.event.location.geoPoint.longitude);
+    return Text(
+      '${LocationService().getDistanceFromLatLonInKm(currentLatLng, eventLatLng)}km',
+      style: const TextStyle(fontSize: 16),
     );
   }
 }
