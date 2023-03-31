@@ -77,8 +77,10 @@ class EventsMapPageState extends State<EventsMapPage> {
               snippet: event.creatorName,
               onTap: () async {
                 StateService().lastSelectedEvent = event;
-                StateService().lastSelectedEvent!.imageUrl =
-                    await StorageService().getEventImageUrl(event: event);
+                if (StateService().lastSelectedEvent!.imageUrl == null) {
+                  StateService().lastSelectedEvent!.imageUrl =
+                      await StorageService().getEventImageUrl(event: event);
+                }
                 if (mounted) Navigator.pushNamed(context, 'event_details');
               }),
         ),

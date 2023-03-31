@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:event_finder/models/location_data.dart';
-import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
@@ -83,8 +82,8 @@ class NewEvent {
         details: details,
         date: date,
         genre: genre,
-        creatorId: AuthService().getCurrentFirebaseUser()!.uid,
-        creatorName: AuthService().getCurrentFirebaseUser()!.displayName ?? '',
+        creatorId: StateService().currentUser!.uid,
+        creatorName: StateService().currentUser!.displayName,
         ticketPrice: ticketPrice,
         artists: enlistedArtists,
         location: locationCoordinates != null
