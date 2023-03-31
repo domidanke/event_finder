@@ -24,10 +24,6 @@ class LocationSnippetState extends State<LocationSnippet> {
     final marker = Marker(
       markerId: const MarkerId('address'),
       position: widget.coordinates,
-      infoWindow: const InfoWindow(
-        title: 'title',
-        snippet: 'address',
-      ),
     );
     setState(() {
       markers[const MarkerId('address')] = marker;
