@@ -87,7 +87,7 @@ class NewEvent {
         ticketPrice: ticketPrice,
         artists: enlistedArtists,
         location: locationCoordinates != null
-            ? locationCoordinates!.data as LocationData
+            ? LocationData.fromJson(locationCoordinates!.data)
             : StateService().currentUser!.mainLocation);
   }
 }
