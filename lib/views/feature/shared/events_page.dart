@@ -6,6 +6,7 @@ import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class EventsPage extends StatefulWidget {
   const EventsPage({super.key});
@@ -34,9 +35,11 @@ class _EventsPageState extends State<EventsPage> {
                 Icons.map,
                 color: Colors.white,
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (StateService().currentUser!.type == UserType.guest) return;
-                Navigator.pushNamed(context, 'maps_page');
+                StateService().currentUserLocation =
+                    await Geolocator.getCurrentPosition();
+                if (mounted) Navigator.pushNamed(context, 'maps_page');
               },
             ),
           ),

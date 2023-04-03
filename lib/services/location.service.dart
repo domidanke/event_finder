@@ -24,8 +24,7 @@ class LocationService {
       if (newPermission == LocationPermission.whileInUse ||
           newPermission == LocationPermission.always) {
         StateService().currentUserLocation =
-            await Geolocator.getCurrentPosition(
-                desiredAccuracy: LocationAccuracy.high);
+            await Geolocator.getCurrentPosition();
       } else {
         StateService().currentUserLocation = null;
       }

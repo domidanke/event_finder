@@ -9,7 +9,6 @@ import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EventsMapPage extends StatefulWidget {
@@ -20,17 +19,11 @@ class EventsMapPage extends StatefulWidget {
 }
 
 class EventsMapPageState extends State<EventsMapPage> {
-  /// Used as center point when running geo query.
-  late CameraPosition _cameraPosition;
-
-  /// This is the current gps of the user, _cameraPosition will be set tho this
-  /// once Future completes
-  late Future<Position> _currentPosition;
-
   /// Detection radius (km) from the center point when running geo query.
   double _radiusInKm = 1;
   Set<Marker> _markers = {};
   int _numOfEventsInRadius = 0;
+  final currentPosition = StateService().currentUserLocation!;
 
   /// Geo query [StreamSubscription].
   late StreamSubscription<List<DocumentSnapshot<Event>>> _subscription;
@@ -52,8 +45,13 @@ class EventsMapPageState extends State<EventsMapPage> {
 
   @override
   void initState() {
-    _currentPosition =
-        Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    _subscription = _geoQuerySubscription(
+      centerGeoPoint: GeoPoint(
+        currentPosition.latitude,
+        currentPosition.longitude,
+      ),
+      radiusInKm: _radiusInKm,
+    );
     super.initState();
   }
 
@@ -64,9 +62,12 @@ class EventsMapPageState extends State<EventsMapPage> {
   }
 
   void _updateMarkers(List<DocumentSnapshot<Event>> documentSnapshots) {
+    print('got new stuff');
+    _numOfEventsInRadius = 0;
     final Map<String, List<Event>> geoToEventsMap = {};
     for (final ds in documentSnapshots) {
       final event = ds.data()!;
+      _numOfEventsInRadius++;
       if (geoToEventsMap.containsKey(event.location.geoHash)) {
         geoToEventsMap[event.location.geoHash]!.add(event);
       } else {
@@ -79,7 +80,6 @@ class EventsMapPageState extends State<EventsMapPage> {
     final markers = <Marker>{};
     geoToEventsMap.forEach((geoHash, eventsList) {
       if (eventsList.length > 1) {
-        _numOfEventsInRadius++;
         markers.add(
           Marker(
             markerId: MarkerId(geoHash),
@@ -124,102 +124,79 @@ class EventsMapPageState extends State<EventsMapPage> {
     print('rebuilt');
     return Scaffold(
       body: SafeArea(
-        child: FutureBuilder(
-          future: _currentPosition,
-          builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            var currentPosition = snapshot.data!;
-
-            _cameraPosition = CameraPosition(
-              target:
-                  LatLng(currentPosition.latitude, currentPosition.longitude),
-              zoom: 13,
-            );
-
-            _subscription = _geoQuerySubscription(
-              centerGeoPoint: GeoPoint(
-                currentPosition.latitude,
-                currentPosition.longitude,
+        child: Stack(
+          children: [
+            GoogleMap(
+              onMapCreated: (controller) async {
+                final String json = await rootBundle
+                    .loadString('assets/json_data/map_style.json');
+                controller.setMapStyle(json);
+              },
+              myLocationButtonEnabled: false,
+              myLocationEnabled: true,
+              initialCameraPosition: CameraPosition(
+                target:
+                    LatLng(currentPosition.latitude, currentPosition.longitude),
+                zoom: 13,
               ),
-              radiusInKm: _radiusInKm,
-            );
-            return Stack(
-              children: [
-                GoogleMap(
-                  onMapCreated: (controller) async {
-                    final String json = await rootBundle
-                        .loadString('assets/json_data/map_style.json');
-                    controller.setMapStyle(json);
-                  },
-                  myLocationButtonEnabled: false,
-                  myLocationEnabled: true,
-                  initialCameraPosition: _cameraPosition,
-                  markers: _markers,
-                  circles: {
-                    Circle(
-                      circleId: const CircleId('value'),
-                      center: LatLng(
-                        currentPosition.latitude,
-                        currentPosition.longitude,
-                      ),
-                      // multiple 1000 to convert from kilometers to meters.
-                      radius: _radiusInKm * 1000,
-                      fillColor: primaryColorTransparent,
-                      strokeWidth: 0,
-                    ),
-                  },
-                ),
-                Positioned(
-                  bottom: 30,
-                  left: 10,
-                  right: 10,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
-                      color: Colors.black38,
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Events in diesem Radius: '
-                          '$_numOfEventsInRadius',
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        const SizedBox(height: 8),
-                        Slider(
-                          value: _radiusInKm,
-                          min: 1,
-                          max: 50,
-                          divisions: 49,
-                          label: '${_radiusInKm.toInt()}km',
-                          onChanged: (value) {
-                            _radiusInKm = value;
-                            _subscription = _geoQuerySubscription(
-                              centerGeoPoint: GeoPoint(
-                                currentPosition.latitude,
-                                currentPosition.longitude,
-                              ),
-                              radiusInKm: _radiusInKm,
-                            );
-
-                            setState(() {});
-                          },
-                        ),
-                      ],
-                    ),
+              markers: _markers,
+              circles: {
+                Circle(
+                  circleId: const CircleId('value'),
+                  center: LatLng(
+                    currentPosition.latitude,
+                    currentPosition.longitude,
                   ),
+                  // multiple 1000 to convert from kilometers to meters.
+                  radius: _radiusInKm * 1000,
+                  fillColor: primaryColorTransparent,
+                  strokeWidth: 0,
                 ),
-              ],
-            );
-          },
+              },
+            ),
+            Positioned(
+              bottom: 30,
+              left: 10,
+              right: 10,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: Colors.black38,
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Events in ${_radiusInKm.toInt()}km Radius: '
+                      '$_numOfEventsInRadius',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(height: 8),
+                    Slider(
+                      value: _radiusInKm,
+                      min: 1,
+                      max: 50,
+                      divisions: 49,
+                      label: '${_radiusInKm.toInt()}km',
+                      onChanged: (value) {
+                        _radiusInKm = value;
+                        _subscription = _geoQuerySubscription(
+                          centerGeoPoint: GeoPoint(
+                            currentPosition.latitude,
+                            currentPosition.longitude,
+                          ),
+                          radiusInKm: _radiusInKm,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
