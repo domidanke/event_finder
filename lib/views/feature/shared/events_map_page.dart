@@ -30,6 +30,7 @@ class EventsMapPageState extends State<EventsMapPage> {
   /// Detection radius (km) from the center point when running geo query.
   double _radiusInKm = 1;
   Set<Marker> _markers = {};
+  int _numOfEventsInRadius = 0;
 
   /// Geo query [StreamSubscription].
   late StreamSubscription<List<DocumentSnapshot<Event>>> _subscription;
@@ -63,29 +64,56 @@ class EventsMapPageState extends State<EventsMapPage> {
   }
 
   void _updateMarkers(List<DocumentSnapshot<Event>> documentSnapshots) {
-    final markers = <Marker>{};
+    final Map<String, List<Event>> geoToEventsMap = {};
     for (final ds in documentSnapshots) {
       final event = ds.data()!;
-      markers.add(
-        Marker(
-          markerId: MarkerId(event.uid),
-          position: LatLng(event.location.geoPoint.latitude,
-              event.location.geoPoint.longitude),
-          infoWindow: InfoWindow(
-              title:
-                  '${event.title} (${event.date.toString().substring(0, 16)})',
-              snippet: event.creatorName,
-              onTap: () async {
-                StateService().lastSelectedEvent = event;
-                if (StateService().lastSelectedEvent!.imageUrl == null) {
-                  StateService().lastSelectedEvent!.imageUrl =
-                      await StorageService().getEventImageUrl(event: event);
-                }
-                if (mounted) Navigator.pushNamed(context, 'event_details');
-              }),
-        ),
-      );
+      if (geoToEventsMap.containsKey(event.location.geoHash)) {
+        geoToEventsMap[event.location.geoHash]!.add(event);
+      } else {
+        geoToEventsMap.addAll({
+          event.location.geoHash: [event]
+        });
+      }
     }
+
+    final markers = <Marker>{};
+    geoToEventsMap.forEach((geoHash, eventsList) {
+      if (eventsList.length > 1) {
+        _numOfEventsInRadius++;
+        markers.add(
+          Marker(
+            markerId: MarkerId(geoHash),
+            position: LatLng(eventsList[0].location.geoPoint.latitude,
+                eventsList[0].location.geoPoint.longitude),
+            infoWindow: InfoWindow(
+              title: 'Hier gibts mehrere Events',
+              snippet: 'Anzahl: ${eventsList.length}',
+            ),
+          ),
+        );
+      } else {
+        Event event = eventsList[0];
+        markers.add(
+          Marker(
+            markerId: MarkerId(event.location.geoHash),
+            position: LatLng(event.location.geoPoint.latitude,
+                event.location.geoPoint.longitude),
+            infoWindow: InfoWindow(
+                title:
+                    '${event.title} (${event.date.toString().substring(0, 16)})',
+                snippet: event.creatorName,
+                onTap: () async {
+                  StateService().lastSelectedEvent = event;
+                  if (StateService().lastSelectedEvent!.imageUrl == null) {
+                    StateService().lastSelectedEvent!.imageUrl =
+                        await StorageService().getEventImageUrl(event: event);
+                  }
+                  if (mounted) Navigator.pushNamed(context, 'event_details');
+                }),
+          ),
+        );
+      }
+    });
     setState(() {
       _markers = markers;
     });
@@ -93,6 +121,7 @@ class EventsMapPageState extends State<EventsMapPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('rebuilt');
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder(
@@ -145,7 +174,7 @@ class EventsMapPageState extends State<EventsMapPage> {
                   },
                 ),
                 Positioned(
-                  bottom: 50,
+                  bottom: 30,
                   left: 10,
                   right: 10,
                   child: Container(
@@ -161,7 +190,7 @@ class EventsMapPageState extends State<EventsMapPage> {
                       children: [
                         Text(
                           'Events in diesem Radius: '
-                          '${_markers.length}',
+                          '$_numOfEventsInRadius',
                           style: const TextStyle(color: Colors.white),
                         ),
                         const SizedBox(height: 8),

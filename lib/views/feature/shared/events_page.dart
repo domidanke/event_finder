@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
@@ -59,7 +60,7 @@ class _EventsPageState extends State<EventsPage> {
                 child: Text('Keine Events'),
               );
             },
-            query: EventDocService().eventsCollection.orderBy('date'),
+            query: _getQuery(),
             itemBuilder: (context, snapshot) {
               return EventCard(event: snapshot.data());
             },
@@ -67,6 +68,10 @@ class _EventsPageState extends State<EventsPage> {
         ),
       ),
     );
+  }
+
+  Query<Event> _getQuery() {
+    return EventDocService().eventsCollection.orderBy('date');
   }
 
   void _showFiltersSheet() {
