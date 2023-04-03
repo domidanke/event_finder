@@ -18,7 +18,6 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('BUILD');
     return Scaffold(
       body: SafeArea(
         child: Column(
