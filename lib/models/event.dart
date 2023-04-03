@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/location_data.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
@@ -24,7 +25,8 @@ class Event {
           uid: uid,
           title: json['title']! as String,
           details: json['details']! as String,
-          date: DateTime.parse(json['date']! as String),
+          date:
+              DateTime.parse((json['date']! as Timestamp).toDate().toString()),
           genre: json['genre']! as String,
           ticketPrice: json['ticketPrice']! as int,
           creatorId: json['creatorId']! as String,
@@ -53,7 +55,7 @@ class Event {
     return {
       'title': title,
       'details': details,
-      'date': date.toString(),
+      'date': date,
       'creatorId': creatorId,
       'creatorName': creatorName,
       'artists': artists,
