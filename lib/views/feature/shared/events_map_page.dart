@@ -24,6 +24,7 @@ class EventsMapPageState extends State<EventsMapPage> {
   Set<Marker> _markers = {};
   int _numOfEventsInRadius = 0;
   final currentPosition = StateService().currentUserLocation!;
+  BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
 
   /// Geo query [StreamSubscription].
   late StreamSubscription<List<DocumentSnapshot<Event>>> _subscription;
@@ -45,6 +46,7 @@ class EventsMapPageState extends State<EventsMapPage> {
 
   @override
   void initState() {
+    addCustomIcon();
     _subscription = _geoQuerySubscription(
       centerGeoPoint: GeoPoint(
         currentPosition.latitude,
@@ -61,8 +63,20 @@ class EventsMapPageState extends State<EventsMapPage> {
     super.dispose();
   }
 
+  void addCustomIcon() {
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), 'assets/images/custom_marker.png')
+        .then(
+      (icon) {
+        print(icon);
+        setState(() {
+          markerIcon = icon;
+        });
+      },
+    );
+  }
+
   void _updateMarkers(List<DocumentSnapshot<Event>> documentSnapshots) {
-    print('got new stuff');
     _numOfEventsInRadius = 0;
     final Map<String, List<Event>> geoToEventsMap = {};
     for (final ds in documentSnapshots) {
@@ -85,6 +99,7 @@ class EventsMapPageState extends State<EventsMapPage> {
             markerId: MarkerId(geoHash),
             position: LatLng(eventsList[0].location.geoPoint.latitude,
                 eventsList[0].location.geoPoint.longitude),
+            icon: markerIcon,
             infoWindow: InfoWindow(
               title: 'Hier gibts mehrere Events',
               snippet: 'Anzahl: ${eventsList.length}',
@@ -98,6 +113,7 @@ class EventsMapPageState extends State<EventsMapPage> {
             markerId: MarkerId(event.location.geoHash),
             position: LatLng(event.location.geoPoint.latitude,
                 event.location.geoPoint.longitude),
+            icon: markerIcon,
             infoWindow: InfoWindow(
                 title:
                     '${event.title} (${event.date.toString().substring(0, 16)})',
@@ -121,7 +137,6 @@ class EventsMapPageState extends State<EventsMapPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('rebuilt');
     return Scaffold(
       body: SafeArea(
         child: Stack(
