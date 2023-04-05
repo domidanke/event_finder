@@ -136,7 +136,7 @@ class _EventCardState extends State<EventCard> {
                                     height: 30,
                                     child: Center(
                                       child: Text(
-                                        widget.event.genre,
+                                        widget.event.genres[0],
                                       ),
                                     )),
                               ),

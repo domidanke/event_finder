@@ -1,12 +1,9 @@
-import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/services/date.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/views/feature/shared/search_address_in_map.dart';
+import 'package:event_finder/views/feature/shared/genre_picker.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 import '../../../../models/event.dart';
 
@@ -20,14 +17,11 @@ class CreateEventPage1 extends StatefulWidget {
 class _CreateEventPage1State extends State<CreateEventPage1> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController dateController = TextEditingController();
-  late Future<List<Placemark>> _getPlaceMarkers;
+  final List<String> _selectedGenres = [];
 
   @override
   void initState() {
     StateService().newEvent = NewEvent();
-    final mainLocation = StateService().currentUser!.mainLocation;
-    _getPlaceMarkers = placemarkFromCoordinates(
-        mainLocation.geoPoint.latitude, mainLocation.geoPoint.longitude);
     super.initState();
   }
 
@@ -138,55 +132,16 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Center(
-                        child: DropdownButton<String>(
-                          value: newEvent.genre,
-                          icon: const Icon(Icons.arrow_drop_down_rounded),
-                          onChanged: (String? value) {
-                            setState(() {
-                              newEvent.genre = value!;
-                            });
-                          },
-                          items: genres
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                      GenrePicker(
+                        onGenreSelected: (genre) {
+                          /// Possibly room for improvement
+                          if (_selectedGenres.contains(genre)) {
+                            _selectedGenres.remove(genre);
+                          } else {
+                            _selectedGenres.add(genre);
+                          }
+                        },
                       ),
-                      FutureBuilder(
-                          future: _getPlaceMarkers,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            }
-                            final placeMark = snapshot.data!.first;
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Icon(Icons.location_on),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('${placeMark.street}'),
-                                    Text(
-                                        '${placeMark.postalCode} ${placeMark.subAdministrativeArea}'),
-                                  ],
-                                ),
-                                KKButton(
-                                    onPressed: () {
-                                      _showChangeLocation();
-                                    },
-                                    buttonText: 'Andere Location')
-                              ],
-                            );
-                          }),
                     ],
                   ),
                 ),
@@ -202,7 +157,9 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                     ),
                     KKButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState!.validate() &&
+                            _selectedGenres.isNotEmpty) {
+                          newEvent.genres = _selectedGenres;
                           Navigator.pushNamed(context, 'create_event_page_2');
                         }
                       },
@@ -214,53 +171,6 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  void _showChangeLocation() {
-    GeoFirePoint? newCoordinates;
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => Dialog(
-        child: Container(
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    topRight: Radius.circular(10.0))),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.all(8),
-                    height: 300,
-                    clipBehavior: Clip.hardEdge,
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12))),
-                    child: SearchAddressInMap(onAddressSelected: (coordinates) {
-                      newCoordinates = coordinates;
-                    }),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: KKButton(
-                    onPressed: () {
-                      if (newCoordinates == null) return;
-                      setState(() {
-                        _getPlaceMarkers = placemarkFromCoordinates(
-                            newCoordinates!.latitude,
-                            newCoordinates!.longitude);
-                        StateService().newEvent.locationCoordinates =
-                            newCoordinates;
-                      });
-                      Navigator.pop(context);
-                    },
-                    buttonText: 'Anwenden',
-                  ),
-                )
-              ],
-            )),
       ),
     );
   }

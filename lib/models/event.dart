@@ -5,15 +5,13 @@ import 'package:event_finder/models/location_data.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
-import 'consts.dart';
-
 class Event {
   Event(
       {this.uid = '',
       required this.title,
       required this.details,
       required this.date,
-      required this.genre,
+      required this.genres,
       required this.ticketPrice,
       required this.creatorId,
       required this.creatorName,
@@ -27,7 +25,7 @@ class Event {
           details: json['details']! as String,
           date:
               DateTime.parse((json['date']! as Timestamp).toDate().toString()),
-          genre: json['genre']! as String,
+          genres: List.from(json['genres']! as List<dynamic>),
           ticketPrice: json['ticketPrice']! as int,
           creatorId: json['creatorId']! as String,
           creatorName: json['creatorName']! as String,
@@ -42,7 +40,7 @@ class Event {
   final String uid;
   final String title;
   late String details;
-  final String genre;
+  final List<String> genres;
   final int ticketPrice;
   final DateTime date;
   final String creatorId;
@@ -59,7 +57,7 @@ class Event {
       'creatorId': creatorId,
       'creatorName': creatorName,
       'artists': artists,
-      'genre': genre,
+      'genres': genres,
       'ticketPrice': ticketPrice,
       'location': location.toJson(),
     };
@@ -71,7 +69,7 @@ class NewEvent {
 
   String title = '';
   String details = '';
-  String genre = genres.first;
+  List<String> genres = [];
   int ticketPrice = 0;
   DateTime date = DateTime.now();
   File? selectedImageFile;
@@ -83,7 +81,7 @@ class NewEvent {
         title: title,
         details: details,
         date: date,
-        genre: genre,
+        genres: genres,
         creatorId: StateService().currentUser!.uid,
         creatorName: StateService().currentUser!.displayName,
         ticketPrice: ticketPrice,

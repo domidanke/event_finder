@@ -139,7 +139,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             const SizedBox(
                               width: 20,
                             ),
-                            Text(event.genre),
+                            ...event.genres.map((e) => Text(e)),
                           ],
                         ),
                       ),
