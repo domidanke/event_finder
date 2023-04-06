@@ -24,7 +24,6 @@ class EventDetailsPage extends StatefulWidget {
 
 class _EventDetailsPageState extends State<EventDetailsPage> {
   late Future<String> _imageUrl;
-  final _artistSearchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +138,9 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             const SizedBox(
                               width: 20,
                             ),
-                            ...event.genres.map((e) => Text(e)),
+                            ...event.genres.map((e) => Container(
+                                margin: const EdgeInsets.only(right: 18),
+                                child: Text(e))),
                           ],
                         ),
                       ),
@@ -178,7 +179,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             children: [
                               const KKIcon(icon: Icon(Icons.house)),
                               const SizedBox(
-                                width: 20,
+                                width: 12,
                               ),
                               TextButton(
                                 onPressed: _navigateToHost,
@@ -350,10 +351,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           trailing: const Icon(
                             Icons.arrow_forward_ios,
                             size: 15,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(),
-                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                       ),

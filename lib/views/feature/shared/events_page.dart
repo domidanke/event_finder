@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/shared/event_card.dart';
+import 'package:event_finder/views/feature/shared/genre_picker.dart';
+import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,7 +21,6 @@ class EventsPage extends StatefulWidget {
 
 class _EventsPageState extends State<EventsPage> {
   bool _today = false;
-  String? _selectedGenre;
   @override
   void initState() {
     super.initState();
@@ -33,6 +33,21 @@ class _EventsPageState extends State<EventsPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         actions: <Widget>[
+          Container(
+            margin: const EdgeInsets.only(left: 16),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _today = !_today;
+                });
+              },
+              child: Chip(
+                backgroundColor: _today ? primaryColor : null,
+                label: const Text('Heute'),
+              ),
+            ),
+          ),
+          const Spacer(),
           Opacity(
             opacity:
                 StateService().currentUser!.type == UserType.guest ? 0.2 : 1,
@@ -63,66 +78,16 @@ class _EventsPageState extends State<EventsPage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _today = !_today;
-                      });
-                    },
-                    child: Chip(
-                      backgroundColor: _today ? primaryColor : null,
-                      label: const Text('Heute'),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  if (_selectedGenre != null)
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _selectedGenre = null;
-                        });
-                      },
-                      child: Chip(
-                        label: Row(
-                          children: [
-                            Text(_selectedGenre!),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            const Icon(
-                              Icons.cancel,
-                              size: 16,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              Expanded(
-                flex: 10,
-                child: FirestoreListView<Event>(
-                  emptyBuilder: (context) {
-                    return const Center(
-                      child: Text('Keine Events'),
-                    );
-                  },
-                  query: _getQuery(),
-                  itemBuilder: (context, snapshot) {
-                    return EventCard(event: snapshot.data());
-                  },
-                ),
-              ),
-            ],
+          child: FirestoreListView<Event>(
+            emptyBuilder: (context) {
+              return const Center(
+                child: Text('Keine Events'),
+              );
+            },
+            query: _getQuery(),
+            itemBuilder: (context, snapshot) {
+              return EventCard(event: snapshot.data());
+            },
           ),
         ),
       ),
@@ -130,7 +95,6 @@ class _EventsPageState extends State<EventsPage> {
   }
 
   Query<Event> _getQuery() {
-    print('GENRE: $_selectedGenre');
     var query = EventDocService().eventsCollection.orderBy('date');
 
     if (_today) {
@@ -142,40 +106,40 @@ class _EventsPageState extends State<EventsPage> {
           .where('date', isGreaterThanOrEqualTo: startOfDay);
     }
 
-    if (_selectedGenre != null) {
-      query = query.where('genre', isEqualTo: _selectedGenre);
+    if (StateService().selectedGenres.isNotEmpty) {
+      query = query.where('genres',
+          arrayContainsAny: StateService().selectedGenres);
     }
 
     return query;
   }
 
   void _showFiltersSheet() {
-    _selectedGenre = _selectedGenre ?? genres.first;
     showModalBottomSheet<String>(
       context: context,
-      builder: (BuildContext context) => Container(
-        height: 200,
+      builder: (BuildContext context) => SizedBox(
+        height: 400,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            DropdownButton<String>(
-              value: _selectedGenre,
-              icon: const Icon(Icons.arrow_drop_down_rounded),
-              onChanged: (String? value) {
-                setState(() {
-                  _selectedGenre = value!;
-                });
-                Navigator.pop(context);
-              },
-              items: genres.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                );
-              }).toList(),
+            const GenrePicker(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                KKButton(
+                    onPressed: () {
+                      StateService().resetSelectedGenres();
+                      Navigator.pop(context);
+                      setState(() {});
+                    },
+                    buttonText: 'Reset'),
+                KKButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      setState(() {});
+                    },
+                    buttonText: 'Anwenden')
+              ],
             )
           ],
         ),

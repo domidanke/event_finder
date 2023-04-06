@@ -2,6 +2,7 @@ import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/models/location_data.dart';
 import 'package:event_finder/models/ticket_info.dart';
+import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -18,6 +19,30 @@ class StateService extends ChangeNotifier {
   set currentUser(AppUser? user) {
     _currentUser = user;
     notifyListeners();
+  }
+
+  void setCurrentUserDisplayName(String displayName) async {
+    currentUser!.displayName = displayName;
+    notifyListeners();
+  }
+
+  Future<void> refreshCurrentUserImageUrl() async {
+    currentUser!.imageUrl = await StorageService().getProfileImageUrl();
+    notifyListeners();
+  }
+
+  final List<String> _selectedGenres = [];
+  List<String> get selectedGenres => _selectedGenres;
+  toggleGenre(String genre) {
+    if (_selectedGenres.contains(genre)) {
+      _selectedGenres.remove(genre);
+    } else {
+      _selectedGenres.add(genre);
+    }
+  }
+
+  resetSelectedGenres() {
+    _selectedGenres.clear();
   }
 
   /// This method ensures that a user gets set properly inside the

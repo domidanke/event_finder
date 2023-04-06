@@ -1,24 +1,15 @@
 import 'package:event_finder/models/consts.dart';
+import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class GenrePicker extends StatefulWidget {
-  const GenrePicker({Key? key, required this.onGenreSelected})
-      : super(key: key);
-  final Function(String genreSelected) onGenreSelected;
-
+  const GenrePicker({Key? key}) : super(key: key);
   @override
   State<GenrePicker> createState() => _GenrePickerState();
 }
 
 class _GenrePickerState extends State<GenrePicker> {
-  final List<String> _selectedGenres = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -33,17 +24,12 @@ class _GenrePickerState extends State<GenrePicker> {
                           void Function(void Function()) setState) {
                         return GestureDetector(
                           onTap: () {
-                            widget.onGenreSelected(genre);
                             setState(() {
-                              if (_selectedGenres.contains(genre)) {
-                                _selectedGenres.remove(genre);
-                              } else {
-                                _selectedGenres.add(genre);
-                              }
+                              StateService().toggleGenre(genre);
                             });
                           },
                           child: Card(
-                            color: _selectedGenres.contains(genre)
+                            color: StateService().selectedGenres.contains(genre)
                                 ? primaryColor
                                 : null,
                             child: Padding(

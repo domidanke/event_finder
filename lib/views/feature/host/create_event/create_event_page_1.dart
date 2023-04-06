@@ -132,16 +132,7 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                       const SizedBox(
                         height: 20,
                       ),
-                      GenrePicker(
-                        onGenreSelected: (genre) {
-                          /// Possibly room for improvement
-                          if (_selectedGenres.contains(genre)) {
-                            _selectedGenres.remove(genre);
-                          } else {
-                            _selectedGenres.add(genre);
-                          }
-                        },
-                      ),
+                      const GenrePicker(),
                     ],
                   ),
                 ),

@@ -117,29 +117,31 @@ class _EventCardState extends State<EventCard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Card(
+                            //color: primaryColor,
+                            child: SizedBox(
+                                width: 50,
+                                height: 30,
+                                child: Center(
+                                  child: Text(
+                                    '${widget.event.ticketPrice} €',
+                                  ),
+                                )),
+                          ),
                           Row(
                             children: [
-                              Card(
-                                //color: primaryColor,
-                                child: SizedBox(
-                                    width: 50,
-                                    height: 30,
-                                    child: Center(
-                                      child: Text(
-                                        '${widget.event.ticketPrice} €',
-                                      ),
-                                    )),
-                              ),
-                              Card(
-                                child: SizedBox(
-                                    width: 50,
-                                    height: 30,
-                                    child: Center(
-                                      child: Text(
-                                        widget.event.genres[0],
-                                      ),
-                                    )),
-                              ),
+                              ...widget.event.genres.map(
+                                (genre) => Card(
+                                  child: SizedBox(
+                                      width: 50,
+                                      height: 30,
+                                      child: Center(
+                                        child: Text(
+                                          genre,
+                                        ),
+                                      )),
+                                ),
+                              )
                             ],
                           ),
                           Text(

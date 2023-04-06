@@ -20,7 +20,7 @@ class AppUser {
   });
 
   final String uid;
-  final String displayName;
+  late String displayName;
   final ExternalLinks externalLinks;
   late UserType type = UserType.base;
   late List<String> savedEvents = [];

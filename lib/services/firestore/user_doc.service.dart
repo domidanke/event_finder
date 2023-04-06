@@ -147,4 +147,10 @@ class UserDocService {
       'usedTickets': FieldValue.arrayUnion([qrCodeId])
     });
   }
+
+  Future<void> updateDisplayName(String newDisplayName) async {
+    await usersCollection
+        .doc(StateService().currentUser!.uid)
+        .update({'displayName': newDisplayName});
+  }
 }
