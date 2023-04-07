@@ -17,7 +17,6 @@ class CreateEventPage1 extends StatefulWidget {
 class _CreateEventPage1State extends State<CreateEventPage1> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController dateController = TextEditingController();
-  final List<String> _selectedGenres = [];
 
   @override
   void initState() {
@@ -150,8 +149,8 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                     KKButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate() &&
-                            _selectedGenres.isNotEmpty) {
-                          newEvent.genres = _selectedGenres;
+                            StateService().selectedGenres.isNotEmpty) {
+                          newEvent.genres = StateService().selectedGenres;
                           Navigator.pushNamed(context, 'create_event_page_2');
                         }
                       },
