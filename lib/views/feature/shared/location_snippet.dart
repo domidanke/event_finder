@@ -43,6 +43,9 @@ class LocationSnippetState extends State<LocationSnippet> {
           rotateGesturesEnabled: false,
           scrollGesturesEnabled: false,
           myLocationButtonEnabled: false,
+          zoomControlsEnabled: false,
+          zoomGesturesEnabled: false,
+          mapToolbarEnabled: false,
           mapType: MapType.normal,
           initialCameraPosition: CameraPosition(
             target: LatLng(
@@ -64,6 +67,7 @@ class LocationSnippetState extends State<LocationSnippet> {
               (BuildContext context, AsyncSnapshot<List<Placemark>> snapshot) {
             if (snapshot.hasData) {
               final placeMark = snapshot.data![0];
+              print(placeMark);
               return Positioned(
                 bottom: 5,
                 left: 10,
@@ -81,7 +85,7 @@ class LocationSnippetState extends State<LocationSnippet> {
                         placeMark.street!,
                       ),
                       Text(
-                        '${placeMark.postalCode}, ${placeMark.subAdministrativeArea}',
+                        '${placeMark.postalCode}, ${placeMark.locality}',
                       ),
                     ],
                   ),

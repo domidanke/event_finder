@@ -108,6 +108,8 @@ class EventsMapPageState extends State<EventsMapPage> {
                     .loadString('assets/json_data/map_style.json');
                 controller.setMapStyle(json);
               },
+              zoomControlsEnabled: false,
+              mapToolbarEnabled: false,
               myLocationButtonEnabled: false,
               myLocationEnabled: true,
               initialCameraPosition: CameraPosition(
@@ -172,20 +174,21 @@ class EventsMapPageState extends State<EventsMapPage> {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 30,
-              left: 10,
-              right: 10,
-              child: SizedBox(
-                height: 210,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: _events
-                      .map((event) => MapEventCard(event: event))
-                      .toList(),
+            if (_events.isNotEmpty)
+              Positioned(
+                bottom: 30,
+                left: 10,
+                right: 10,
+                child: SizedBox(
+                  height: 220,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: _events
+                        .map((event) => MapEventCard(event: event))
+                        .toList(),
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
