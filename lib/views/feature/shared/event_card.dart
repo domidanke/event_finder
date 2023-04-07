@@ -128,21 +128,23 @@ class _EventCardState extends State<EventCard> {
                                   ),
                                 )),
                           ),
-                          Row(
-                            children: [
-                              ...widget.event.genres.map(
-                                (genre) => Card(
-                                  child: SizedBox(
-                                      width: 50,
-                                      height: 30,
-                                      child: Center(
-                                        child: Text(
-                                          genre,
-                                        ),
-                                      )),
-                                ),
-                              )
-                            ],
+                          FittedBox(
+                            child: Row(
+                              children: widget.event.genres
+                                  .map(
+                                    (genre) => Card(
+                                      child: SizedBox(
+                                          width: 50,
+                                          height: 30,
+                                          child: Center(
+                                            child: Text(
+                                              genre,
+                                            ),
+                                          )),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
                           ),
                           Text(
                             widget.event.title,

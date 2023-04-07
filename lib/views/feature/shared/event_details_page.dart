@@ -138,9 +138,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             const SizedBox(
                               width: 20,
                             ),
-                            ...event.genres.map((e) => Container(
-                                margin: const EdgeInsets.only(right: 18),
-                                child: Text(e))),
+                            ..._getGenreWidgets(),
                           ],
                         ),
                       ),
@@ -166,9 +164,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                               icon: const Icon(Icons.people)),
                         )
                     ],
-                  ),
-                  const SizedBox(
-                    height: 10,
                   ),
                   if (currentUser.type != UserType.host)
                     Row(
@@ -369,6 +364,25 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         ),
       ),
     );
+  }
+
+  List<Widget> _getGenreWidgets() {
+    final event = StateService().lastSelectedEvent!;
+    if (event.genres.length > 3) {
+      List<Widget> shortList = [];
+      for (var i = 0; i < 3; i++) {
+        shortList.add(Container(
+            margin: const EdgeInsets.only(right: 18),
+            child: Text(event.genres[i])));
+      }
+      shortList.add(Text('(+${event.genres.length - 3})'));
+      return shortList;
+    } else {
+      return event.genres
+          .map((e) => Container(
+              margin: const EdgeInsets.only(right: 18), child: Text(e)))
+          .toList();
+    }
   }
 
   Future<void> _navigateToHost() async {

@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/theme/theme.dart';
+import 'package:event_finder/views/feature/shared/map_event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
@@ -22,6 +22,7 @@ class EventsMapPageState extends State<EventsMapPage> {
   /// Detection radius (km) from the center point when running geo query.
   double _radiusInKm = 1;
   Set<Marker> _markers = {};
+  List<Event> _events = [];
   int _numOfEventsInRadius = 0;
   final currentPosition = StateService().currentUserLocation!;
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
@@ -68,7 +69,6 @@ class EventsMapPageState extends State<EventsMapPage> {
             const ImageConfiguration(), 'assets/images/custom_marker.png')
         .then(
       (icon) {
-        print(icon);
         setState(() {
           markerIcon = icon;
         });
@@ -78,61 +78,22 @@ class EventsMapPageState extends State<EventsMapPage> {
 
   void _updateMarkers(List<DocumentSnapshot<Event>> documentSnapshots) {
     _numOfEventsInRadius = 0;
-    final Map<String, List<Event>> geoToEventsMap = {};
+    _markers = <Marker>{};
+    _events = [];
     for (final ds in documentSnapshots) {
       final event = ds.data()!;
       _numOfEventsInRadius++;
-      if (geoToEventsMap.containsKey(event.location.geoHash)) {
-        geoToEventsMap[event.location.geoHash]!.add(event);
-      } else {
-        geoToEventsMap.addAll({
-          event.location.geoHash: [event]
-        });
-      }
+      _events.add(event);
+      _markers.add(
+        Marker(
+          markerId: MarkerId(event.location.geoHash),
+          position: LatLng(event.location.geoPoint.latitude,
+              event.location.geoPoint.longitude),
+          icon: markerIcon,
+        ),
+      );
     }
-
-    final markers = <Marker>{};
-    geoToEventsMap.forEach((geoHash, eventsList) {
-      if (eventsList.length > 1) {
-        markers.add(
-          Marker(
-            markerId: MarkerId(geoHash),
-            position: LatLng(eventsList[0].location.geoPoint.latitude,
-                eventsList[0].location.geoPoint.longitude),
-            icon: markerIcon,
-            infoWindow: InfoWindow(
-              title: 'Hier gibts mehrere Events',
-              snippet: 'Anzahl: ${eventsList.length}',
-            ),
-          ),
-        );
-      } else {
-        Event event = eventsList[0];
-        markers.add(
-          Marker(
-            markerId: MarkerId(event.location.geoHash),
-            position: LatLng(event.location.geoPoint.latitude,
-                event.location.geoPoint.longitude),
-            icon: markerIcon,
-            infoWindow: InfoWindow(
-                title:
-                    '${event.title} (${event.date.toString().substring(0, 16)})',
-                snippet: event.creatorName,
-                onTap: () async {
-                  StateService().lastSelectedEvent = event;
-                  if (StateService().lastSelectedEvent!.imageUrl == null) {
-                    StateService().lastSelectedEvent!.imageUrl =
-                        await StorageService().getEventImageUrl(event: event);
-                  }
-                  if (mounted) Navigator.pushNamed(context, 'event_details');
-                }),
-          ),
-        );
-      }
-    });
-    setState(() {
-      _markers = markers;
-    });
+    setState(() {});
   }
 
   @override
@@ -170,7 +131,7 @@ class EventsMapPageState extends State<EventsMapPage> {
               },
             ),
             Positioned(
-              bottom: 30,
+              top: 30,
               left: 10,
               right: 10,
               child: Container(
@@ -208,6 +169,20 @@ class EventsMapPageState extends State<EventsMapPage> {
                       },
                     ),
                   ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 30,
+              left: 10,
+              right: 10,
+              child: SizedBox(
+                height: 210,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: _events
+                      .map((event) => MapEventCard(event: event))
+                      .toList(),
                 ),
               ),
             ),
