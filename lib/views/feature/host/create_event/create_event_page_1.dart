@@ -63,6 +63,7 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                         height: 20,
                       ),
                       TextFormField(
+                        readOnly: true,
                         style: TextStyle(
                             color:
                                 Theme.of(context).textTheme.bodyMedium?.color),
