@@ -21,6 +21,7 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
   @override
   void initState() {
     StateService().newEvent = NewEvent();
+    StateService().resetSelectedGenres();
     super.initState();
   }
 

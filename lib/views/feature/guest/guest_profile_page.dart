@@ -1,6 +1,9 @@
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 
+import '../../../services/auth.service.dart';
+import '../../../services/state.service.dart';
+
 class GuestProfilePage extends StatefulWidget {
   const GuestProfilePage({Key? key}) : super(key: key);
 
@@ -15,64 +18,80 @@ class _GuestProfilePageState extends State<GuestProfilePage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: ListView(
+          child: Column(
             children: [
-              CircleAvatar(
-                radius: 70,
-                backgroundImage:
-                    Image.asset('assets/images/profile_placeholder.png').image,
-              ),
-              const SizedBox(
-                height: 30,
+              Expanded(
+                child: ListView(
+                  children: [
+                    CircleAvatar(
+                      radius: 70,
+                      backgroundImage:
+                          Image.asset('assets/images/profile_placeholder.png')
+                              .image,
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    KKButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, 'activate_account');
+                        },
+                        buttonText: 'Activate Account'),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Opacity(
+                      opacity: 0.2,
+                      child: ListTile(
+                        leading: const Icon(Icons.receipt),
+                        title: const Text('Meine Tickets'),
+                        onTap: () {},
+                      ),
+                    ),
+                    Opacity(
+                      opacity: 0.2,
+                      child: ListTile(
+                        leading: const Icon(Icons.event_available),
+                        title: const Text('Gespeicherte Veranstaltungen'),
+                        onTap: () {},
+                      ),
+                    ),
+                    Opacity(
+                      opacity: 0.2,
+                      child: ListTile(
+                        leading: const Icon(Icons.house),
+                        title: const Text('Meine Hosts'),
+                        onTap: () {},
+                      ),
+                    ),
+                    Opacity(
+                      opacity: 0.2,
+                      child: ListTile(
+                        leading: const Icon(Icons.people),
+                        title: const Text('Meine Artists'),
+                        onTap: () {},
+                      ),
+                    ),
+                    Opacity(
+                      opacity: 0.2,
+                      child: ListTile(
+                        leading: const Icon(Icons.help),
+                        title: const Text('Support'),
+                        onTap: () {},
+                      ),
+                    ),
+                  ],
+                ),
               ),
               KKButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'activate_account');
+                  onPressed: () async {
+                    await AuthService().signOut().then((value) => {
+                          StateService().resetCurrentUserSilent(),
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/', (Route<dynamic> route) => false),
+                        });
                   },
-                  buttonText: 'Activate Account'),
-              const SizedBox(
-                height: 30,
-              ),
-              Opacity(
-                opacity: 0.2,
-                child: ListTile(
-                  leading: const Icon(Icons.receipt),
-                  title: const Text('Meine Tickets'),
-                  onTap: () {},
-                ),
-              ),
-              Opacity(
-                opacity: 0.2,
-                child: ListTile(
-                  leading: const Icon(Icons.event_available),
-                  title: const Text('Gespeicherte Veranstaltungen'),
-                  onTap: () {},
-                ),
-              ),
-              Opacity(
-                opacity: 0.2,
-                child: ListTile(
-                  leading: const Icon(Icons.house),
-                  title: const Text('Meine Hosts'),
-                  onTap: () {},
-                ),
-              ),
-              Opacity(
-                opacity: 0.2,
-                child: ListTile(
-                  leading: const Icon(Icons.people),
-                  title: const Text('Meine Artists'),
-                  onTap: () {},
-                ),
-              ),
-              Opacity(
-                opacity: 0.2,
-                child: ListTile(
-                  leading: const Icon(Icons.help),
-                  title: const Text('Support'),
-                  onTap: () {},
-                ),
-              ),
+                  buttonText: 'Abmelden'),
             ],
           ),
         ),

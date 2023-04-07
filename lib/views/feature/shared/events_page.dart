@@ -28,22 +28,28 @@ class _EventsPageState extends State<EventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('REBUILD ROOT');
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         actions: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(left: 16),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _today = !_today;
-                });
-              },
-              child: Chip(
-                backgroundColor: _today ? primaryColor : null,
-                label: const Text('Heute'),
+          Opacity(
+            opacity:
+                StateService().currentUser!.type == UserType.guest ? 0.2 : 1,
+            child: Container(
+              margin: const EdgeInsets.only(left: 16),
+              child: GestureDetector(
+                onTap: () {
+                  if (StateService().currentUser!.type == UserType.guest) {
+                    return;
+                  }
+                  setState(() {
+                    _today = !_today;
+                  });
+                },
+                child: Chip(
+                  backgroundColor: _today ? primaryColor : null,
+                  label: const Text('Heute'),
+                ),
               ),
             ),
           ),
@@ -64,14 +70,19 @@ class _EventsPageState extends State<EventsPage> {
               },
             ),
           ),
-          IconButton(
-            icon: const Icon(
-              Icons.filter_alt,
-              color: Colors.white,
+          Opacity(
+            opacity:
+                StateService().currentUser!.type == UserType.guest ? 0.2 : 1,
+            child: IconButton(
+              icon: const Icon(
+                Icons.filter_alt,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                if (StateService().currentUser!.type == UserType.guest) return;
+                _showFiltersSheet();
+              },
             ),
-            onPressed: () {
-              _showFiltersSheet();
-            },
           )
         ],
       ),

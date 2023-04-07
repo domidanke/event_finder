@@ -1,5 +1,4 @@
 import 'package:event_finder/services/alert.service.dart';
-import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/widgets/kk_button_async.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -118,16 +117,14 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       onPressed: () async {
                         try {
-                          await AuthService()
-                              .signInAsGuest()
-                              .then((value) async {
-                            await UserDocService().addUserDocument(
-                                AuthService().getCurrentFirebaseUser()!);
-                            if (mounted) Navigator.pushNamed(context, '/');
-                          });
+                          await AuthService().signInAsGuest();
+                          if (mounted) Navigator.pushNamed(context, '/');
                         } on FirebaseAuthException catch (e) {
                           AlertService().showAlert(
-                              'Login fehlgeschlagen', e.code, context);
+                              'Login fehlgeschlagen 1/2', e.code, context);
+                        } on Exception catch (e) {
+                          AlertService().showAlert(
+                              'Login fehlgeschlagen 2/2', '', context);
                         }
                       },
                     ),

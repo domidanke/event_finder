@@ -70,7 +70,7 @@ class _CreateEventPage2State extends State<CreateEventPage2> {
                             children: [
                               Text('${placeMark.street}'),
                               Text(
-                                  '${placeMark.postalCode} ${placeMark.subAdministrativeArea}'),
+                                  '${placeMark.postalCode} ${placeMark.locality}'),
                             ],
                           ),
                           KKButton(

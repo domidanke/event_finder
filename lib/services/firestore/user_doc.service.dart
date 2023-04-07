@@ -52,8 +52,10 @@ class UserDocService {
   }
 
   Future<AppUser?> getCurrentUserData() async {
-    print('Getting User Data');
     if (AuthService().getCurrentFirebaseUser() == null) return null;
+    if (AuthService().getCurrentFirebaseUser()!.isAnonymous) {
+      return AppUser(displayName: 'Gast', type: UserType.guest);
+    }
     final doc = await usersCollection
         .doc(AuthService().getCurrentFirebaseUser()!.uid)
         .get();
