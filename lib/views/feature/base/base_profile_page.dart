@@ -1,13 +1,9 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class BaseProfilePage extends StatefulWidget {
@@ -48,17 +44,12 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                             future: _imageUrl,
                             builder: (context, snapshot) {
                               if (snapshot.hasError) {
-                                final e = snapshot.error as FirebaseException;
-                                if (e.code == 'object-not-found') {
-                                  return _getUploadProfileWidget();
-                                } else {
-                                  return CircleAvatar(
-                                    radius: 100,
-                                    backgroundImage: Image.asset(
-                                            'assets/images/profile_placeholder.png')
-                                        .image,
-                                  );
-                                }
+                                return CircleAvatar(
+                                  radius: 100,
+                                  backgroundImage: Image.asset(
+                                          'assets/images/profile_placeholder.png')
+                                      .image,
+                                );
                               }
                               currentUser.imageUrl = snapshot.data;
                               if (snapshot.hasData) {
@@ -160,9 +151,6 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                         leading: const Icon(Icons.edit),
                         title: const Text('Profil bearbeiten'),
                         onTap: () {
-                          if (currentUser.savedArtists.isEmpty) {
-                            return;
-                          }
                           Navigator.pushNamed(context, 'base_edit_profile');
                         },
                       ),
@@ -187,34 +175,6 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _getUploadProfileWidget() {
-    return SizedBox(
-      height: 200,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(
-            icon: const Icon(
-              Icons.add,
-              size: 50,
-            ),
-            onPressed: () async {
-              final XFile? image =
-                  await ImagePicker().pickImage(source: ImageSource.gallery);
-              if (image == null) return;
-              await StorageService()
-                  .saveProfileImageToStorage(File(image.path));
-              setState(() {
-                _imageUrl = StorageService().getProfileImageUrl();
-              });
-            },
-          ),
-          const Text('Profilbild hinzufuegen')
-        ],
       ),
     );
   }
