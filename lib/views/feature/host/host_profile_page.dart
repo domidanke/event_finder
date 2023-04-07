@@ -31,94 +31,99 @@ class _HostProfilePageState extends State<HostProfilePage> {
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Column(
             children: [
-              Column(
-                children: [
-                  currentUser.imageUrl != null
-                      ? CircleAvatar(
-                          radius: 100,
-                          backgroundImage: NetworkImage(currentUser.imageUrl!))
-                      : FutureBuilder(
-                          future: _imageUrl,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return CircleAvatar(
-                                radius: 100,
-                                backgroundImage: Image.asset(
-                                        'assets/images/profile_placeholder.png')
-                                    .image,
-                              );
-                            }
-                            currentUser.imageUrl = snapshot.data;
-                            if (snapshot.hasData) {
-                              return CircleAvatar(
-                                radius: 100,
-                                backgroundImage: snapshot.connectionState ==
-                                        ConnectionState.waiting
-                                    ? null
-                                    : currentUser.imageUrl != null
-                                        ? NetworkImage(currentUser.imageUrl!)
-                                        : Image.asset(
-                                                'assets/images/profile_placeholder.png')
-                                            .image,
-                                child: snapshot.connectionState ==
-                                        ConnectionState.waiting
-                                    ? const CircularProgressIndicator()
-                                    : null,
-                              );
-                            } else {
-                              return const SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: CircularProgressIndicator());
-                            }
-                          }),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                    child: Text(currentUser.displayName),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Divider(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
+              Expanded(
+                flex: 4,
+                child: Column(
+                  children: [
+                    currentUser.imageUrl != null
+                        ? CircleAvatar(
+                            radius: 100,
+                            backgroundImage:
+                                NetworkImage(currentUser.imageUrl!))
+                        : FutureBuilder(
+                            future: _imageUrl,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return CircleAvatar(
+                                  radius: 100,
+                                  backgroundImage: Image.asset(
+                                          'assets/images/profile_placeholder.png')
+                                      .image,
+                                );
+                              }
+                              currentUser.imageUrl = snapshot.data;
+                              if (snapshot.hasData) {
+                                return CircleAvatar(
+                                  radius: 100,
+                                  backgroundImage: snapshot.connectionState ==
+                                          ConnectionState.waiting
+                                      ? null
+                                      : currentUser.imageUrl != null
+                                          ? NetworkImage(currentUser.imageUrl!)
+                                          : Image.asset(
+                                                  'assets/images/profile_placeholder.png')
+                                              .image,
+                                  child: snapshot.connectionState ==
+                                          ConnectionState.waiting
+                                      ? const CircularProgressIndicator()
+                                      : null,
+                                );
+                              } else {
+                                return const SizedBox(
+                                    height: 100,
+                                    width: 100,
+                                    child: CircularProgressIndicator());
+                              }
+                            }),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: Text(currentUser.displayName),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Divider(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
               ),
               Expanded(
+                  flex: 5,
                   child: ListView(
-                children: [
-                  Opacity(
-                    opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
-                    child: ListTile(
-                      leading: const Icon(Icons.people),
-                      title: const Text('Meine Artists'),
-                      onTap: () {
-                        if (currentUser.savedArtists.isEmpty) {
-                          return;
-                        }
-                        Navigator.pushNamed(context, 'saved_artists');
-                      },
-                    ),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.edit),
-                    title: const Text('Profil bearbeiten'),
-                    onTap: () {
-                      Navigator.pushNamed(context, 'host_edit_profile');
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.question_mark),
-                    title: const Text('Support'),
-                    onTap: () {
-                      Navigator.pushNamed(context, 'support_page');
-                    },
-                  ),
-                ],
-              )),
+                    children: [
+                      Opacity(
+                        opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
+                        child: ListTile(
+                          leading: const Icon(Icons.people),
+                          title: const Text('Meine Artists'),
+                          onTap: () {
+                            if (currentUser.savedArtists.isEmpty) {
+                              return;
+                            }
+                            Navigator.pushNamed(context, 'saved_artists');
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.edit),
+                        title: const Text('Profil bearbeiten'),
+                        onTap: () {
+                          Navigator.pushNamed(context, 'host_edit_profile');
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.question_mark),
+                        title: const Text('Support'),
+                        onTap: () {
+                          Navigator.pushNamed(context, 'support_page');
+                        },
+                      ),
+                    ],
+                  )),
               KKButton(
                   onPressed: () async {
                     await AuthService().signOut().then((value) => {
