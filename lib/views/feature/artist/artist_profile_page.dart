@@ -33,7 +33,7 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
           child: Column(
             children: [
               Expanded(
-                  flex: 4,
+                  flex: 7,
                   child: Column(
                     children: [
                       currentUser.imageUrl != null
@@ -89,13 +89,10 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
                         height: 20,
                       ),
                       const Divider(),
-                      const SizedBox(
-                        height: 20,
-                      ),
                     ],
                   )),
               Expanded(
-                  flex: 5,
+                  flex: 8,
                   child: ListView(
                     children: [
                       Opacity(

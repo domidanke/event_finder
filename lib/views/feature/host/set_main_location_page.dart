@@ -1,4 +1,5 @@
 import 'package:event_finder/services/firestore/user_doc.service.dart';
+import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/shared/search_address_in_map.dart';
 import 'package:event_finder/widgets/kk_button_async.dart';
 import 'package:flutter/material.dart';
@@ -41,10 +42,10 @@ class _SetMainLocationPageState extends State<SetMainLocationPage> {
                   setState(() {
                     _isSaving = true;
                   });
+                  FocusManager.instance.primaryFocus?.unfocus();
                   await UserDocService()
                       .saveMainLocationData(_selectedCoordinates!);
-                  // StateService().currentUserMainLocation =
-                  //     _selectedCoordinates!;
+                  await StateService().getCurrentUserSilent();
                   setState(() {
                     _isSaving = false;
                   });

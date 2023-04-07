@@ -2,6 +2,7 @@ import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/models/location_data.dart';
 import 'package:event_finder/models/ticket_info.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -49,6 +50,10 @@ class StateService extends ChangeNotifier {
   /// auth startup page. We don't want a provider rebuild on init
   set setCurrentUserSilent(AppUser user) {
     _currentUser = user;
+  }
+
+  Future<void> getCurrentUserSilent() async {
+    _currentUser = await UserDocService().getCurrentUserData();
   }
 
   /// This method ensures that the current user gets set to null
