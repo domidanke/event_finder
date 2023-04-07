@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "575649252184-rfrguih5gvdj4pi0qbju6umi0pinl3a2.apps.googleusercontent.com",
+          "client_id": "575649252184-9iaoetl246hnom35jtccnm2ft8iv24rr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dominik.tajak.event_finder",
+            "certificate_hash": "8dd5df25ea23d90c35727357e7bf6686cea03fc5"
+          }
+        },
+        {
+          "client_id": "575649252184-lt5mplbnnqun0nbhja8h8mavf18eekta.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "575649252184-rfrguih5gvdj4pi0qbju6umi0pinl3a2.apps.googleusercontent.com",
+              "client_id": "575649252184-lt5mplbnnqun0nbhja8h8mavf18eekta.apps.googleusercontent.com",
               "client_type": 3
             },
             {
