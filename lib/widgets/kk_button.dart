@@ -14,7 +14,7 @@ class KKButton extends StatelessWidget {
         onPressed: onPressed,
         child: Container(
           constraints: const BoxConstraints(
-              maxHeight: 70, minHeight: 36.0, minWidth: 100),
+              maxHeight: 50, minHeight: 36.0, minWidth: 100),
           alignment: Alignment.center,
           child: Text(
             buttonText,

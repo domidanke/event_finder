@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:event_finder/route_generator.dart';
 import 'package:event_finder/services/auth.service.dart';
@@ -8,10 +7,7 @@ import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/color_schemes.g.dart';
 import 'package:event_finder/theme/custom_color.g.dart';
 import 'package:event_finder/views/auth/auth_startup_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -24,17 +20,17 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  if (kDebugMode) {
-    try {
-      const ip = '192.168.2.191';
-      FirebaseFirestore.instance.useFirestoreEmulator(ip, 8080);
-      await FirebaseStorage.instance.useStorageEmulator(ip, 9199);
-      await FirebaseAuth.instance.useAuthEmulator(ip, 9099);
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
-  }
+  // if (kDebugMode) {
+  //   try {
+  //     const ip = '192.168.2.191';
+  //     FirebaseFirestore.instance.useFirestoreEmulator(ip, 8080);
+  //     await FirebaseStorage.instance.useStorageEmulator(ip, 9199);
+  //     await FirebaseAuth.instance.useAuthEmulator(ip, 9099);
+  //   } catch (e) {
+  //     // ignore: avoid_print
+  //     print(e);
+  //   }
+  // }
 
   runApp(MultiProvider(
     providers: [
