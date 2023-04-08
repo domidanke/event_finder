@@ -15,7 +15,7 @@ class _OnboardingPageState extends State<OnboardingPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   int _currentPage = 0;
-  final PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController();
 
   @override
   void initState() {

@@ -16,6 +16,7 @@ class VerifyEmailPage extends StatefulWidget {
 
 class _VerifyEmailPageState extends State<VerifyEmailPage> {
   Timer? timer;
+  bool emailSent = false;
 
   @override
   void initState() {
@@ -33,6 +34,12 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
             await UserDocService().getCurrentUserData();
         if (mounted) Navigator.pushNamed(context, '/');
         timer.cancel();
+      }
+      {
+        if (!emailSent) {
+          await AuthService().getCurrentFirebaseUser()!.sendEmailVerification();
+          emailSent = true;
+        }
       }
     });
   }

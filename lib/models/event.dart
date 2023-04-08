@@ -25,7 +25,9 @@ class Event {
           details: json['details']! as String,
           date:
               DateTime.parse((json['date']! as Timestamp).toDate().toString()),
-          genres: List.from(json['genres']! as List<dynamic>),
+          genres: json['genres'] != null
+              ? List.from(json['genres']! as List<dynamic>)
+              : [],
           ticketPrice: json['ticketPrice']! as int,
           creatorId: json['creatorId']! as String,
           creatorName: json['creatorName']! as String,
