@@ -57,7 +57,7 @@ class _SavedHostsPageState extends State<SavedHostsPage> {
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           return CircleAvatar(
-                            radius: 100,
+                            radius: 30,
                             backgroundImage: Image.asset(
                                     'assets/images/profile_placeholder.png')
                                 .image,
