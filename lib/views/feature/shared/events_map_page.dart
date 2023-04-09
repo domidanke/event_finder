@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/event.dart';
@@ -6,6 +7,7 @@ import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/map_event_card.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
@@ -153,23 +155,7 @@ class EventsMapPageState extends State<EventsMapPage> {
                       style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 8),
-                    Slider(
-                      value: _radiusInKm,
-                      min: 1,
-                      max: 50,
-                      divisions: 49,
-                      label: '${_radiusInKm.toInt()}km',
-                      onChanged: (value) {
-                        _radiusInKm = value;
-                        _subscription = _geoQuerySubscription(
-                          centerGeoPoint: GeoPoint(
-                            currentPosition.latitude,
-                            currentPosition.longitude,
-                          ),
-                          radiusInKm: _radiusInKm,
-                        );
-                      },
-                    ),
+                    SizedBox(width: double.infinity, child: _getSlider()),
                   ],
                 ),
               ),
@@ -193,5 +179,45 @@ class EventsMapPageState extends State<EventsMapPage> {
         ),
       ),
     );
+  }
+
+  Widget _getSlider() {
+    if (Platform.isAndroid) {
+      return Slider(
+        value: _radiusInKm,
+        min: 1,
+        max: 50,
+        divisions: 49,
+        label: '${_radiusInKm.toInt()}km',
+        onChanged: (value) {
+          _radiusInKm = value;
+          _subscription = _geoQuerySubscription(
+            centerGeoPoint: GeoPoint(
+              currentPosition.latitude,
+              currentPosition.longitude,
+            ),
+            radiusInKm: _radiusInKm,
+          );
+        },
+      );
+    } else {
+      return CupertinoSlider(
+        key: const Key('slider'),
+        value: _radiusInKm,
+        min: 1,
+        max: 50,
+        divisions: 49,
+        onChanged: (double value) {
+          _subscription = _geoQuerySubscription(
+            centerGeoPoint: GeoPoint(
+              currentPosition.latitude,
+              currentPosition.longitude,
+            ),
+            radiusInKm: _radiusInKm,
+          );
+          _radiusInKm = value;
+        },
+      );
+    }
   }
 }
