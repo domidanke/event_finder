@@ -35,11 +35,9 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
         if (mounted) Navigator.pushNamed(context, '/');
         timer.cancel();
       }
-      {
-        if (!emailSent) {
-          await AuthService().getCurrentFirebaseUser()!.sendEmailVerification();
-          emailSent = true;
-        }
+      if (!emailSent) {
+        await AuthService().getCurrentFirebaseUser()!.sendEmailVerification();
+        emailSent = true;
       }
     });
   }
@@ -55,28 +53,27 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     return WillPopScope(
       onWillPop: () async => !Navigator.of(context).userGestureInProgress,
       child: Scaffold(
-          body: Container(
-        decoration: const BoxDecoration(
-          gradient: primaryGradient,
-        ),
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const Text('Bestaetigungsemail geschickt an:'),
-              Text(
-                '${AuthService().getCurrentFirebaseUser()!.email}',
-                style: const TextStyle(fontSize: 24),
-              ),
-              const Text('Bitte verifizieren Sie Ihre Email'),
-              Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 80),
-                  child: const LinearProgressIndicator(
-                    color: primaryColor,
-                    backgroundColor: primaryWhite,
-                  ))
-            ],
-          ),
+          body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Icon(
+              Icons.mail,
+              size: 100,
+            ),
+            const Text('Bestaetigungsemail geschickt an:'),
+            Text(
+              '${AuthService().getCurrentFirebaseUser()!.email}',
+              style: const TextStyle(fontSize: 24),
+            ),
+            const Text('Bitte verifizieren Sie Ihre Email'),
+            Container(
+                margin: const EdgeInsets.symmetric(horizontal: 80),
+                child: const LinearProgressIndicator(
+                  color: primaryColor,
+                  backgroundColor: primaryWhite,
+                ))
+          ],
         ),
       )),
     );
