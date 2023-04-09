@@ -21,103 +21,94 @@ class MapEventCard extends StatefulWidget {
 class _MapEventCardState extends State<MapEventCard> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (widget.event.imageUrl == null) return;
-        StateService().lastSelectedEvent = widget.event;
-        Navigator.pushNamed(context, 'event_details');
-      },
-      child: SizedBox(
-        width: 300,
-        child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Stack(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Card(
-                          color: Colors.white,
-                          child: SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  widget.event.date.day.toString(),
-                                  style: const TextStyle(color: Colors.black),
+    return SizedBox(
+      width: 300,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Card(
+                        color: Colors.white,
+                        child: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                widget.event.date.day.toString(),
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                              Text(
+                                monthMap[widget.event.date.month.toString()]!,
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      _getDistanceWidget()
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        child: Text(
+                          widget.event.title,
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                      ),
+                      FittedBox(
+                        child: Row(
+                          children: widget.event.genres
+                              .map(
+                                (genre) => Card(
+                                  child: SizedBox(
+                                      width: 50,
+                                      height: 30,
+                                      child: Center(
+                                        child: Text(
+                                          genre,
+                                        ),
+                                      )),
                                 ),
-                                Text(
-                                  monthMap[widget.event.date.month.toString()]!,
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
+                              )
+                              .toList(),
                         ),
-                        _getDistanceWidget()
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FittedBox(
-                          child: Text(
-                            widget.event.title,
-                            style: const TextStyle(fontSize: 24),
-                          ),
-                        ),
-                        FittedBox(
-                          child: Row(
-                            children: widget.event.genres
-                                .map(
-                                  (genre) => Card(
-                                    child: SizedBox(
-                                        width: 50,
-                                        height: 30,
-                                        child: Center(
-                                          child: Text(
-                                            genre,
-                                          ),
-                                        )),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Center(
-                      child: TextButton(
-                          onPressed: () async {
-                            StateService().lastSelectedEvent = widget.event;
-                            if (StateService().lastSelectedEvent!.imageUrl ==
-                                null) {
-                              StateService().lastSelectedEvent!.imageUrl =
-                                  await StorageService()
-                                      .getEventImageUrl(event: widget.event);
-                            }
-                            if (mounted) {
-                              Navigator.pushNamed(context, 'event_details');
-                            }
-                          },
-                          child: const Text('Details')),
-                    )
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  Center(
+                    child: TextButton(
+                        onPressed: () async {
+                          StateService().lastSelectedEvent = widget.event;
+                          if (StateService().lastSelectedEvent!.imageUrl ==
+                              null) {
+                            StateService().lastSelectedEvent!.imageUrl =
+                                await StorageService()
+                                    .getEventImageUrl(event: widget.event);
+                          }
+                          if (mounted) {
+                            Navigator.pushNamed(context, 'event_details');
+                          }
+                        },
+                        child: const Text('Details')),
+                  )
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
