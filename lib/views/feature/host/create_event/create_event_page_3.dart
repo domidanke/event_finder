@@ -165,6 +165,7 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
                     final event = newEvent.toEvent();
                     final eventId =
                         await EventDocService().addEventDocument(event);
+                    StateService().resetSelectedGenres();
                     await EventTicketDocService().addTicketDocument(eventId);
                     await StorageService()
                         .saveEventImageToStorage(

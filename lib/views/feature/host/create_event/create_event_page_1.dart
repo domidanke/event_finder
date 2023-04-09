@@ -79,8 +79,8 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                           labelText: 'Datum',
                         ),
                         onTap: () async {
-                          final selectedDate =
-                              await DateService().showIosDatePicker(context);
+                          final selectedDate = await DateService()
+                              .showPlatformDatePicker(context);
                           setState(() {
                             dateController.text =
                                 selectedDate.toString().substring(0, 16);

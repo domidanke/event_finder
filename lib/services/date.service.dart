@@ -10,7 +10,7 @@ class DateService {
   DateService._internal();
   static final DateService _singleton = DateService._internal();
 
-  Future<DateTime> showIosDatePicker(context) async {
+  Future<DateTime> showPlatformDatePicker(context) async {
     late DateTime? selectedDate = DateTime.now();
 
     if (Platform.isAndroid) {
@@ -21,14 +21,14 @@ class DateService {
           lastDate: DateTime(DateTime.now().year + DateTime.now().year + 5));
       return selectedDate!;
     } else {
-      await showCupertinoModalPopup(
+      await showModalBottomSheet(
           context: context,
           builder: (_) => SizedBox(
-                height: 190,
+                height: 250,
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 180,
+                      height: 200,
                       child: CupertinoDatePicker(
                           use24hFormat: true,
                           initialDateTime: DateTime.now(),
