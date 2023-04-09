@@ -121,6 +121,7 @@ class StateService extends ChangeNotifier {
     } else {
       currentUser!.savedEvents.add(eventUid);
     }
+    notifyListeners();
   }
 
   /// TODO: Move to separate User State service class
