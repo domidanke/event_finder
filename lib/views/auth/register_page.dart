@@ -99,12 +99,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       }
                       try {
                         authService.registerLoading = true;
-                        await authService
-                            .signUp(
-                                emailController.text, passwordController.text)
-                            .then((value) => {
-                                  AuthService().sendEmailVerificationEmail(),
-                                });
+                        await authService.signUp(
+                            emailController.text, passwordController.text);
                         if (mounted) Navigator.pushNamed(context, '/');
                       } on FirebaseAuthException catch (e) {
                         authService.registerLoading = false;
