@@ -1,6 +1,7 @@
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/widgets/kk_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -124,6 +125,17 @@ class _ArtistPageState extends State<ArtistPage> {
                   Navigator.pushNamed(context, 'artist_events_page');
                 },
                 icon: const Icon(Icons.event)),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 30),
+              child: KKButton(
+                  onPressed: () {
+                    print('');
+                  },
+                  buttonText: 'Anfrage schicken'),
+            )
           ],
         ),
       ),
