@@ -69,7 +69,7 @@ class _SavedArtistsPageState extends State<SavedArtistsPage> {
                             builder: (context, snapshot) {
                               if (snapshot.hasError) {
                                 return CircleAvatar(
-                                  radius: 100,
+                                  radius: 30,
                                   backgroundImage: Image.asset(
                                           'assets/images/profile_placeholder.png')
                                       .image,
@@ -78,14 +78,9 @@ class _SavedArtistsPageState extends State<SavedArtistsPage> {
                               artist.imageUrl = snapshot.data;
                               return CircleAvatar(
                                 radius: 30,
-                                backgroundImage: snapshot.connectionState ==
-                                        ConnectionState.waiting
-                                    ? null
-                                    : artist.imageUrl != null
-                                        ? NetworkImage(artist.imageUrl!)
-                                        : Image.asset(
-                                                'assets/images/profile_placeholder.png')
-                                            .image,
+                                backgroundImage: artist.imageUrl != null
+                                    ? NetworkImage(artist.imageUrl!)
+                                    : null,
                                 child: snapshot.connectionState ==
                                         ConnectionState.waiting
                                     ? const SizedBox(

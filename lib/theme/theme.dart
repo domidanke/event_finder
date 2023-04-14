@@ -1,42 +1,54 @@
 import 'package:flutter/material.dart';
 
-const primaryColor = Color(0xff9739C8);
-final primaryColorTransparent = primaryColor.withOpacity(0.3);
-const primaryWhite = Colors.white70;
+const primaryColor = Color(0xff40075e);
+final primaryColorTransparent = primaryColor.withOpacity(0.6);
+const primaryWhite = Colors.white;
 
 final primaryThemeData = ThemeData(
+  brightness: Brightness.dark,
   elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-          elevation: MaterialStateProperty.all(1),
+          elevation: MaterialStateProperty.all(0.1),
           backgroundColor: MaterialStateProperty.all(primaryColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           )))),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: primaryColor,
-    elevation: 2,
-  ),
+      backgroundColor: primaryColor,
+      elevation: 0.1,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)))),
   primaryColor: primaryColor,
   listTileTheme: const ListTileThemeData(
     textColor: primaryWhite,
     iconColor: primaryWhite,
   ),
-  progressIndicatorTheme: ProgressIndicatorThemeData(color: Colors.grey[200]),
+  sliderTheme: const SliderThemeData(
+      activeTrackColor: Colors.teal,
+      inactiveTrackColor: primaryWhite,
+      thumbColor: Colors.teal,
+      activeTickMarkColor: Colors.transparent,
+      inactiveTickMarkColor: Colors.transparent),
+  progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: primaryColor, linearTrackColor: primaryWhite.withOpacity(0.8)),
   drawerTheme: const DrawerThemeData(shadowColor: primaryColor),
   iconTheme: const IconThemeData(color: Colors.white),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      selectedItemColor: primaryColor, unselectedItemColor: Colors.grey),
-  cardTheme: const CardTheme(color: Colors.transparent),
+    elevation: 0.1,
+  ),
+  cardTheme: const CardTheme(color: Colors.transparent, elevation: 0.1),
   canvasColor: const Color(0xff11001C),
   fontFamily: 'Quicksand',
   appBarTheme: const AppBarTheme(color: primaryColor),
   hintColor: Colors.pinkAccent,
-  indicatorColor: Colors.grey,
-  dialogBackgroundColor: Colors.red,
-  disabledColor: Colors.yellow,
-  dividerColor: Colors.green,
-  //highlightColor: Colors.greenAccent,
+  indicatorColor: Colors.yellow,
+  dialogTheme: const DialogTheme(elevation: 0.1),
+  dividerColor: primaryWhite,
+  checkboxTheme: CheckboxThemeData(
+    checkColor: MaterialStateProperty.all(primaryWhite),
+    fillColor: MaterialStateProperty.all(Colors.teal),
+  ),
   inputDecorationTheme: const InputDecorationTheme(
     labelStyle: TextStyle(color: Colors.white),
     focusedBorder: UnderlineInputBorder(
@@ -47,7 +59,7 @@ final primaryThemeData = ThemeData(
     ),
   ),
   focusColor: Colors.redAccent,
-  hoverColor: Colors.blueGrey,
+  hoverColor: Colors.orange,
   shadowColor: primaryWhite,
   splashColor: primaryColor,
   textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),

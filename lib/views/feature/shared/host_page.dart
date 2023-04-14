@@ -1,6 +1,7 @@
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/location_snippet.dart';
 import 'package:event_finder/widgets/kk_back_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
@@ -32,9 +33,6 @@ class _HostPageState extends State<HostPage> {
                   KKBackButton(),
                 ],
               ),
-            ),
-            Row(
-              children: [],
             ),
             CircleAvatar(
               radius: 50,
@@ -88,10 +86,16 @@ class _HostPageState extends State<HostPage> {
                 elevation: 0,
                 label: currentUser.savedHosts.contains(host.uid)
                     ? const Text('Unfollow')
-                    : const Text('Follow'),
+                    : const Text(
+                        'Follow',
+                        style: TextStyle(color: primaryWhite),
+                      ),
                 icon: currentUser.savedHosts.contains(host.uid)
                     ? const Icon(Icons.cancel_outlined)
-                    : const Icon(Icons.person_add_alt_1),
+                    : const Icon(
+                        Icons.person_add_alt_1,
+                        color: primaryWhite,
+                      ),
               );
             }),
             const SizedBox(

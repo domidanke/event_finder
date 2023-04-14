@@ -23,6 +23,7 @@ class EventsPage extends StatefulWidget {
 
 class _EventsPageState extends State<EventsPage> {
   bool _today = false;
+  bool _mapLoading = false;
   late Future<String> _hostImageUrlFuture;
 
   @override
@@ -57,7 +58,7 @@ class _EventsPageState extends State<EventsPage> {
                           });
                         },
                         child: Chip(
-                          backgroundColor: _today ? primaryColor : null,
+                          backgroundColor: _today ? Colors.teal : null,
                           label: const Text('Heute'),
                         ),
                       ),
@@ -65,25 +66,47 @@ class _EventsPageState extends State<EventsPage> {
                   ),
                   const Spacer(),
                   Opacity(
-                    opacity: StateService().currentUser!.type == UserType.guest
-                        ? 0.2
-                        : 1,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.map,
-                        color: Colors.white,
-                      ),
-                      onPressed: () async {
-                        if (StateService().currentUser!.type ==
-                            UserType.guest) {
-                          return;
-                        }
-                        StateService().currentUserLocation =
-                            await Geolocator.getCurrentPosition();
-                        if (mounted) Navigator.pushNamed(context, 'maps_page');
-                      },
-                    ),
-                  ),
+                      opacity:
+                          StateService().currentUser!.type == UserType.guest
+                              ? 0.2
+                              : 1,
+                      child: StatefulBuilder(
+                        builder: (BuildContext context,
+                            void Function(void Function()) setState) {
+                          if (_mapLoading) {
+                            return Container(
+                                margin: const EdgeInsets.only(right: 16),
+                                width: 15,
+                                height: 15,
+                                child: const CircularProgressIndicator(
+                                    color: primaryWhite));
+                          } else {
+                            return IconButton(
+                              icon: const Icon(
+                                Icons.map,
+                                color: Colors.white,
+                              ),
+                              onPressed: () async {
+                                if (StateService().currentUser!.type ==
+                                    UserType.guest) {
+                                  return;
+                                }
+                                setState(() {
+                                  _mapLoading = true;
+                                });
+                                StateService().currentUserLocation =
+                                    await Geolocator.getCurrentPosition();
+                                setState(() {
+                                  _mapLoading = false;
+                                });
+                                if (mounted) {
+                                  Navigator.pushNamed(context, 'maps_page');
+                                }
+                              },
+                            );
+                          }
+                        },
+                      )),
                   Opacity(
                     opacity: StateService().currentUser!.type == UserType.guest
                         ? 0.2

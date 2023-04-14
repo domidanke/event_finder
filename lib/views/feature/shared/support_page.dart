@@ -1,3 +1,4 @@
+import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../../widgets/kk_back_button.dart';
@@ -47,6 +48,7 @@ class _SupportPageState extends State<SupportPage> {
 
   Widget _buildPanel() {
     return ExpansionPanelList(
+      dividerColor: primaryWhite,
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _supportItems[index].isExpanded = !isExpanded;
@@ -54,6 +56,7 @@ class _SupportPageState extends State<SupportPage> {
       },
       children: _supportItems.map<ExpansionPanel>((SupportItem item) {
         return ExpansionPanel(
+          backgroundColor: primaryColorTransparent,
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
               title: Text(item.headerValue),

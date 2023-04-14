@@ -7,6 +7,7 @@ import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/map_event_card.dart';
+import 'package:event_finder/widgets/kk_back_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -137,7 +138,7 @@ class EventsMapPageState extends State<EventsMapPage> {
               },
             ),
             Positioned(
-              top: 30,
+              top: 10,
               left: 10,
               right: 10,
               child: Container(
@@ -151,10 +152,18 @@ class EventsMapPageState extends State<EventsMapPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      'Events in ${_radiusInKm.toInt()}km Radius: '
-                      '$_numOfEventsInRadius',
-                      style: const TextStyle(color: Colors.white),
+                    Row(
+                      children: [
+                        const KKBackButton(),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          'Events in ${_radiusInKm.toInt()}km Radius: '
+                          '$_numOfEventsInRadius',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     SizedBox(width: double.infinity, child: _getSlider()),

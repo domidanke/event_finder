@@ -101,14 +101,13 @@ class _EventCardState extends State<EventCard> {
                               children: widget.event.genres
                                   .map(
                                     (genre) => Card(
-                                      child: SizedBox(
-                                          width: 50,
-                                          height: 30,
-                                          child: Center(
-                                            child: Text(
-                                              genre,
-                                            ),
-                                          )),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 8),
+                                        child: Text(
+                                          genre,
+                                        ),
+                                      ),
                                     ),
                                   )
                                   .toList(),

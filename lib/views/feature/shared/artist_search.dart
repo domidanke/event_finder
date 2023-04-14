@@ -6,8 +6,6 @@ import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../widgets/kk_back_button.dart';
-
 class ArtistSearch extends StatefulWidget {
   const ArtistSearch({super.key});
 
@@ -26,15 +24,7 @@ class _ArtistSearchState extends State<ArtistSearch> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: const [
-                  KKBackButton(),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
                   Expanded(

@@ -24,6 +24,7 @@ class _MapEventCardState extends State<MapEventCard> {
     return SizedBox(
       width: 300,
       child: Card(
+        color: Colors.grey[900],
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Stack(
@@ -74,14 +75,13 @@ class _MapEventCardState extends State<MapEventCard> {
                           children: widget.event.genres
                               .map(
                                 (genre) => Card(
-                                  child: SizedBox(
-                                      width: 50,
-                                      height: 30,
-                                      child: Center(
-                                        child: Text(
-                                          genre,
-                                        ),
-                                      )),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2, horizontal: 8),
+                                    child: Text(
+                                      genre,
+                                    ),
+                                  ),
                                 ),
                               )
                               .toList(),

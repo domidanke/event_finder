@@ -26,8 +26,26 @@ class _EditDisplayNamePageState extends State<EditDisplayNamePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  children: const [
-                    KKBackButton(),
+                  children: [
+                    const KKBackButton(),
+                    const Spacer(),
+                    KKIcon(
+                      icon: const Icon(Icons.save),
+                      onPressed: () async {
+                        if (displayName ==
+                                StateService().currentUser!.displayName ||
+                            displayName.isEmpty) return;
+                        await UserDocService().updateDisplayName(displayName);
+                        StateService().setCurrentUserDisplayName(displayName);
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Name geaendert')),
+                          );
+                          StateService().currentUser!.displayName = displayName;
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -41,35 +59,6 @@ class _EditDisplayNamePageState extends State<EditDisplayNamePage> {
                 onChanged: (value) {
                   displayName = value;
                 },
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  KKIcon(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  KKIcon(
-                    icon: const Icon(Icons.save),
-                    onPressed: () async {
-                      if (displayName ==
-                              StateService().currentUser!.displayName ||
-                          displayName.isEmpty) return;
-                      await UserDocService().updateDisplayName(displayName);
-                      StateService().setCurrentUserDisplayName(displayName);
-                      if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Name geaendert')),
-                        );
-                        StateService().currentUser!.displayName = displayName;
-                        Navigator.pop(context);
-                      }
-                    },
-                  ),
-                ],
               ),
             ],
           ),

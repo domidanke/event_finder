@@ -6,6 +6,8 @@ import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../../widgets/kk_back_button.dart';
+
 class ArtistEventsPage extends StatefulWidget {
   const ArtistEventsPage({super.key});
 
@@ -26,20 +28,34 @@ class _ArtistEventsPageState extends State<ArtistEventsPage> {
         : StateService().lastSelectedArtist!.uid;
     return Scaffold(
       body: SafeArea(
-        child: FirestoreListView<Event>(
-          emptyBuilder: (context) {
-            return const Center(
-              child: Text('Keine Events'),
-            );
-          },
-          query: EventDocService()
-              .eventsCollection
-              .where('artists', arrayContains: artistId)
-              .orderBy('date'),
-          itemBuilder: (context, snapshot) {
-            Event event = snapshot.data();
-            return EventCard(event: event);
-          },
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: const [
+                  KKBackButton(),
+                ],
+              ),
+            ),
+            Expanded(
+              child: FirestoreListView<Event>(
+                emptyBuilder: (context) {
+                  return const Center(
+                    child: Text('Keine Events'),
+                  );
+                },
+                query: EventDocService()
+                    .eventsCollection
+                    .where('artists', arrayContains: artistId)
+                    .orderBy('date'),
+                itemBuilder: (context, snapshot) {
+                  Event event = snapshot.data();
+                  return EventCard(event: event);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

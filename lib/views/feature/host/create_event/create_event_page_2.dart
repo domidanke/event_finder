@@ -50,9 +50,23 @@ class _CreateEventPage2State extends State<CreateEventPage2> {
                       },
                       buttonText: 'Bild hochladen'),
                 if (newEvent.selectedImageFile != null)
-                  SizedBox(
-                      height: 300,
-                      child: Image.file(newEvent.selectedImageFile!)),
+                  Column(
+                    children: [
+                      SizedBox(
+                          height: 300,
+                          child: Image.file(newEvent.selectedImageFile!)),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              newEvent.selectedImageFile = null;
+                            });
+                          },
+                          icon: const Icon(Icons.remove_circle))
+                    ],
+                  ),
                 const Spacer(),
                 FutureBuilder(
                     future: _getPlaceMarkers,

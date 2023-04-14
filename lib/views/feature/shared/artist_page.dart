@@ -2,6 +2,7 @@ import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/kk_back_button.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
@@ -94,11 +95,19 @@ class _ArtistPageState extends State<ArtistPage> {
                     : null,
                 elevation: 0,
                 label: currentUser.savedArtists.contains(artist.uid)
-                    ? const Text('Unfollow')
-                    : const Text('Follow'),
+                    ? const Text(
+                        'Unfollow',
+                      )
+                    : const Text(
+                        'Follow',
+                        style: TextStyle(color: primaryWhite),
+                      ),
                 icon: currentUser.savedArtists.contains(artist.uid)
                     ? const Icon(Icons.cancel_outlined)
-                    : const Icon(Icons.person_add_alt_1),
+                    : const Icon(
+                        Icons.person_add_alt_1,
+                        color: primaryWhite,
+                      ),
               );
             }),
             const SizedBox(

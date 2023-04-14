@@ -1,4 +1,5 @@
 import 'package:event_finder/services/alert.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/kk_button_async.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +78,9 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         child: const Text(
                           'Passwort vergessen',
+                          style: TextStyle(
+                              color: primaryWhite,
+                              decoration: TextDecoration.underline),
                         ),
                       ),
                       KKButtonAsync(
@@ -110,7 +114,9 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                     child: const Text(
                       'Weiter als Gast',
-                      style: TextStyle(decoration: TextDecoration.underline),
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: primaryWhite),
                     ),
                     onPressed: () async {
                       try {
@@ -135,7 +141,8 @@ class _LoginPageState extends State<LoginPage> {
                             child: const Text(
                               'registrieren',
                               style: TextStyle(
-                                  decoration: TextDecoration.underline),
+                                  decoration: TextDecoration.underline,
+                                  color: primaryWhite),
                             ),
                             onPressed: () {
                               Navigator.pushNamed(context, 'register');

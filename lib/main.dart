@@ -4,8 +4,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:event_finder/route_generator.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/theme/color_schemes.g.dart';
-import 'package:event_finder/theme/custom_color.g.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/auth/auth_startup_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -53,35 +52,11 @@ class EventFinder extends StatelessWidget {
     ]);
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-        ColorScheme lightScheme;
-        ColorScheme darkScheme;
-
-        if (lightDynamic != null && darkDynamic != null) {
-          lightScheme = lightDynamic.harmonized();
-          lightCustomColors = lightCustomColors.harmonized(lightScheme);
-
-          // Repeat for the dark color scheme.
-          darkScheme = darkDynamic.harmonized();
-          darkCustomColors = darkCustomColors.harmonized(darkScheme);
-        } else {
-          // Otherwise, use fallback schemes.
-          lightScheme = lightColorScheme;
-          darkScheme = darkColorScheme;
-        }
         return MaterialApp(
           scaffoldMessengerKey: _scaffoldKey,
           debugShowCheckedModeBanner: false,
           onGenerateRoute: RouteGenerator().generateRoute,
-          theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: darkScheme,
-            extensions: [darkCustomColors],
-          ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: darkScheme,
-            extensions: [darkCustomColors],
-          ),
+          theme: primaryThemeData,
           home: const AuthStartupPage(),
         );
       },

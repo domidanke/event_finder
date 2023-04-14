@@ -32,6 +32,7 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
   Widget build(BuildContext context) {
     NewEvent newEvent = StateService().newEvent;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -47,9 +48,6 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                         height: 10,
                       ),
                       TextFormField(
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.bodyMedium?.color),
                         decoration: const InputDecoration(
                           labelText: 'Titel',
                           border: OutlineInputBorder(),
@@ -65,14 +63,11 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                       const SizedBox(
                         height: 20,
                       ),
-                      _getPlatformFields(newEvent),
+                      _getPlatformDateFields(newEvent),
                       const SizedBox(
                         height: 20,
                       ),
                       TextFormField(
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.bodyMedium?.color),
                         decoration: const InputDecoration(
                           labelText: 'Beschreibung',
                           border: OutlineInputBorder(),
@@ -89,14 +84,12 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                         height: 20,
                       ),
                       TextFormField(
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.bodyMedium?.color),
                         decoration: const InputDecoration(
                           labelText: 'Ticket Preis',
                           border: OutlineInputBorder(),
                         ),
-                        keyboardType: TextInputType.number,
+                        keyboardType:
+                            const TextInputType.numberWithOptions(signed: true),
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.digitsOnly
                         ],
@@ -145,7 +138,7 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
     );
   }
 
-  Widget _getPlatformFields(NewEvent newEvent) {
+  Widget _getPlatformDateFields(NewEvent newEvent) {
     if (Platform.isAndroid) {
       return Row(
         children: [
@@ -182,8 +175,6 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
           Expanded(
             child: TextFormField(
               readOnly: true,
-              style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
               controller: androidTimeController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -216,7 +207,6 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
     } else {
       return TextFormField(
         readOnly: true,
-        style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
         controller: dateController,
         validator: (value) {
           if (value == null || value.isEmpty) {
