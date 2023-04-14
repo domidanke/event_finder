@@ -82,7 +82,7 @@ class UserDocService {
     }
   }
 
-  Future<void> followArtist(AppUser artist) async {
+  Future<void> toggleFollowArtist(AppUser artist) async {
     final currentUser = StateService().currentUser!;
     // Currently not allowed
     if (artist.type == UserType.base || artist.type == UserType.guest) return;
@@ -105,7 +105,7 @@ class UserDocService {
     }
   }
 
-  Future<void> followHost(AppUser user) async {
+  Future<void> toggleFollowHost(AppUser user) async {
     final currentUser = StateService().currentUser!;
     // Currently not allowed
     if (user.type == UserType.base || user.type == UserType.guest) return;

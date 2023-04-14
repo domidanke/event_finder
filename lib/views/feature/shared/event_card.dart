@@ -147,7 +147,7 @@ class _EventCardState extends State<EventCard> {
     final Position? currentPosition =
         Provider.of<StateService>(context).currentUserLocation;
     if (currentPosition == null) {
-      return const Text('GPS deaktiviert');
+      return const Text('kein GPS');
     }
     var currentLatLng =
         LatLng(currentPosition.latitude, currentPosition.longitude);
