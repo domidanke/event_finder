@@ -112,9 +112,12 @@ class _EventsPageState extends State<EventsPage> {
                         ? 0.2
                         : 1,
                     child: IconButton(
-                      icon: const Icon(
-                        Icons.filter_alt,
-                        color: Colors.white,
+                      icon: Badge(
+                        label: Text('${StateService().selectedGenres.length}'),
+                        child: const Icon(
+                          Icons.filter_alt,
+                          color: Colors.white,
+                        ),
                       ),
                       onPressed: () {
                         if (StateService().currentUser!.type ==
@@ -168,11 +171,12 @@ class _EventsPageState extends State<EventsPage> {
                                           },
                                           child: CircleAvatar(
                                             radius: 18,
-                                            backgroundImage: snapshot
-                                                        .connectionState ==
-                                                    ConnectionState.waiting
-                                                ? null
-                                                : NetworkImage(snapshot.data!),
+                                            backgroundImage:
+                                                snapshot.connectionState ==
+                                                        ConnectionState.waiting
+                                                    ? null
+                                                    : NetworkImage(
+                                                        snapshot.data ?? ''),
                                             child: snapshot.connectionState ==
                                                     ConnectionState.waiting
                                                 ? const SizedBox(

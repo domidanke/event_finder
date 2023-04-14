@@ -24,6 +24,8 @@ final primaryThemeData = ThemeData(
     textColor: primaryWhite,
     iconColor: primaryWhite,
   ),
+  badgeTheme: const BadgeThemeData(
+      textColor: primaryWhite, backgroundColor: Colors.teal),
   sliderTheme: const SliderThemeData(
       activeTrackColor: Colors.teal,
       inactiveTrackColor: primaryWhite,
