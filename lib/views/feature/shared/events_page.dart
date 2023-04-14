@@ -29,76 +29,94 @@ class _EventsPageState extends State<EventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        actions: <Widget>[
-          Opacity(
-            opacity:
-                StateService().currentUser!.type == UserType.guest ? 0.2 : 1,
-            child: Container(
-              margin: const EdgeInsets.only(left: 16),
-              child: GestureDetector(
-                onTap: () {
-                  if (StateService().currentUser!.type == UserType.guest) {
-                    return;
-                  }
-                  setState(() {
-                    _today = !_today;
-                  });
-                },
-                child: Chip(
-                  backgroundColor: _today ? primaryColor : null,
-                  label: const Text('Heute'),
-                ),
-              ),
-            ),
-          ),
-          const Spacer(),
-          Opacity(
-            opacity:
-                StateService().currentUser!.type == UserType.guest ? 0.2 : 1,
-            child: IconButton(
-              icon: const Icon(
-                Icons.map,
-                color: Colors.white,
-              ),
-              onPressed: () async {
-                if (StateService().currentUser!.type == UserType.guest) return;
-                StateService().currentUserLocation =
-                    await Geolocator.getCurrentPosition();
-                if (mounted) Navigator.pushNamed(context, 'maps_page');
-              },
-            ),
-          ),
-          Opacity(
-            opacity:
-                StateService().currentUser!.type == UserType.guest ? 0.2 : 1,
-            child: IconButton(
-              icon: const Icon(
-                Icons.filter_alt,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                if (StateService().currentUser!.type == UserType.guest) return;
-                _showFiltersSheet();
-              },
-            ),
-          )
-        ],
-      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: FirestoreListView<Event>(
-            emptyBuilder: (context) {
-              return const Center(
-                child: Text('Keine Events'),
-              );
-            },
-            query: _getQuery(),
-            itemBuilder: (context, snapshot) {
-              return EventCard(event: snapshot.data());
-            },
+          padding: const EdgeInsets.all(4),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Opacity(
+                    opacity: StateService().currentUser!.type == UserType.guest
+                        ? 0.2
+                        : 1,
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 16),
+                      child: GestureDetector(
+                        onTap: () {
+                          if (StateService().currentUser!.type ==
+                              UserType.guest) {
+                            return;
+                          }
+                          setState(() {
+                            _today = !_today;
+                          });
+                        },
+                        child: Chip(
+                          backgroundColor: _today ? primaryColor : null,
+                          label: const Text('Heute'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  Opacity(
+                    opacity: StateService().currentUser!.type == UserType.guest
+                        ? 0.2
+                        : 1,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.map,
+                        color: Colors.white,
+                      ),
+                      onPressed: () async {
+                        if (StateService().currentUser!.type ==
+                            UserType.guest) {
+                          return;
+                        }
+                        StateService().currentUserLocation =
+                            await Geolocator.getCurrentPosition();
+                        if (mounted) Navigator.pushNamed(context, 'maps_page');
+                      },
+                    ),
+                  ),
+                  Opacity(
+                    opacity: StateService().currentUser!.type == UserType.guest
+                        ? 0.2
+                        : 1,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.filter_alt,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        if (StateService().currentUser!.type ==
+                            UserType.guest) {
+                          return;
+                        }
+                        _showFiltersSheet();
+                      },
+                    ),
+                  )
+                ],
+              ),
+              const Divider(
+                height: 30,
+              ),
+              Expanded(
+                child: FirestoreListView<Event>(
+                  emptyBuilder: (context) {
+                    return const Center(
+                      child: Text('Keine Events'),
+                    );
+                  },
+                  query: _getQuery(),
+                  itemBuilder: (context, snapshot) {
+                    return EventCard(event: snapshot.data());
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -20,160 +20,200 @@ class EventCard extends StatefulWidget {
 }
 
 class _EventCardState extends State<EventCard> {
-  late Future<String> _imageUrl;
+  late Future<String> _eventImageUrlFuture;
+  late Future<String> _hostImageUrlFuture;
+  String? _hostImageUrl;
   @override
   void initState() {
-    _imageUrl = StorageService().getEventImageUrl(event: widget.event);
+    _eventImageUrlFuture =
+        StorageService().getEventImageUrl(event: widget.event);
+    _hostImageUrlFuture =
+        StorageService().getUserImageUrl(widget.event.creatorId);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (widget.event.imageUrl == null) return;
-        StateService().lastSelectedEvent = widget.event;
-        Navigator.pushNamed(context, 'event_details');
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Stack(
-          children: [
-            FutureBuilder(
-                future: _imageUrl,
-                builder: (context, snapshot) {
-                  widget.event.imageUrl = snapshot.data;
-                  return Container(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            children: [
+              FutureBuilder(
+                  future: _hostImageUrlFuture,
+                  builder: (context, snapshot) {
+                    _hostImageUrl = snapshot.data;
+                    return GestureDetector(
+                      onTap: () async {
+                        await _navigateToHost();
+                      },
+                      child: CircleAvatar(
+                        radius: 18,
+                        backgroundImage:
+                            snapshot.connectionState == ConnectionState.waiting
+                                ? null
+                                : NetworkImage(_hostImageUrl!),
+                        child:
+                            snapshot.connectionState == ConnectionState.waiting
+                                ? const SizedBox(
+                                    height: 18,
+                                    width: 18,
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : null,
+                      ),
+                    );
+                  }),
+              const SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                onTap: () async {
+                  await _navigateToHost();
+                },
+                child: Text(
+                  widget.event.creatorName,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
+              const Spacer(),
+              StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                return IconButton(
+                    onPressed: () async {
+                      await UserDocService().saveEvent(widget.event.uid);
+                      setState(() {
+                        StateService().toggleSavedEvent(widget.event.uid);
+                      });
+                    },
+                    icon: StateService()
+                            .currentUser!
+                            .savedEvents
+                            .contains(widget.event.uid)
+                        ? const Icon(Icons.bookmark)
+                        : const Icon(Icons.bookmark_border));
+              }),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        GestureDetector(
+          onTap: () {
+            if (widget.event.imageUrl == null) return;
+            StateService().lastSelectedEvent = widget.event;
+            Navigator.pushNamed(context, 'event_details');
+          },
+          child: Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Stack(
+              children: [
+                FutureBuilder(
+                    future: _eventImageUrlFuture,
+                    builder: (context, snapshot) {
+                      widget.event.imageUrl = snapshot.data;
+                      return Container(
+                        height: 250,
+                        decoration: BoxDecoration(
+                          image: widget.event.imageUrl != null
+                              ? DecorationImage(
+                                  image: NetworkImage(widget.event.imageUrl!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                        ),
+                        child:
+                            snapshot.connectionState == ConnectionState.waiting
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : null,
+                      );
+                    }),
+                SizedBox(
                     height: 250,
-                    decoration: BoxDecoration(
-                      image: widget.event.imageUrl != null
-                          ? DecorationImage(
-                              image: NetworkImage(widget.event.imageUrl!),
-                              fit: BoxFit.cover,
-                            )
-                          : null,
-                    ),
-                    child: snapshot.connectionState == ConnectionState.waiting
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : null,
-                  );
-                }),
-            SizedBox(
-                height: 250,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Card(
-                            //color: Colors.white,
-                            child: SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    widget.event.date.day.toString(),
-                                    //style: const TextStyle(color: Colors.black),
-                                  ),
-                                  Text(
-                                    monthMap[
-                                        widget.event.date.month.toString()]!,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (StateService().currentUser?.type == UserType.base)
-                            StatefulBuilder(builder:
-                                (BuildContext context, StateSetter setState) {
-                              return IconButton(
-                                  onPressed: () async {
-                                    await UserDocService()
-                                        .saveEvent(widget.event.uid);
-                                    setState(() {
-                                      StateService()
-                                          .toggleSavedEvent(widget.event.uid);
-                                    });
-                                  },
-                                  icon: StateService()
-                                          .currentUser!
-                                          .savedEvents
-                                          .contains(widget.event.uid)
-                                      ? const Icon(Icons.favorite)
-                                      : const Icon(Icons.favorite_border));
-                            }),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Card(
-                            //color: primaryColor,
-                            child: SizedBox(
-                                width: 50,
-                                height: 30,
-                                child: Center(
-                                  child: Text(
-                                    '${widget.event.ticketPrice} €',
-                                  ),
-                                )),
-                          ),
-                          FittedBox(
-                            child: Row(
-                              children: widget.event.genres
-                                  .map(
-                                    (genre) => Card(
-                                      child: SizedBox(
-                                          width: 50,
-                                          height: 30,
-                                          child: Center(
-                                            child: Text(
-                                              genre,
-                                            ),
-                                          )),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          ),
-                          Text(
-                            widget.event.title,
-                            style: const TextStyle(fontSize: 24),
-                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                '${widget.event.date.toString().substring(11, 16)} Uhr',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              if (StateService().currentUser!.type ==
-                                  UserType.base)
-                                Text(
-                                  widget.event.creatorName,
-                                  style: const TextStyle(fontSize: 16),
+                              Card(
+                                child: SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        widget.event.date.day.toString(),
+                                      ),
+                                      Text(
+                                        monthMap[widget.event.date.month
+                                            .toString()]!,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              _getDistanceWidget()
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FittedBox(
+                                child: Row(
+                                  children: widget.event.genres
+                                      .map(
+                                        (genre) => Card(
+                                          child: SizedBox(
+                                              width: 50,
+                                              height: 30,
+                                              child: Center(
+                                                child: Text(
+                                                  genre,
+                                                ),
+                                              )),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              ),
+                              Text(
+                                widget.event.title,
+                                style: const TextStyle(fontSize: 24),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '${widget.event.date.toString().substring(11, 16)} Uhr',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  _getDistanceWidget()
+                                ],
+                              )
                             ],
                           )
                         ],
-                      )
-                    ],
-                  ),
-                )),
-          ],
+                      ),
+                    )),
+              ],
+            ),
+          ),
         ),
-      ),
+        const SizedBox(
+          height: 30,
+        )
+      ],
     );
   }
 
@@ -196,5 +236,15 @@ class _EventCardState extends State<EventCard> {
       '${LocationService().getDistanceFromLatLonInKm(currentLatLng, eventLatLng)}km',
       style: const TextStyle(fontSize: 16),
     );
+  }
+
+  Future<void> _navigateToHost() async {
+    final host = await UserDocService().getUserData(widget.event.creatorId);
+    if (host == null) return;
+    StateService().lastSelectedHost = host;
+    StateService().lastSelectedHost!.imageUrl = _hostImageUrl;
+    if (mounted) {
+      Navigator.pushNamed(context, 'host_page');
+    }
   }
 }
