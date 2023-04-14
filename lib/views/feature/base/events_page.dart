@@ -113,6 +113,8 @@ class _EventsPageState extends State<EventsPage> {
                         : 1,
                     child: IconButton(
                       icon: Badge(
+                        isLabelVisible:
+                            StateService().selectedGenres.isNotEmpty,
                         label: Text('${StateService().selectedGenres.length}'),
                         child: const Icon(
                           Icons.filter_alt,
