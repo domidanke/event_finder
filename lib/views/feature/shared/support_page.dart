@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../widgets/kk_back_button.dart';
+
 class SupportPage extends StatefulWidget {
   const SupportPage({super.key});
 
@@ -22,13 +24,12 @@ class _SupportPageState extends State<SupportPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 20),
-              child: const Center(
-                child: Text(
-                  'Ihr habt Fragen?',
-                  style: TextStyle(fontSize: 22),
-                ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: const [
+                  KKBackButton(),
+                ],
               ),
             ),
             Expanded(

@@ -1,7 +1,7 @@
 import 'package:event_finder/services/location.service.dart';
 import 'package:event_finder/views/feature/base/base_profile_page.dart';
+import 'package:event_finder/views/feature/base/events_page.dart';
 import 'package:event_finder/views/feature/base/search_page.dart';
-import 'package:event_finder/views/feature/shared/events_page.dart';
 import 'package:flutter/material.dart';
 
 class BaseHomePage extends StatefulWidget {

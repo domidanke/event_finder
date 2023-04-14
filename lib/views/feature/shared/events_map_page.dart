@@ -88,6 +88,8 @@ class EventsMapPageState extends State<EventsMapPage> {
       _events.add(event);
       _markers.add(
         Marker(
+          infoWindow:
+              InfoWindow(title: event.title, snippet: event.creatorName),
           markerId: MarkerId(event.location.geoHash),
           position: LatLng(event.location.geoPoint.latitude,
               event.location.geoPoint.longitude),

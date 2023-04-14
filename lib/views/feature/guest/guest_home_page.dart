@@ -1,5 +1,5 @@
+import 'package:event_finder/views/feature/base/events_page.dart';
 import 'package:event_finder/views/feature/guest/guest_profile_page.dart';
-import 'package:event_finder/views/feature/shared/events_page.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 

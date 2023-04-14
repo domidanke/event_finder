@@ -1,6 +1,4 @@
-import 'package:event_finder/views/feature/host/created_events_page.dart';
-import 'package:event_finder/views/feature/host/host_profile_page.dart';
-import 'package:event_finder/views/feature/shared/artist_search.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class HostHomePage extends StatefulWidget {
@@ -10,46 +8,123 @@ class HostHomePage extends StatefulWidget {
 }
 
 class _HostHomePageState extends State<HostHomePage> {
-  int _selectedIndex = 1;
-  static const List<Widget> _widgetOptions = <Widget>[
-    ArtistSearch(),
-    CreatedEventsPage(),
-    HostProfilePage()
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => !Navigator.of(context).userGestureInProgress,
       child: Scaffold(
-        //drawer: const KKDrawer(),
         body: SafeArea(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Artists',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.event),
-              label: 'Meine Events',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profil',
+            child: CustomScrollView(
+          primary: false,
+          slivers: <Widget>[
+            SliverPadding(
+              padding: const EdgeInsets.all(20),
+              sliver: SliverGrid.count(
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+                crossAxisCount: 2,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'current_events');
+                    },
+                    child: Card(
+                        color: primaryColorTransparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.event),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Aktuelle Events',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Icon(Icons.arrow_forward_ios)
+                          ],
+                        )),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'host_profile');
+                    },
+                    child: Card(
+                        color: primaryColorTransparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.person),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Mein Profil',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Icon(Icons.arrow_forward_ios)
+                          ],
+                        )),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'artist_search');
+                    },
+                    child: Card(
+                        color: primaryColorTransparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.people),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Kuenstlersuche',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Icon(Icons.arrow_forward_ios)
+                          ],
+                        )),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'past_events');
+                    },
+                    child: Card(
+                        color: primaryColorTransparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.event),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Alte Events',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Icon(Icons.arrow_forward_ios)
+                          ],
+                        )),
+                  ),
+                ],
+              ),
             ),
           ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ),
+        )),
       ),
     );
   }

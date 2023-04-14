@@ -42,4 +42,11 @@ class DateService {
       return selectedDate!;
     }
   }
+
+  Future<TimeOfDay?> showAndroidTimePicker(context) async {
+    return await showTimePicker(
+      initialTime: TimeOfDay.now(),
+      context: context,
+    );
+  }
 }

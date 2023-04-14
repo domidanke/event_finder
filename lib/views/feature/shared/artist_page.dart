@@ -1,6 +1,8 @@
 import 'package:event_finder/models/app_user.dart';
+import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/widgets/kk_back_button.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,14 @@ class _ArtistPageState extends State<ArtistPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: const [
+                  KKBackButton(),
+                ],
+              ),
+            ),
             CircleAvatar(
               radius: 100,
               backgroundImage: artist.imageUrl != null
@@ -120,11 +130,12 @@ class _ArtistPageState extends State<ArtistPage> {
             const SizedBox(
               height: 20,
             ),
-            IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, 'artist_events_page');
-                },
-                icon: const Icon(Icons.event)),
+            if (StateService().currentUser!.type != UserType.host)
+              IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'artist_events_page');
+                  },
+                  icon: const Icon(Icons.event)),
             const SizedBox(
               height: 20,
             ),

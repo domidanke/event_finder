@@ -175,7 +175,9 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
                                 const SnackBar(
                                     content: Text('Event erstellt.')),
                               ),
-                              Navigator.pushNamed(context, 'host_home'),
+                              Navigator.pop(context),
+                              Navigator.pop(context),
+                              Navigator.pop(context),
                             })
                         .catchError((e) {
                       AlertService().showAlert(

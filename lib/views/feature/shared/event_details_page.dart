@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
-import 'package:event_finder/services/firestore/event_ticket_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
+import 'package:event_finder/widgets/kk_back_button.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -56,17 +56,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                KKIcon(
-                                  icon: const Icon(Icons.arrow_back),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            ),
+                            const KKBackButton(),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -143,8 +133,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         ),
                       ),
                       const Spacer(),
-                      if (currentUser.type != UserType.host &&
-                          event.artists.isNotEmpty)
+                      if (event.artists.isNotEmpty)
                         Container(
                           margin: const EdgeInsets.only(right: 12),
                           child: IconButton(
@@ -153,16 +142,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                               },
                               icon: const Icon(Icons.people)),
                         ),
-                      if (currentUser.type == UserType.host)
-                        Container(
-                          margin: const EdgeInsets.only(right: 12),
-                          child: IconButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                    context, 'edit_event_artists');
-                              },
-                              icon: const Icon(Icons.people)),
-                        )
                     ],
                   ),
                   if (currentUser.type != UserType.host)
@@ -187,22 +166,22 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     ),
 
                   /// Maybe not the best solution, but shows live number of bought tickets
-                  Center(
-                    child: StreamBuilder(
-                        stream: EventTicketDocService()
-                            .eventTicketsCollection
-                            .doc(event.uid)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const Text('Verkaufte Tickets: -');
-                          } else {
-                            final x = snapshot.data!.data()!;
-                            return Text(
-                                'Verkaufte Tickets: ${x.allTickets.length}');
-                          }
-                        }),
-                  ),
+                  // Center(
+                  //   child: StreamBuilder(
+                  //       stream: EventTicketDocService()
+                  //           .eventTicketsCollection
+                  //           .doc(event.uid)
+                  //           .snapshots(),
+                  //       builder: (context, snapshot) {
+                  //         if (!snapshot.hasData) {
+                  //           return const Text('Verkaufte Tickets: -');
+                  //         } else {
+                  //           final x = snapshot.data!.data()!;
+                  //           return Text(
+                  //               'Verkaufte Tickets: ${x.allTickets.length}');
+                  //         }
+                  //       }),
+                  // ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -386,22 +365,14 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   }
 
   Future<void> _navigateToHost() async {
-    var lastHost = StateService().lastSelectedHost;
     var lastEvent = StateService().lastSelectedEvent!;
-    if (lastHost == null) {
-      final host = await UserDocService().getUserData(lastEvent.creatorId);
-      if (host == null) return;
-      StateService().lastSelectedHost = host;
-      StateService().lastSelectedHost!.imageUrl =
-          await StorageService().getUserImageUrl(host.uid);
-      if (mounted) {
-        Navigator.pushNamed(context, 'host_page');
-      }
-    } else {
-      // Possibly saving a firestore read here?
-      if (lastHost.uid == lastEvent.creatorId) {
-        Navigator.pushNamed(context, 'host_page');
-      }
+    final host = await UserDocService().getUserData(lastEvent.creatorId);
+    if (host == null) return;
+    StateService().lastSelectedHost = host;
+    StateService().lastSelectedHost!.imageUrl =
+        await StorageService().getUserImageUrl(host.uid);
+    if (mounted) {
+      Navigator.pushNamed(context, 'host_page');
     }
   }
 }

@@ -3,6 +3,8 @@ import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
 
+import '../../../widgets/kk_back_button.dart';
+
 class EditDisplayNamePage extends StatefulWidget {
   const EditDisplayNamePage({super.key});
 
@@ -20,8 +22,15 @@ class _EditDisplayNamePageState extends State<EditDisplayNamePage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: const [
+                    KKBackButton(),
+                  ],
+                ),
+              ),
               TextField(
                 style: TextStyle(
                     color: Theme.of(context).textTheme.bodyMedium?.color),
@@ -33,9 +42,7 @@ class _EditDisplayNamePageState extends State<EditDisplayNamePage> {
                   displayName = value;
                 },
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

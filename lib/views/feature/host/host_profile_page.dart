@@ -6,6 +6,8 @@ import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../widgets/kk_back_button.dart';
+
 class HostProfilePage extends StatefulWidget {
   const HostProfilePage({Key? key}) : super(key: key);
 
@@ -31,6 +33,11 @@ class _HostProfilePageState extends State<HostProfilePage> {
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Column(
             children: [
+              Row(
+                children: const [
+                  KKBackButton(),
+                ],
+              ),
               Expanded(
                 flex: 7,
                 child: Column(
@@ -96,7 +103,7 @@ class _HostProfilePageState extends State<HostProfilePage> {
                         opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
                         child: ListTile(
                           leading: const Icon(Icons.people),
-                          title: const Text('Meine Artists'),
+                          title: const Text('Meine Kuenstler'),
                           onTap: () {
                             if (currentUser.savedArtists.isEmpty) {
                               return;

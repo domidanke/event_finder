@@ -3,6 +3,7 @@ import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
+import 'package:event_finder/widgets/kk_back_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,71 +28,86 @@ class _SavedArtistsPageState extends State<SavedArtistsPage> {
     final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
     return Scaffold(
       body: SafeArea(
-        child: FirestoreListView<AppUser>(
-          emptyBuilder: (context) {
-            return const Center(
-              child: Text('Keine Artists'),
-            );
-          },
-          query: currentUser.savedArtists.isEmpty
-              ? UserDocService()
-                  .usersCollection
-                  .where(FieldPath.documentId, whereIn: ['EMPTY'])
-              : UserDocService().usersCollection.where(FieldPath.documentId,
-                  whereIn: currentUser.savedArtists),
-          itemBuilder: (context, snapshot) {
-            AppUser artist = snapshot.data();
-            _imageUrl = StorageService().getUserImageUrl(artist.uid);
-            return GestureDetector(
-              onTap: () {
-                StateService().lastSelectedArtist = artist;
-                Navigator.pushNamed(context, 'artist_page');
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  visualDensity: const VisualDensity(vertical: 4),
-                  leading: FutureBuilder(
-                      future: _imageUrl,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return CircleAvatar(
-                            radius: 100,
-                            backgroundImage: Image.asset(
-                                    'assets/images/profile_placeholder.png')
-                                .image,
-                          );
-                        }
-                        artist.imageUrl = snapshot.data;
-                        return CircleAvatar(
-                          radius: 30,
-                          backgroundImage: snapshot.connectionState ==
-                                  ConnectionState.waiting
-                              ? null
-                              : artist.imageUrl != null
-                                  ? NetworkImage(artist.imageUrl!)
-                                  : Image.asset(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: const [
+                  KKBackButton(),
+                ],
+              ),
+            ),
+            Expanded(
+              child: FirestoreListView<AppUser>(
+                emptyBuilder: (context) {
+                  return const Center(
+                    child: Text('Keine Artists'),
+                  );
+                },
+                query: currentUser.savedArtists.isEmpty
+                    ? UserDocService()
+                        .usersCollection
+                        .where(FieldPath.documentId, whereIn: ['EMPTY'])
+                    : UserDocService().usersCollection.where(
+                        FieldPath.documentId,
+                        whereIn: currentUser.savedArtists),
+                itemBuilder: (context, snapshot) {
+                  AppUser artist = snapshot.data();
+                  _imageUrl = StorageService().getUserImageUrl(artist.uid);
+                  return GestureDetector(
+                    onTap: () {
+                      StateService().lastSelectedArtist = artist;
+                      Navigator.pushNamed(context, 'artist_page');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        visualDensity: const VisualDensity(vertical: 4),
+                        leading: FutureBuilder(
+                            future: _imageUrl,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return CircleAvatar(
+                                  radius: 100,
+                                  backgroundImage: Image.asset(
                                           'assets/images/profile_placeholder.png')
                                       .image,
-                          child: snapshot.connectionState ==
-                                  ConnectionState.waiting
-                              ? const SizedBox(
-                                  height: 18,
-                                  width: 18,
-                                  child: CircularProgressIndicator(),
-                                )
-                              : null,
-                        );
-                      }),
-                  title: Text(artist.displayName),
-                  trailing: const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 15,
-                  ),
-                ),
+                                );
+                              }
+                              artist.imageUrl = snapshot.data;
+                              return CircleAvatar(
+                                radius: 30,
+                                backgroundImage: snapshot.connectionState ==
+                                        ConnectionState.waiting
+                                    ? null
+                                    : artist.imageUrl != null
+                                        ? NetworkImage(artist.imageUrl!)
+                                        : Image.asset(
+                                                'assets/images/profile_placeholder.png')
+                                            .image,
+                                child: snapshot.connectionState ==
+                                        ConnectionState.waiting
+                                    ? const SizedBox(
+                                        height: 18,
+                                        width: 18,
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : null,
+                              );
+                            }),
+                        title: Text(artist.displayName),
+                        trailing: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 15,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:event_finder/services/date.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/shared/genre_picker.dart';
@@ -17,6 +19,7 @@ class CreateEventPage1 extends StatefulWidget {
 class _CreateEventPage1State extends State<CreateEventPage1> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController dateController = TextEditingController();
+  TextEditingController androidTimeController = TextEditingController();
 
   @override
   void initState() {
@@ -62,32 +65,7 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                       const SizedBox(
                         height: 20,
                       ),
-                      TextFormField(
-                        readOnly: true,
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.bodyMedium?.color),
-                        controller: dateController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a date';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Datum',
-                        ),
-                        onTap: () async {
-                          final selectedDate = await DateService()
-                              .showPlatformDatePicker(context);
-                          setState(() {
-                            dateController.text =
-                                selectedDate.toString().substring(0, 16);
-                            newEvent.date = selectedDate;
-                          });
-                        },
-                      ),
+                      _getPlatformFields(newEvent),
                       const SizedBox(
                         height: 20,
                       ),
@@ -165,5 +143,100 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
         ),
       ),
     );
+  }
+
+  Widget _getPlatformFields(NewEvent newEvent) {
+    if (Platform.isAndroid) {
+      return Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              readOnly: true,
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color),
+              controller: dateController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a date';
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Datum',
+              ),
+              onTap: () async {
+                final selectedDate =
+                    await DateService().showPlatformDatePicker(context);
+                setState(() {
+                  dateController.text =
+                      selectedDate.toString().substring(0, 10);
+                  newEvent.date = selectedDate;
+                });
+              },
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            child: TextFormField(
+              readOnly: true,
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color),
+              controller: androidTimeController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a date';
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Uhrzeit',
+              ),
+              onTap: () async {
+                final selectedTime =
+                    await DateService().showAndroidTimePicker(context);
+                setState(() {
+                  androidTimeController.text =
+                      '${selectedTime!.hour}:${selectedTime.minute} Uhr';
+                  newEvent.date = DateTime(
+                      newEvent.date.year,
+                      newEvent.date.month,
+                      newEvent.date.day,
+                      selectedTime.hour,
+                      selectedTime.minute);
+                });
+              },
+            ),
+          ),
+        ],
+      );
+    } else {
+      return TextFormField(
+        readOnly: true,
+        style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
+        controller: dateController,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter a date';
+          }
+          return null;
+        },
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Datum',
+        ),
+        onTap: () async {
+          final selectedDate =
+              await DateService().showPlatformDatePicker(context);
+          setState(() {
+            dateController.text = selectedDate.toString().substring(0, 16);
+            newEvent.date = selectedDate;
+          });
+        },
+      );
+    }
   }
 }

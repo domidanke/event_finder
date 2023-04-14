@@ -1,5 +1,5 @@
 import 'package:event_finder/views/feature/artist/artist_profile_page.dart';
-import 'package:event_finder/views/feature/shared/events_page.dart';
+import 'package:event_finder/views/feature/base/events_page.dart';
 import 'package:flutter/material.dart';
 
 class ArtistHomePage extends StatefulWidget {

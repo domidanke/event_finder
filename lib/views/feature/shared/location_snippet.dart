@@ -67,7 +67,6 @@ class LocationSnippetState extends State<LocationSnippet> {
               (BuildContext context, AsyncSnapshot<List<Placemark>> snapshot) {
             if (snapshot.hasData) {
               final placeMark = snapshot.data![0];
-              print(placeMark);
               return Positioned(
                 bottom: 5,
                 left: 10,

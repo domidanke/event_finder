@@ -2,6 +2,7 @@ import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/shared/location_snippet.dart';
+import 'package:event_finder/widgets/kk_back_button.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -24,8 +25,19 @@ class _HostPageState extends State<HostPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: const [
+                  KKBackButton(),
+                ],
+              ),
+            ),
+            Row(
+              children: [],
+            ),
             CircleAvatar(
-              radius: 100,
+              radius: 50,
               backgroundImage: host.imageUrl != null
                   ? NetworkImage(host.imageUrl!)
                   : Image.asset('assets/images/profile_placeholder.png').image,
