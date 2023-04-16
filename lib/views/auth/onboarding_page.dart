@@ -20,7 +20,7 @@ class _OnboardingPageState extends State<OnboardingPage>
   @override
   void initState() {
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 750),
       vsync: this,
     );
     _controller.animateTo((_currentPage + 1) / onboardingPageModels.length);
@@ -37,11 +37,11 @@ class _OnboardingPageState extends State<OnboardingPage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-              child: AnimatedBuilder(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+          child: Column(
+            children: [
+              AnimatedBuilder(
                 animation: _controller,
                 builder: (BuildContext context, Widget? child) {
                   return Container(
@@ -53,23 +53,22 @@ class _OnboardingPageState extends State<OnboardingPage>
                   );
                 },
               ),
-            ),
-            Expanded(
-              flex: 9,
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (idx) {
-                  setState(() {
-                    _currentPage = idx;
-                    _controller.animateTo(
-                        (_currentPage + 1) / onboardingPageModels.length);
-                  });
-                },
-                children: _getPageModelWidgets(),
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (idx) {
+                    setState(() {
+                      _currentPage = idx;
+                      _controller.animateTo(
+                          (_currentPage + 1) / onboardingPageModels.length);
+                    });
+                  },
+                  children: _getPageModelWidgets(),
+                ),
               ),
-            ),
-            Flexible(flex: 2, child: _getButtonView())
-          ],
+              _getButtonView()
+            ],
+          ),
         ),
       ),
     );
@@ -125,54 +124,48 @@ class _OnboardingPageState extends State<OnboardingPage>
 
   Widget _getButtonView() {
     if (_currentPage + 1 == onboardingPageModels.length) {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          children: [
-            const GoogleSignInButton(),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: KKButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, 'login');
-                      },
-                      buttonText: 'Login'),
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                Expanded(
-                  child: KKButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, 'register');
-                      },
-                      buttonText: 'Registrieren'),
-                ),
-              ],
-            ),
-          ],
-        ),
+      return Column(
+        children: [
+          const GoogleSignInButton(),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: KKButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'login');
+                    },
+                    buttonText: 'Login'),
+              ),
+              const SizedBox(
+                width: 30,
+              ),
+              Expanded(
+                child: KKButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'register');
+                    },
+                    buttonText: 'Registrieren'),
+              ),
+            ],
+          ),
+        ],
       );
     } else {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            KKButton(
-                onPressed: () {
-                  _pageController.animateToPage(onboardingPageModels.length - 1,
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.linear);
-                },
-                buttonText: 'Los Geht\'s'),
-          ],
-        ),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          KKButton(
+              onPressed: () {
+                _pageController.animateToPage(onboardingPageModels.length - 1,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.linear);
+              },
+              buttonText: 'Los Geht\'s'),
+        ],
       );
     }
   }

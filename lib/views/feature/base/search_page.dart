@@ -38,19 +38,49 @@ class _SearchPageState extends State<SearchPage>
         const SizedBox(
           height: 10,
         ),
-        TabBar(
-          onTap: (value) {
-            setState(() {
-              _selectedIndex = value;
-            });
-          },
-          controller: _tabController,
-          tabs: const [
-            Tab(icon: Icon(Icons.house)),
-            Tab(icon: Icon(Icons.people)),
-          ],
-          indicator: BoxDecoration(
-            borderRadius: BorderRadius.circular(80.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: TabBar(
+            splashFactory: NoSplash.splashFactory,
+            overlayColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                return states.contains(MaterialState.focused)
+                    ? null
+                    : Colors.transparent;
+              },
+            ),
+            onTap: (value) {
+              setState(() {
+                _selectedIndex = value;
+              });
+            },
+            controller: _tabController,
+            tabs: [
+              Tab(
+                  icon: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.house),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text('Hosts'),
+                ],
+              )),
+              Tab(
+                  icon: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.people),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text('Künstler'),
+                ],
+              )),
+            ],
+            indicator: BoxDecoration(
+                borderRadius: BorderRadius.circular(25.0), color: Colors.teal),
           ),
         ),
         const SizedBox(

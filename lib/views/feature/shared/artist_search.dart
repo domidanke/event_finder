@@ -39,6 +39,9 @@ class _ArtistSearchState extends State<ArtistSearch> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
+                        style: const ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.grey)),
                         onPressed: () async {
                           FocusManager.instance.primaryFocus?.unfocus();
                           setState(() {});
@@ -47,6 +50,9 @@ class _ArtistSearchState extends State<ArtistSearch> {
                   )
                 ],
               ),
+            ),
+            const SizedBox(
+              height: 20,
             ),
             Expanded(
               flex: 9,

@@ -70,7 +70,7 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
         } else {
           if (qrCodesScanned.contains(scanData.code!)) {
             _showQrCodeResultDialog(
-                'Code bereits eingeloest',
+                'Code bereits eingelöst',
                 const Icon(
                   Icons.error,
                   color: Colors.red,
@@ -89,7 +89,7 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
               );
             } else {
               _showQrCodeResultDialog(
-                  'Code bereits eingeloest',
+                  'Code bereits eingelöst',
                   const Icon(
                     Icons.error,
                     color: Colors.red,
@@ -124,7 +124,7 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
                     controller!.resumeCamera();
                     Navigator.pop(context);
                   },
-                  child: const Text('Naechster Code'),
+                  child: const Text('Nächster Code'),
                 ),
               ),
             ],

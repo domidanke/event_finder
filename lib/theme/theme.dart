@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const primaryColor = Color(0xff40075e);
 final primaryColorTransparent = primaryColor.withOpacity(0.6);
 const primaryWhite = Colors.white;
+const primaryBackgroundColor = Color(0xff11001C);
 
 final primaryThemeData = ThemeData(
   brightness: Brightness.dark,
@@ -40,7 +41,7 @@ final primaryThemeData = ThemeData(
     elevation: 0.1,
   ),
   cardTheme: const CardTheme(color: Colors.transparent, elevation: 0.1),
-  canvasColor: const Color(0xff11001C),
+  canvasColor: primaryBackgroundColor,
   fontFamily: 'Quicksand',
   appBarTheme: const AppBarTheme(color: primaryColor),
   hintColor: Colors.pinkAccent,
@@ -64,6 +65,7 @@ final primaryThemeData = ThemeData(
   hoverColor: Colors.orange,
   shadowColor: primaryWhite,
   splashColor: primaryColor,
+  dialogBackgroundColor: primaryBackgroundColor,
   textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
   textButtonTheme: TextButtonThemeData(
       style:

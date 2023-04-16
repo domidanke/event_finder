@@ -27,28 +27,14 @@ class _EditEventFormState extends State<EditEventForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.all(8),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextField(
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium?.color),
-                decoration: const InputDecoration(
-                  labelText: 'Beschreibung',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  details = value;
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   KKIcon(
                     icon: const Icon(Icons.arrow_back),
@@ -86,6 +72,17 @@ class _EditEventFormState extends State<EditEventForm> {
                     },
                   ),
                 ],
+              ),
+              TextField(
+                keyboardType: TextInputType.multiline,
+                maxLines: 15,
+                decoration: const InputDecoration(
+                  labelText: 'Beschreibung',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (value) {
+                  details = value;
+                },
               ),
             ],
           ),

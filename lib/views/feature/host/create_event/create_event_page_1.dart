@@ -69,22 +69,6 @@ class _CreateEventPage1State extends State<CreateEventPage1> {
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
-                          labelText: 'Beschreibung',
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          newEvent.details = value;
-                          return null;
-                        },
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
                           labelText: 'Ticket Preis',
                           border: OutlineInputBorder(),
                         ),

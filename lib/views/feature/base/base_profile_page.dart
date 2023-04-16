@@ -56,7 +56,7 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                     opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
                     child: ListTile(
                       leading: const Icon(Icons.people),
-                      title: const Text('Meine Artists'),
+                      title: const Text('Meine Künstler'),
                       onTap: () {
                         if (currentUser.savedArtists.isEmpty) {
                           return;
@@ -92,10 +92,10 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.edit),
-                    title: const Text('Profil bearbeiten'),
+                    leading: const Icon(Icons.password),
+                    title: const Text('Passwort ändern'),
                     onTap: () {
-                      Navigator.pushNamed(context, 'base_edit_profile');
+                      print('edit password');
                     },
                   ),
                   ListTile(
@@ -107,15 +107,18 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                   ),
                 ],
               )),
-              KKButton(
-                  onPressed: () async {
-                    await AuthService().signOut().then((value) => {
-                          StateService().resetCurrentUserSilent(),
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/', (Route<dynamic> route) => false),
-                        });
-                  },
-                  buttonText: 'Abmelden'),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: KKButton(
+                    onPressed: () async {
+                      await AuthService().signOut().then((value) => {
+                            StateService().resetCurrentUserSilent(),
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/', (Route<dynamic> route) => false),
+                          });
+                    },
+                    buttonText: 'Abmelden'),
+              ),
             ],
           ),
         ),

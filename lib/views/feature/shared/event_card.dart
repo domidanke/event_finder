@@ -50,7 +50,7 @@ class _EventCardState extends State<EventCard> {
                     decoration: BoxDecoration(
                       image: widget.event.imageUrl != null
                           ? DecorationImage(
-                              image: NetworkImage(widget.event.imageUrl!),
+                              image: NetworkImage(widget.event.imageUrl ?? ''),
                               fit: BoxFit.cover,
                             )
                           : null,

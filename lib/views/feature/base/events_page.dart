@@ -239,7 +239,7 @@ class _EventsPageState extends State<EventsPage> {
                         ),
                         EventCard(event: snapshot.data()),
                         const SizedBox(
-                          height: 20,
+                          height: 25,
                         ),
                       ],
                     );

@@ -103,7 +103,7 @@ class _HostProfilePageState extends State<HostProfilePage> {
                         opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
                         child: ListTile(
                           leading: const Icon(Icons.people),
-                          title: const Text('Meine Kuenstler'),
+                          title: const Text('Meine Künstler'),
                           onTap: () {
                             if (currentUser.savedArtists.isEmpty) {
                               return;

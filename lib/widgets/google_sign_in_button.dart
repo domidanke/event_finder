@@ -69,14 +69,14 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   children: const <Widget>[
                     Image(
                       image: AssetImage('assets/images/google_logo.png'),
-                      height: 35.0,
+                      height: 25.0,
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 10),
                       child: Text(
-                        'Login mit Google',
+                        'Login',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           color: Colors.black54,
                           fontWeight: FontWeight.w600,
                         ),

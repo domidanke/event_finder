@@ -38,6 +38,8 @@ class _HostSearchState extends State<HostSearch> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
+                    style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(Colors.grey)),
                     onPressed: () async {
                       FocusManager.instance.primaryFocus?.unfocus();
                       setState(() {});
@@ -46,6 +48,9 @@ class _HostSearchState extends State<HostSearch> {
               )
             ],
           ),
+        ),
+        const SizedBox(
+          height: 20,
         ),
         Expanded(
           flex: 9,

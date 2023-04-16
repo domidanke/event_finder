@@ -107,11 +107,12 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         ),
                       ),
                       const Spacer(),
-                      if (currentUser.type == UserType.host)
+                      if (currentUser.type == UserType.host &&
+                          event.date.isAfter(DateTime.now()))
                         Container(
                           margin: const EdgeInsets.only(right: 12),
                           child: IconButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 Navigator.pushNamed(context, 'scan_qr_code');
                               },
                               icon: const Icon(Icons.qr_code)),
@@ -195,11 +196,11 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           coordinates: LatLng(event.location.geoPoint.latitude,
                               event.location.geoPoint.longitude))),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      height: 200,
+                      height: 400,
                       child: SingleChildScrollView(
                           child: Text(
                         event.details,
@@ -211,9 +212,10 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 ],
               ),
             ),
-            if (currentUser.type == UserType.base)
+            if (currentUser.type == UserType.base &&
+                event.date.isAfter(DateTime.now()))
               Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
+                margin: const EdgeInsets.all(20),
                 child: KKButton(
                   onPressed: () {
                     Navigator.pushNamed(context, 'buy_tickets');
@@ -240,7 +242,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   ],
                 ),
               ),
-            if (event.creatorId == currentUser.uid)
+            if (event.creatorId == currentUser.uid &&
+                event.date.isAfter(DateTime.now()))
               Container(
                 margin: const EdgeInsets.all(20),
                 child: KKButton(
