@@ -35,17 +35,12 @@ class _HostSearchState extends State<HostSearch> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(Colors.grey)),
-                    onPressed: () async {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      setState(() {});
-                    },
-                    child: const Icon(Icons.search)),
-              )
+              IconButton(
+                  onPressed: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    setState(() {});
+                  },
+                  icon: const Icon(Icons.search))
             ],
           ),
         ),

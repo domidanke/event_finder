@@ -1,19 +1,32 @@
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/views/feature/shared/genre_picker.dart';
 import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
 
 import '../../../widgets/kk_back_button.dart';
 
-class EditDisplayNamePage extends StatefulWidget {
-  const EditDisplayNamePage({super.key});
+class EditArtistGenresPage extends StatefulWidget {
+  const EditArtistGenresPage({super.key});
 
   @override
-  State<EditDisplayNamePage> createState() => _EditDisplayNamePageState();
+  State<EditArtistGenresPage> createState() => _EditArtistGenresPageState();
 }
 
-class _EditDisplayNamePageState extends State<EditDisplayNamePage> {
-  String displayName = '';
+class _EditArtistGenresPageState extends State<EditArtistGenresPage> {
+  @override
+  void initState() {
+    fillGenres();
+    super.initState();
+  }
+
+  void fillGenres() {
+    StateService().resetSelectedGenres();
+    final currentUser = StateService().currentUser!;
+    for (var genre in currentUser.genres) {
+      StateService().selectedGenres.add(genre);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +45,14 @@ class _EditDisplayNamePageState extends State<EditDisplayNamePage> {
                     KKIcon(
                       icon: const Icon(Icons.save),
                       onPressed: () async {
-                        if (displayName ==
-                                StateService().currentUser!.displayName ||
-                            displayName.isEmpty) return;
-                        await UserDocService().updateDisplayName(displayName);
-                        StateService().setCurrentUserDisplayName(displayName);
+                        await UserDocService().updateArtistGenres();
+                        StateService().setCurrentUserGenres(
+                            StateService().selectedGenres);
                         if (mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Name geändert')),
+                            const SnackBar(content: Text('Genres geändert')),
                           );
-                          StateService().currentUser!.displayName = displayName;
+                          StateService().resetSelectedGenres();
                           Navigator.pop(context);
                         }
                       },
@@ -49,17 +60,10 @@ class _EditDisplayNamePageState extends State<EditDisplayNamePage> {
                   ],
                 ),
               ),
-              TextField(
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium?.color),
-                decoration: const InputDecoration(
-                  labelText: 'Display Name',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  displayName = value;
-                },
+              const SizedBox(
+                height: 100,
               ),
+              const GenrePicker(),
             ],
           ),
         ),

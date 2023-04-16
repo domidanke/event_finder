@@ -48,7 +48,21 @@ class _ArtistPageState extends State<ArtistPage> {
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: artist.genres
+                  .map((e) => Card(
+                        child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 8),
+                            child: Text(e)),
+                      ))
+                  .toList(),
+            ),
+            const SizedBox(
+              height: 10,
             ),
             Column(
               children: [

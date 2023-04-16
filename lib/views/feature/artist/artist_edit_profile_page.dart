@@ -39,10 +39,10 @@ class _ArtistEditProfilePageState extends State<ArtistEditProfilePage> {
                       },
                     ),
                     ListTile(
-                      leading: const Icon(Icons.password),
-                      title: const Text('Anderes Passwort'),
+                      leading: const Icon(Icons.queue_music_outlined),
+                      title: const Text('Anderer Genres'),
                       onTap: () {
-                        print('Change Password');
+                        Navigator.pushNamed(context, 'edit_artist_genres');
                       },
                     ),
                     ListTile(
@@ -62,6 +62,13 @@ class _ArtistEditProfilePageState extends State<ArtistEditProfilePage> {
                           );
                           Navigator.pop(context);
                         }
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.password),
+                      title: const Text('Anderes Passwort'),
+                      onTap: () {
+                        print('Change Password');
                       },
                     ),
                   ],

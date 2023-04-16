@@ -6,6 +6,7 @@ import 'package:event_finder/views/auth/verify_email_page.dart';
 import 'package:event_finder/views/feature/artist/artist_edit_profile_page.dart';
 import 'package:event_finder/views/feature/artist/artist_events_page.dart';
 import 'package:event_finder/views/feature/artist/artist_home_page.dart';
+import 'package:event_finder/views/feature/artist/edit_artist_genres_page.dart';
 import 'package:event_finder/views/feature/base/base_home_page.dart';
 import 'package:event_finder/views/feature/base/buy_tickets_page.dart';
 import 'package:event_finder/views/feature/base/saved_events_page.dart';
@@ -79,6 +80,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const BaseEditProfilePage());
       case 'edit_display_name':
         return MaterialPageRoute(builder: (_) => const EditDisplayNamePage());
+      case 'edit_artist_genres':
+        return MaterialPageRoute(builder: (_) => const EditArtistGenresPage());
       case 'set_main_location':
         return MaterialPageRoute(builder: (_) => const SetMainLocationPage());
       case 'artist_page':

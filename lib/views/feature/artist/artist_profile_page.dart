@@ -86,7 +86,21 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
                             : currentUser.displayName),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: currentUser.genres
+                            .map((e) => Card(
+                                  child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 2, horizontal: 8),
+                                      child: Text(e)),
+                                ))
+                            .toList(),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       const Divider(),
                     ],

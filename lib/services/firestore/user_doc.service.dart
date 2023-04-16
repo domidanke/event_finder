@@ -155,4 +155,10 @@ class UserDocService {
         .doc(StateService().currentUser!.uid)
         .update({'displayName': newDisplayName});
   }
+
+  Future<void> updateArtistGenres() async {
+    await usersCollection
+        .doc(StateService().currentUser!.uid)
+        .update({'genres': StateService().selectedGenres});
+  }
 }

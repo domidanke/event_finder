@@ -15,6 +15,7 @@ class AppUser {
     this.follower = const [],
     this.allTickets = const [],
     this.usedTickets = const [],
+    this.genres = const [],
     this.externalLinks = const ExternalLinks(),
     this.mainLocation = const LocationData(),
   });
@@ -29,6 +30,7 @@ class AppUser {
   late List<TicketInfo> allTickets = [];
   late List<String> usedTickets = [];
   late List<String> follower = [];
+  late List<String> genres = [];
   late LocationData mainLocation;
   String? imageUrl;
 
@@ -46,6 +48,9 @@ class AppUser {
                 : [],
             follower: json['follower'] != null
                 ? List.from(json['follower'] as List<dynamic>)
+                : [],
+            genres: json['genres'] != null
+                ? List.from(json['genres'] as List<dynamic>)
                 : [],
             allTickets: json['allTickets'] != null
                 ? List<TicketInfo>.from((json['allTickets'] as List<dynamic>)
@@ -78,6 +83,7 @@ class AppUser {
       'follower': follower,
       'allTickets': allTickets.map((e) => e.toJson()).toList(),
       'usedTickets': usedTickets,
+      'genres': genres,
       'externalLinks': externalLinks.toJson(),
       'type': type.name
     };

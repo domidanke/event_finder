@@ -27,6 +27,11 @@ class StateService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setCurrentUserGenres(List<String> genres) async {
+    currentUser!.genres = List.from(genres);
+    notifyListeners();
+  }
+
   Future<void> refreshCurrentUserImageUrl() async {
     currentUser!.imageUrl = await StorageService().getProfileImageUrl();
     notifyListeners();

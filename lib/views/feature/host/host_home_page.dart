@@ -86,7 +86,7 @@ class _HostHomePageState extends State<HostHomePage> {
                               height: 10,
                             ),
                             Text(
-                              'Kuenstlersuche',
+                              'Künstlersuche',
                               style: TextStyle(fontSize: 18),
                             ),
                             SizedBox(
