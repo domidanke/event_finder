@@ -43,83 +43,122 @@ class RouteGenerator {
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => const AuthStartupPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const AuthStartupPage());
       case 'login':
-        return MaterialPageRoute(builder: (_) => const LoginPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const LoginPage());
       case 'register':
-        return MaterialPageRoute(builder: (_) => const RegisterPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const RegisterPage());
       case 'activate_account':
-        return MaterialPageRoute(builder: (_) => const ActivateAccountPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const ActivateAccountPage());
       case 'verify_email':
-        return MaterialPageRoute(builder: (_) => const VerifyEmailPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const VerifyEmailPage());
       case 'base_home':
-        return MaterialPageRoute(builder: (_) => const BaseHomePage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const BaseHomePage());
       case 'host_home':
-        return MaterialPageRoute(builder: (_) => const HostHomePage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const HostHomePage());
       case 'host_profile':
-        return MaterialPageRoute(builder: (_) => const HostProfilePage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const HostProfilePage());
       case 'artist_home':
-        return MaterialPageRoute(builder: (_) => const ArtistHomePage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const ArtistHomePage());
       case 'create_event_page_1':
-        return MaterialPageRoute(builder: (_) => const CreateEventPage1());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const CreateEventPage1());
       case 'create_event_page_2':
-        return MaterialPageRoute(builder: (_) => const CreateEventPage2());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const CreateEventPage2());
       case 'create_event_page_3':
-        return MaterialPageRoute(builder: (_) => const CreateEventPage3());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const CreateEventPage3());
       case 'create_event_page_4':
-        return MaterialPageRoute(builder: (_) => const CreateEventPage4());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const CreateEventPage4());
       case 'edit_event':
-        return MaterialPageRoute(builder: (_) => const EditEventForm());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const EditEventForm());
       case 'edit_event_artists':
-        return MaterialPageRoute(builder: (_) => const EditEventArtistsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const EditEventArtistsPage());
       case 'host_edit_profile':
-        return MaterialPageRoute(builder: (_) => const HostEditProfilePage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const HostEditProfilePage());
       case 'artist_edit_profile':
-        return MaterialPageRoute(builder: (_) => const ArtistEditProfilePage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const ArtistEditProfilePage());
       case 'base_edit_profile':
-        return MaterialPageRoute(builder: (_) => const BaseEditProfilePage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const BaseEditProfilePage());
       case 'edit_display_name':
-        return MaterialPageRoute(builder: (_) => const EditDisplayNamePage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const EditDisplayNamePage());
       case 'edit_artist_genres':
-        return MaterialPageRoute(builder: (_) => const EditArtistGenresPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const EditArtistGenresPage());
       case 'set_main_location':
-        return MaterialPageRoute(builder: (_) => const SetMainLocationPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const SetMainLocationPage());
       case 'artist_page':
-        return MaterialPageRoute(builder: (_) => const ArtistPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const ArtistPage());
       case 'artist_search':
-        return MaterialPageRoute(builder: (_) => const ArtistSearch());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const ArtistSearch());
       case 'artist_events_page':
-        return MaterialPageRoute(builder: (_) => const ArtistEventsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const ArtistEventsPage());
       case 'host_page':
-        return MaterialPageRoute(builder: (_) => const HostPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const HostPage());
       case 'host_events_page':
-        return MaterialPageRoute(builder: (_) => const HostEventsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const HostEventsPage());
       case 'saved_events':
-        return MaterialPageRoute(builder: (_) => const SavedEventsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const SavedEventsPage());
       case 'saved_artists':
-        return MaterialPageRoute(builder: (_) => const SavedArtistsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const SavedArtistsPage());
       case 'saved_hosts':
-        return MaterialPageRoute(builder: (_) => const SavedHostsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const SavedHostsPage());
       case 'tickets':
-        return MaterialPageRoute(builder: (_) => const TicketsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const TicketsPage());
       case 'ticket_details':
-        return MaterialPageRoute(builder: (_) => TicketDetailsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => TicketDetailsPage());
       case 'current_events':
-        return MaterialPageRoute(builder: (_) => const CurrentEventsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const CurrentEventsPage());
       case 'past_events':
-        return MaterialPageRoute(builder: (_) => const PastEventsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const PastEventsPage());
       case 'event_details':
-        return MaterialPageRoute(builder: (_) => const EventDetailsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const EventDetailsPage());
       case 'buy_tickets':
-        return MaterialPageRoute(builder: (_) => const BuyTicketsPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const BuyTicketsPage());
       case 'scan_qr_code':
-        return MaterialPageRoute(builder: (_) => const ScanQrCodePage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const ScanQrCodePage());
       case 'maps_page':
-        return MaterialPageRoute(builder: (_) => const EventsMapPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const EventsMapPage());
       case 'support_page':
-        return MaterialPageRoute(builder: (_) => const SupportPage());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const SupportPage());
       default:
         return MaterialPageRoute(
+            settings: settings,
             builder: (_) => Scaffold(
                   body: Center(
                       child: Text(
