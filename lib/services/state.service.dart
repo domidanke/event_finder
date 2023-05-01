@@ -51,6 +51,14 @@ class StateService extends ChangeNotifier {
     _selectedGenres.clear();
   }
 
+  String? _lastSelectedGenre;
+  String? get lastSelectedGenre => _lastSelectedGenre;
+
+  set lastSelectedGenre(String? genre) {
+    _lastSelectedGenre = genre;
+    notifyListeners();
+  }
+
   /// This method ensures that a user gets set properly inside the
   /// auth startup page. We don't want a provider rebuild on init
   set setCurrentUserSilent(AppUser user) {

@@ -1,5 +1,10 @@
-import 'package:event_finder/views/feature/base/host_search.dart';
-import 'package:event_finder/views/feature/shared/artist_search.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_finder/models/app_user.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
+import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/widgets/artist_tile.dart';
+import 'package:event_finder/widgets/top_genres.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -9,87 +14,73 @@ class SearchPage extends StatefulWidget {
   State<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    _tabController = TabController(length: 2, vsync: this);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
-  }
-
-  int _selectedIndex = 0;
-  List<Widget> searchWidgetOptions = [
-    const HostSearch(),
-    const ArtistSearch(),
-  ];
+class _SearchPageState extends State<SearchPage> {
+  final _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const SizedBox(
-          height: 10,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: TabBar(
-            splashFactory: NoSplash.splashFactory,
-            overlayColor: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-                return states.contains(MaterialState.focused)
-                    ? null
-                    : Colors.transparent;
-              },
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      onChanged: (text) {
+                        setState(() {});
+                      },
+                      controller: _searchController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Suche',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            onTap: (value) {
-              setState(() {
-                _selectedIndex = value;
-              });
-            },
-            controller: _tabController,
-            tabs: [
-              Tab(
-                  icon: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.house),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text('Hosts'),
-                ],
-              )),
-              Tab(
-                  icon: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.people),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text('Künstler'),
-                ],
-              )),
-            ],
-            indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(25.0), color: Colors.teal),
-          ),
+            const SizedBox(
+              height: 30,
+            ),
+            if (_searchController.text.isEmpty)
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TopGenres(onGenreSelected: (String genre) {
+                    StateService().lastSelectedGenre = genre;
+                    Navigator.pushNamed(context, 'genre_search_result');
+                  }),
+                ),
+              ),
+            if (_searchController.text.isNotEmpty)
+              Expanded(
+                flex: 9,
+                child: FirestoreListView<AppUser>(
+                  emptyBuilder: (context) {
+                    return const Center(
+                      child: Text('Keine Artists'),
+                    );
+                  },
+                  query: _getQuery(),
+                  itemBuilder: (context, snapshot) {
+                    return ArtistTile(artist: snapshot.data());
+                  },
+                ),
+              ),
+          ],
         ),
-        const SizedBox(
-          height: 20,
-        ),
-        Expanded(
-          child: searchWidgetOptions[_selectedIndex],
-        )
-      ],
+      ),
     );
+  }
+
+  Query<AppUser> _getQuery() {
+    return UserDocService()
+        .usersCollection
+        .where('displayName', isGreaterThanOrEqualTo: _searchController.text)
+        .where('displayName', isLessThan: '${_searchController.text}z')
+        .orderBy('displayName');
   }
 }

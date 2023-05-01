@@ -425,7 +425,8 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.popUntil(context, ModalRoute.withName('/'));
+                      Navigator.pushNamed(context, 'tickets');
                     },
                     child: const Text('Meine Tickets'),
                   ),
