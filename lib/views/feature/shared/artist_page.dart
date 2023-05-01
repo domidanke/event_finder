@@ -1,4 +1,5 @@
 import 'package:event_finder/models/app_user.dart';
+import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
@@ -156,14 +157,15 @@ class _ArtistPageState extends State<ArtistPage> {
             const SizedBox(
               height: 20,
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 30),
-              child: KKButton(
-                  onPressed: () {
-                    print('');
-                  },
-                  buttonText: 'Anfrage schicken'),
-            )
+            if (StateService().currentUser!.type == UserType.host)
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 30),
+                child: KKButton(
+                    onPressed: () {
+                      print('');
+                    },
+                    buttonText: 'Anfrage schicken'),
+              )
           ],
         ),
       ),
