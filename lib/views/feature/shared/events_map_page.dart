@@ -6,7 +6,7 @@ import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
-import 'package:event_finder/views/feature/shared/map_event_card.dart';
+import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:event_finder/widgets/kk_back_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -181,7 +181,7 @@ class EventsMapPageState extends State<EventsMapPage> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: _events
-                        .map((event) => MapEventCard(event: event))
+                        .map((event) => EventCard(event: event))
                         .toList(),
                   ),
                 ),
