@@ -56,7 +56,7 @@ class _SupportPageState extends State<SupportPage> {
       },
       children: _supportItems.map<ExpansionPanel>((SupportItem item) {
         return ExpansionPanel(
-          backgroundColor: primaryColorTransparent,
+          backgroundColor: primaryBackgroundColor,
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
               title: Text(item.headerValue),
