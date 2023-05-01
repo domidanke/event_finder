@@ -7,6 +7,8 @@ import 'package:event_finder/views/feature/guest/guest_home_page.dart';
 import 'package:event_finder/views/feature/host/host_home_page.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/auth.service.dart';
+import '../../widgets/kk_button.dart';
 import '../feature/base/base_home_page.dart';
 
 class UserRoutingPage extends StatefulWidget {
@@ -44,8 +46,26 @@ class _UserRoutingPageState extends State<UserRoutingPage> {
                     StateService().setCurrentUserSilent = snapshot.data!;
                     return _getUserRoute();
                   }
-                  return const Center(
-                    child: Text('Etwas ist schiefgelaufen.'),
+                  return Center(
+                    child: Column(
+                      children: [
+                        const Text('Etwas ist schiefgelaufen.'),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        KKButton(
+                            onPressed: () async {
+                              await AuthService().signOut().then((value) => {
+                                    StateService().resetCurrentUserSilent(),
+                                    Navigator.popUntil(
+                                        context,
+                                        (Route<dynamic> route) =>
+                                            route.settings.name == '/'),
+                                  });
+                            },
+                            buttonText: 'Neustarten')
+                      ],
+                    ),
                   );
                 }),
       ),
