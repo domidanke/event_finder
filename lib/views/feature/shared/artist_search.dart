@@ -44,9 +44,12 @@ class _ArtistSearchState extends State<ArtistSearch> {
                       },
                       controller: _artistSearchController,
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Suche',
-                      ),
+                          border: OutlineInputBorder(),
+                          labelText: 'Suche',
+                          suffixIcon: Icon(
+                            Icons.search,
+                            color: Colors.teal,
+                          )),
                     ),
                   ),
                   IconButton(

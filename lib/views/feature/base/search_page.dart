@@ -34,16 +34,18 @@ class _SearchPageState extends State<SearchPage> {
                       },
                       controller: _searchController,
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Suche',
-                      ),
+                          border: OutlineInputBorder(),
+                          labelText: 'Suche Künstler oder Hosts',
+                          suffixIcon: Icon(
+                            Icons.search,
+                          )),
                     ),
                   ),
                 ],
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 50,
             ),
             if (_searchController.text.isEmpty)
               Expanded(
