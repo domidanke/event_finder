@@ -1,4 +1,6 @@
 import 'package:event_finder/models/onboarding_page_model.dart';
+import 'package:event_finder/models/top_genre.dart';
+import 'package:flutter/material.dart';
 
 const genres = [
   'techno',
@@ -8,6 +10,33 @@ const genres = [
   'pop',
   '90s',
   '80s',
+];
+
+List<TopGenre> topGenres = [
+  TopGenre(
+      name: 'techno',
+      color: Colors.redAccent,
+      imagePath: 'assets/images/onboarding/page1.png'),
+  TopGenre(
+      name: 'rnb',
+      color: Colors.blueAccent,
+      imagePath: 'assets/images/onboarding/page2.png'),
+  TopGenre(
+      name: 'house',
+      color: Colors.green,
+      imagePath: 'assets/images/onboarding/page3.png'),
+  TopGenre(
+      name: 'rap',
+      color: Colors.purple,
+      imagePath: 'assets/images/onboarding/page4.png'),
+  TopGenre(
+      name: 'pop',
+      color: Colors.orange,
+      imagePath: 'assets/images/onboarding/page5.png'),
+  TopGenre(
+      name: '90s',
+      color: Colors.teal,
+      imagePath: 'assets/images/onboarding/page6.png'),
 ];
 
 const Map<String, String> monthMap = {
