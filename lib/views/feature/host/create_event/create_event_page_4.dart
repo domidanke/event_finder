@@ -27,6 +27,7 @@ class _CreateEventPage4State extends State<CreateEventPage4> {
   Widget build(BuildContext context) {
     NewEvent newEvent = StateService().newEvent;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           children: [
@@ -36,23 +37,16 @@ class _CreateEventPage4State extends State<CreateEventPage4> {
                 children: [
                   Expanded(
                     child: TextField(
+                      onChanged: (value) {
+                        setState(() {});
+                      },
                       controller: _artistSearchController,
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Suche',
-                      ),
+                          border: OutlineInputBorder(),
+                          labelText: 'Suche',
+                          suffixIcon: Icon(Icons.search)),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          /// Remove annoying keyboard
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          setState(() {});
-                        },
-                        child: const Icon(Icons.search)),
-                  )
                 ],
               ),
             ),
@@ -175,9 +169,9 @@ class _CreateEventPage4State extends State<CreateEventPage4> {
                                 const SnackBar(
                                     content: Text('Event erstellt.')),
                               ),
-                              Navigator.pop(context),
-                              Navigator.pop(context),
-                              Navigator.pop(context),
+                              Navigator.popUntil(
+                                  context, ModalRoute.withName('/')),
+                              Navigator.pushNamed(context, 'current_events'),
                             })
                         .catchError((e) {
                       AlertService().showAlert(

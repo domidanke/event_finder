@@ -1,23 +1,24 @@
 import 'package:event_finder/models/app_user.dart';
+import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class ArtistTile extends StatefulWidget {
-  const ArtistTile({Key? key, required this.artist}) : super(key: key);
-  final AppUser artist;
+class UserTile extends StatefulWidget {
+  const UserTile({Key? key, required this.user}) : super(key: key);
+  final AppUser user;
 
   @override
-  State<ArtistTile> createState() => _ArtistTileState();
+  State<UserTile> createState() => _UserTileState();
 }
 
-class _ArtistTileState extends State<ArtistTile> {
+class _UserTileState extends State<UserTile> {
   late Future<String> _imageUrl;
 
   @override
   void initState() {
-    _imageUrl = StorageService().getUserImageUrl(widget.artist.uid);
+    _imageUrl = StorageService().getUserImageUrl(widget.user.uid);
     super.initState();
   }
 
@@ -25,8 +26,13 @@ class _ArtistTileState extends State<ArtistTile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        StateService().lastSelectedArtist = widget.artist;
-        Navigator.pushNamed(context, 'artist_page');
+        if (widget.user.type == UserType.artist) {
+          StateService().lastSelectedArtist = widget.user;
+          Navigator.pushNamed(context, 'artist_page');
+        } else {
+          StateService().lastSelectedHost = widget.user;
+          Navigator.pushNamed(context, 'host_page');
+        }
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -47,14 +53,14 @@ class _ArtistTileState extends State<ArtistTile> {
                               .image,
                         );
                       }
-                      widget.artist.imageUrl = snapshot.data;
+                      widget.user.imageUrl = snapshot.data;
                       return CircleAvatar(
                         radius: 30,
                         backgroundImage: snapshot.connectionState ==
                                 ConnectionState.waiting
                             ? null
-                            : widget.artist.imageUrl != null
-                                ? NetworkImage(widget.artist.imageUrl!)
+                            : widget.user.imageUrl != null
+                                ? NetworkImage(widget.user.imageUrl!)
                                 : Image.asset(
                                         'assets/images/profile_placeholder.png')
                                     .image,
@@ -68,9 +74,9 @@ class _ArtistTileState extends State<ArtistTile> {
                                 : null,
                       );
                     }),
-                title: Text(widget.artist.displayName),
+                title: Text(widget.user.displayName),
                 subtitle: Row(
-                  children: widget.artist.genres
+                  children: widget.user.genres
                       .map((e) => Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: Opacity(opacity: 0.5, child: Text(e)),

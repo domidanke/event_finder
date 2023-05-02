@@ -97,7 +97,7 @@ class _ArtistSearchState extends State<ArtistSearch> {
                   },
                   query: _getQuery(),
                   itemBuilder: (context, snapshot) {
-                    return ArtistTile(artist: snapshot.data());
+                    return UserTile(user: snapshot.data());
                   },
                 ),
               ),

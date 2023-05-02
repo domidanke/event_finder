@@ -32,6 +32,7 @@ class _CreateEventPage3State extends State<CreateEventPage3> {
   Widget build(BuildContext context) {
     NewEvent newEvent = StateService().newEvent;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),

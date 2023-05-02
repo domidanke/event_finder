@@ -47,8 +47,8 @@ class _SavedArtistsPageState extends State<SavedArtistsPage> {
                         FieldPath.documentId,
                         whereIn: currentUser.savedArtists),
                 itemBuilder: (context, snapshot) {
-                  return ArtistTile(
-                    artist: snapshot.data(),
+                  return UserTile(
+                    user: snapshot.data(),
                   );
                 },
               ),

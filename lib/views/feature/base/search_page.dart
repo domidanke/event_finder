@@ -68,7 +68,7 @@ class _SearchPageState extends State<SearchPage> {
                   },
                   query: _getQuery(),
                   itemBuilder: (context, snapshot) {
-                    return ArtistTile(artist: snapshot.data());
+                    return UserTile(user: snapshot.data());
                   },
                 ),
               ),

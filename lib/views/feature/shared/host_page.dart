@@ -120,7 +120,7 @@ class _HostPageState extends State<HostPage> {
                         style: TextStyle(fontSize: 20),
                       ),
                       Text(
-                        'Artist Colabs',
+                        'Artist Collabs',
                         style: TextStyle(fontSize: 12),
                       ),
                     ],

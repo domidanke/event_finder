@@ -85,6 +85,9 @@ class EventsMapPageState extends State<EventsMapPage> {
     _events = [];
     for (final ds in documentSnapshots) {
       final event = ds.data()!;
+      final now = DateTime.now();
+      final startOfDay = DateTime(now.year, now.month, now.day);
+      if (event.date.isBefore(startOfDay)) continue;
       _numOfEventsInRadius++;
       _events.add(event);
       _markers.add(
@@ -132,7 +135,7 @@ class EventsMapPageState extends State<EventsMapPage> {
                   ),
                   // multiple 1000 to convert from kilometers to meters.
                   radius: _radiusInKm * 1000,
-                  fillColor: primaryColorTransparent,
+                  fillColor: primaryBackgroundColor.withOpacity(0.5),
                   strokeWidth: 0,
                 ),
               },
