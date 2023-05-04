@@ -101,6 +101,7 @@ class EventsMapPageState extends State<EventsMapPage> {
         ),
       );
     }
+    _events.sort((a, b) => a.date.compareTo(b.date));
     setState(() {});
   }
 
