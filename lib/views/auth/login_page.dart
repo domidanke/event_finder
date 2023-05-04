@@ -94,7 +94,10 @@ class _LoginPageState extends State<LoginPage> {
                                         passwordController.text)
                                     .then((value) => {
                                           authService.loginLoading = false,
-                                          Navigator.pushNamed(context, '/'),
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              '/',
+                                              (Route<dynamic> route) => false),
                                         });
                               } on FirebaseAuthException catch (e) {
                                 authService.loginLoading = false;
@@ -121,7 +124,10 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () async {
                       try {
                         await AuthService().signInAsGuest();
-                        if (mounted) Navigator.pushNamed(context, '/');
+                        if (mounted) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/', (Route<dynamic> route) => false);
+                        }
                       } on FirebaseAuthException catch (e) {
                         AlertService().showAlert(
                             'Login fehlgeschlagen 1/2', e.code, context);
