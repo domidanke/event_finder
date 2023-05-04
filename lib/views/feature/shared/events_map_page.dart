@@ -30,6 +30,7 @@ class EventsMapPageState extends State<EventsMapPage> {
   int _numOfEventsInRadius = 0;
   final currentPosition = StateService().currentUserLocation!;
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
+  late GoogleMapController _mapController;
 
   /// Geo query [StreamSubscription].
   late StreamSubscription<List<DocumentSnapshot<Event>>> _subscription;
@@ -65,6 +66,7 @@ class EventsMapPageState extends State<EventsMapPage> {
   @override
   void dispose() {
     _subscription.cancel();
+    _mapController.dispose();
     super.dispose();
   }
 
@@ -95,13 +97,19 @@ class EventsMapPageState extends State<EventsMapPage> {
       _events.add(event);
       _markers.add(
         Marker(
-          infoWindow:
-              InfoWindow(title: event.title, snippet: event.creatorName),
-          markerId: MarkerId(event.location.geoHash),
-          position: LatLng(event.location.geoPoint.latitude,
-              event.location.geoPoint.longitude),
-          icon: markerIcon,
-        ),
+            infoWindow:
+                InfoWindow(title: event.title, snippet: event.creatorName),
+            markerId: MarkerId(event.location.geoHash),
+            position: LatLng(event.location.geoPoint.latitude,
+                event.location.geoPoint.longitude),
+            icon: markerIcon,
+            onTap: () {
+              _mapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                      target: LatLng(event.location.geoPoint.latitude,
+                          event.location.geoPoint.longitude),
+                      zoom: 17)));
+            }),
       );
     }
     _events.sort((a, b) => a.date.compareTo(b.date));
@@ -116,9 +124,10 @@ class EventsMapPageState extends State<EventsMapPage> {
           children: [
             GoogleMap(
               onMapCreated: (controller) async {
+                _mapController = controller;
                 final String json = await rootBundle
                     .loadString('assets/json_data/map_style.json');
-                controller.setMapStyle(json);
+                _mapController.setMapStyle(json);
               },
               zoomControlsEnabled: false,
               mapToolbarEnabled: false,
@@ -127,7 +136,7 @@ class EventsMapPageState extends State<EventsMapPage> {
               initialCameraPosition: CameraPosition(
                 target:
                     LatLng(currentPosition.latitude, currentPosition.longitude),
-                zoom: 13,
+                zoom: 12,
               ),
               markers: _markers,
               circles: {
@@ -221,14 +230,9 @@ class EventsMapPageState extends State<EventsMapPage> {
         divisions: 49,
         label: '${_radiusInKm.toInt()}km',
         onChanged: (value) {
-          _radiusInKm = value;
-          _subscription = _geoQuerySubscription(
-            centerGeoPoint: GeoPoint(
-              currentPosition.latitude,
-              currentPosition.longitude,
-            ),
-            radiusInKm: _radiusInKm,
-          );
+          setState(() {
+            _radiusInKm = value;
+          });
         },
       );
     } else {
