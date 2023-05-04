@@ -27,7 +27,6 @@ class _BaseHomePageState extends State<BaseHomePage> {
   @override
   void initState() {
     LocationService().handlePermission();
-
     super.initState();
   }
 

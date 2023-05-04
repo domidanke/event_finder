@@ -29,6 +29,9 @@ class _SearchPageState extends State<SearchPage> {
                 children: [
                   Expanded(
                     child: TextField(
+                      onEditingComplete: () {
+                        FocusScope.of(context).unfocus();
+                      },
                       onChanged: (text) {
                         setState(() {});
                       },

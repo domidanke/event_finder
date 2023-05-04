@@ -15,7 +15,7 @@ class TopGenres extends StatelessWidget {
         Container(
             margin: const EdgeInsets.only(left: 12),
             child: const Text(
-              'Top Genres Künstler & Events',
+              'Top Genres, Künstler & Events',
               style: TextStyle(fontSize: 18),
             )),
         const SizedBox(

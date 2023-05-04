@@ -34,7 +34,7 @@ final primaryThemeData = ThemeData(
       activeTickMarkColor: Colors.transparent,
       inactiveTickMarkColor: Colors.transparent),
   progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: primaryColor, linearTrackColor: primaryWhite.withOpacity(0.8)),
+      color: primaryWhite, linearTrackColor: primaryWhite.withOpacity(0.8)),
   drawerTheme: const DrawerThemeData(shadowColor: primaryColor),
   iconTheme: const IconThemeData(color: Colors.white),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
