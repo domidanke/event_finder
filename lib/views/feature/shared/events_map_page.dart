@@ -23,7 +23,6 @@ class EventsMapPage extends StatefulWidget {
 }
 
 class EventsMapPageState extends State<EventsMapPage> {
-  /// Detection radius (km) from the center point when running geo query.
   double _radiusInKm = 1;
   double _lastSearchedRadiusInKm = 0;
   Set<Marker> _markers = {};
@@ -71,8 +70,7 @@ class EventsMapPageState extends State<EventsMapPage> {
 
   void addCustomIcon() {
     BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(size: Size(10, 10)),
-            'assets/images/custom_marker.png')
+            const ImageConfiguration(), 'assets/images/custom_marker.png')
         .then(
       (icon) {
         setState(() {
@@ -215,42 +213,38 @@ class EventsMapPageState extends State<EventsMapPage> {
   }
 
   Widget _getSlider() {
-    return StatefulBuilder(
-      builder: (BuildContext context, void Function(void Function()) setState) {
-        if (Platform.isAndroid) {
-          return Slider(
-            value: _radiusInKm,
-            min: 1,
-            max: 50,
-            divisions: 49,
-            label: '${_radiusInKm.toInt()}km',
-            onChanged: (value) {
-              _radiusInKm = value;
-              _subscription = _geoQuerySubscription(
-                centerGeoPoint: GeoPoint(
-                  currentPosition.latitude,
-                  currentPosition.longitude,
-                ),
-                radiusInKm: _radiusInKm,
-              );
-            },
+    if (Platform.isAndroid) {
+      return Slider(
+        value: _radiusInKm,
+        min: 1,
+        max: 50,
+        divisions: 49,
+        label: '${_radiusInKm.toInt()}km',
+        onChanged: (value) {
+          _radiusInKm = value;
+          _subscription = _geoQuerySubscription(
+            centerGeoPoint: GeoPoint(
+              currentPosition.latitude,
+              currentPosition.longitude,
+            ),
+            radiusInKm: _radiusInKm,
           );
-        } else {
-          return CupertinoSlider(
-            key: const Key('slider'),
-            activeColor: Colors.teal,
-            value: _radiusInKm,
-            min: 1,
-            max: 50,
-            divisions: 49,
-            onChanged: (double value) {
-              setState(() {
-                _radiusInKm = value;
-              });
-            },
-          );
-        }
-      },
-    );
+        },
+      );
+    } else {
+      return CupertinoSlider(
+        key: const Key('slider'),
+        activeColor: Colors.teal,
+        value: _radiusInKm,
+        min: 1,
+        max: 50,
+        divisions: 49,
+        onChanged: (double value) {
+          setState(() {
+            _radiusInKm = value;
+          });
+        },
+      );
+    }
   }
 }
