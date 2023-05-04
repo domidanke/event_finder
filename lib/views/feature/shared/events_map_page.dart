@@ -210,7 +210,9 @@ class EventsMapPageState extends State<EventsMapPage> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: _events.map((event) {
-                      return EventCard(event: event);
+                      return Container(
+                          margin: const EdgeInsets.only(right: 8),
+                          child: EventCard(event: event));
                     }).toList(),
                   ),
                 ),
