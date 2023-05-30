@@ -37,7 +37,7 @@ class _CurrentEventsPageState extends State<CurrentEventsPage> {
             AlertService().showAlert(
                 'Noch nicht moeglich', 'profile_incomplete', context);
           } else {
-            Navigator.pushNamed(context, 'create_event_page_1');
+            Navigator.pushNamed(context, 'create_event_page');
           }
         },
       ),

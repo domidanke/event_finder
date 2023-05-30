@@ -13,10 +13,7 @@ import 'package:event_finder/views/feature/base/genre_search_result_page.dart';
 import 'package:event_finder/views/feature/base/saved_events_page.dart';
 import 'package:event_finder/views/feature/base/ticket_details_page.dart';
 import 'package:event_finder/views/feature/base/tickets_page.dart';
-import 'package:event_finder/views/feature/host/create_event/create_event_page_1.dart';
-import 'package:event_finder/views/feature/host/create_event/create_event_page_2.dart';
-import 'package:event_finder/views/feature/host/create_event/create_event_page_3.dart';
-import 'package:event_finder/views/feature/host/create_event/create_event_page_4.dart';
+import 'package:event_finder/views/feature/host/create_event/create_event_page.dart';
 import 'package:event_finder/views/feature/host/current_events_page.dart';
 import 'package:event_finder/views/feature/host/edit_event_artists_page.dart';
 import 'package:event_finder/views/feature/host/edit_event_form.dart';
@@ -70,18 +67,9 @@ class RouteGenerator {
       case 'artist_home':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const ArtistHomePage());
-      case 'create_event_page_1':
+      case 'create_event_page':
         return MaterialPageRoute(
-            settings: settings, builder: (_) => const CreateEventPage1());
-      case 'create_event_page_2':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const CreateEventPage2());
-      case 'create_event_page_3':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const CreateEventPage3());
-      case 'create_event_page_4':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const CreateEventPage4());
+            settings: settings, builder: (_) => const CreateEventPage());
       case 'edit_event':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const EditEventForm());

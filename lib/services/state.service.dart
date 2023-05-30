@@ -125,8 +125,6 @@ class StateService extends ChangeNotifier {
     notifyListeners();
   }
 
-  NewEvent newEvent = NewEvent();
-
   /// TODO: Move to separate User State service class
   void toggleSavedEvent(String eventUid) {
     if (currentUser!.savedEvents.contains(eventUid)) {
