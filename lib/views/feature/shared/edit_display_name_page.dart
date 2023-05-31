@@ -1,9 +1,8 @@
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
 
-import '../../../widgets/kk_back_button.dart';
+import '../../../widgets/custom_icon_button.dart';
 
 class EditDisplayNamePage extends StatefulWidget {
   const EditDisplayNamePage({super.key});
@@ -27,9 +26,9 @@ class _EditDisplayNamePageState extends State<EditDisplayNamePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    const KKBackButton(),
+                    const CustomIconButton(),
                     const Spacer(),
-                    KKIcon(
+                    CustomIconButton(
                       icon: const Icon(Icons.save),
                       onPressed: () async {
                         if (displayName ==

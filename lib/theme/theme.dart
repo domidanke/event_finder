@@ -4,6 +4,8 @@ const primaryColor = Color(0xff40075e);
 final primaryColorTransparent = primaryColor.withOpacity(0.6);
 const primaryWhite = Colors.white;
 const primaryBackgroundColor = Color(0xff11001C);
+const primaryGrey = Color(0xff2D2A30);
+const primaryGreen = Color(0xffc1ed8c);
 
 final primaryThemeData = ThemeData(
   brightness: Brightness.dark,
@@ -36,11 +38,10 @@ final primaryThemeData = ThemeData(
   progressIndicatorTheme: ProgressIndicatorThemeData(
       color: primaryWhite, linearTrackColor: primaryWhite.withOpacity(0.8)),
   drawerTheme: const DrawerThemeData(shadowColor: primaryColor),
-  iconTheme: const IconThemeData(color: Colors.white),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     elevation: 0.1,
   ),
-  cardTheme: const CardTheme(color: Colors.transparent, elevation: 0.1),
+  cardTheme: const CardTheme(color: Colors.transparent, elevation: 0),
   canvasColor: primaryBackgroundColor,
   fontFamily: 'Quicksand',
   appBarTheme: const AppBarTheme(color: primaryColor),

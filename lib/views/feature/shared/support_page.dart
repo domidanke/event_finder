@@ -1,7 +1,7 @@
 import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-import '../../../widgets/kk_back_button.dart';
+import '../../../widgets/custom_icon_button.dart';
 
 class SupportPage extends StatefulWidget {
   const SupportPage({super.key});
@@ -29,7 +29,7 @@ class _SupportPageState extends State<SupportPage> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: const [
-                  KKBackButton(),
+                  CustomIconButton(),
                 ],
               ),
             ),

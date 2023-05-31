@@ -5,9 +5,10 @@ import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/kk_button_async.dart';
-import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../widgets/custom_icon_button.dart';
 
 class BuyTicketsPage extends StatefulWidget {
   const BuyTicketsPage({super.key});
@@ -54,14 +55,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                KKIcon(
-                                  icon: const Icon(Icons.arrow_back),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
+                              children: const [CustomIconButton()],
                             ),
                             Text(
                               event.title,

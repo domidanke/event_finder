@@ -4,9 +4,8 @@ import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
-import 'package:event_finder/widgets/kk_back_button.dart';
+import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:event_finder/widgets/kk_button.dart';
-import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -56,7 +55,11 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const KKBackButton(),
+                            CustomIconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -89,7 +92,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Row(
                           children: [
-                            const KKIcon(
+                            const CustomIconButton(
                               icon: Icon(Icons.access_time),
                             ),
                             const SizedBox(
@@ -125,7 +128,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         child: Row(
                           children: [
-                            const KKIcon(icon: Icon(Icons.music_note)),
+                            const CustomIconButton(
+                                icon: Icon(Icons.music_note)),
                             const SizedBox(
                               width: 20,
                             ),
@@ -152,7 +156,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           margin: const EdgeInsets.symmetric(horizontal: 8),
                           child: Row(
                             children: [
-                              const KKIcon(icon: Icon(Icons.house)),
+                              const CustomIconButton(icon: Icon(Icons.house)),
                               const SizedBox(
                                 width: 12,
                               ),

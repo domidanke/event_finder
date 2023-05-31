@@ -5,7 +5,7 @@ import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/views/feature/shared/event_card.dart';
-import 'package:event_finder/widgets/kk_back_button.dart';
+import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +33,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: const [
-                  KKBackButton(),
+                  CustomIconButton(),
                 ],
               ),
             ),

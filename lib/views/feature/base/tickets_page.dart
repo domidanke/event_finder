@@ -3,7 +3,7 @@ import 'package:event_finder/models/ticket_info.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
-import 'package:event_finder/widgets/kk_back_button.dart';
+import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,7 +52,7 @@ class _TicketsPageState extends State<TicketsPage> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: const [
-                  KKBackButton(),
+                  CustomIconButton(),
                 ],
               ),
             ),

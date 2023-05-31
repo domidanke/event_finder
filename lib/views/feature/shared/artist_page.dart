@@ -3,9 +3,9 @@ import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
-import 'package:event_finder/widgets/kk_back_button.dart';
+import 'package:event_finder/widgets/custom_icon_button.dart';
+import 'package:event_finder/widgets/genre_card.dart';
 import 'package:event_finder/widgets/kk_button.dart';
-import 'package:event_finder/widgets/kk_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,151 +23,163 @@ class _ArtistPageState extends State<ArtistPage> {
     final AppUser artist =
         Provider.of<StateService>(context).lastSelectedArtist!;
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: const [
-                  KKBackButton(),
-                ],
-              ),
-            ),
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: artist.imageUrl != null
-                  ? NetworkImage(artist.imageUrl!)
-                  : Image.asset('assets/images/profile_placeholder.png').image,
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Text(
-              artist.displayName,
-              style: const TextStyle(fontSize: 20),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: artist.genres
-                  .map((e) => Card(
-                        child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 8),
-                            child: Text(e)),
-                      ))
-                  .toList(),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Column(
-              children: [
-                StreamBuilder(
-                    stream: UserDocService()
-                        .usersCollection
-                        .doc(artist.uid)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Text(
-                          'No Data...',
-                        );
-                      } else {
-                        final x = snapshot.data!.data()!;
-                        return Text(
-                          '${x.follower.length}',
-                          style: const TextStyle(fontSize: 20),
-                        );
-                      }
-                    }),
-                const Text('Follower')
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-              final currentUser = StateService().currentUser!;
-              return FloatingActionButton.extended(
-                onPressed: () async {
-                  if (!currentUser.savedArtists.contains(artist.uid)) {
-                    await UserDocService().toggleFollowArtist(artist);
-                    setState(() {
-                      StateService().toggleSavedArtist(artist.uid);
-                    });
-                  } else {
-                    _showUnfollowSheet();
-                  }
-                },
-                backgroundColor: currentUser.savedArtists.contains(artist.uid)
-                    ? Colors.grey
-                    : null,
-                elevation: 0,
-                label: currentUser.savedArtists.contains(artist.uid)
-                    ? const Text(
-                        'Following',
+      resizeToAvoidBottomInset: false,
+      body: Column(
+        children: [
+          Container(
+              height: 400,
+              width: 1000,
+              decoration: BoxDecoration(
+                image: artist.imageUrl != null
+                    ? DecorationImage(
+                        image: NetworkImage(
+                          artist.imageUrl!,
+                        ),
+                        fit: BoxFit.cover,
+                        alignment: Alignment.topCenter,
                       )
-                    : const Text(
-                        'Follow',
-                        style: TextStyle(color: primaryWhite),
+                    : null,
+              ),
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomIconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(artist.displayName,
+                                  style: const TextStyle(
+                                    fontSize: 32,
+                                  )),
+                              StreamBuilder(
+                                  stream: UserDocService()
+                                      .usersCollection
+                                      .doc(artist.uid)
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const Text(
+                                        'No Data...',
+                                      );
+                                    } else {
+                                      final x = snapshot.data!.data()!;
+                                      return Text(
+                                        '${x.follower.length} Follower',
+                                        style: const TextStyle(fontSize: 14),
+                                      );
+                                    }
+                                  }),
+                            ],
+                          ),
+                        ],
                       ),
-              );
-            }),
-            const SizedBox(
-              height: 50,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                KKIcon(
-                  color: Colors.blue,
-                  icon: const Icon(Icons.facebook),
-                  onPressed: () async {
-                    if (artist.externalLinks.facebook.isEmpty) return;
-                    final url = Uri.parse(artist.externalLinks.facebook);
-                    await launchUrl(url);
-                  },
+                      Column(
+                        children: [
+                          CustomIconButton(
+                            color: Colors.blue,
+                            icon: const Icon(Icons.facebook),
+                            onPressed: () async {
+                              if (artist.externalLinks.facebook.isEmpty) return;
+                              final url =
+                                  Uri.parse(artist.externalLinks.facebook);
+                              await launchUrl(url);
+                            },
+                          ),
+                          CustomIconButton(
+                            color: Colors.orange,
+                            icon: const Icon(Icons.whatshot),
+                            onPressed: () async {
+                              if (artist.externalLinks.soundCloud.isEmpty) {
+                                return;
+                              }
+                              final url =
+                                  Uri.parse(artist.externalLinks.soundCloud);
+                              await launchUrl(url);
+                            },
+                          ),
+                          CustomIconButton(
+                            color: Colors.pinkAccent,
+                            icon: const Icon(Icons.camera_alt_outlined),
+                            onPressed: () async {
+                              if (artist.externalLinks.instagram.isEmpty) {
+                                return;
+                              }
+                              final url =
+                                  Uri.parse(artist.externalLinks.instagram);
+                              await launchUrl(url);
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-                KKIcon(
-                  color: Colors.orange,
-                  icon: const Icon(Icons.whatshot),
-                  onPressed: () async {
-                    if (artist.externalLinks.soundCloud.isEmpty) return;
-                    final url = Uri.parse(artist.externalLinks.soundCloud);
-                    await launchUrl(url);
+              )),
+          const SizedBox(
+            height: 4,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:
+                artist.genres.map((genre) => GenreCard(text: genre)).toList(),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            final currentUser = StateService().currentUser!;
+            return FloatingActionButton.extended(
+              onPressed: () async {
+                if (!currentUser.savedArtists.contains(artist.uid)) {
+                  await UserDocService().toggleFollowArtist(artist);
+                  setState(() {
+                    StateService().toggleSavedArtist(artist.uid);
+                  });
+                } else {
+                  _showUnfollowSheet();
+                }
+              },
+              backgroundColor: currentUser.savedArtists.contains(artist.uid)
+                  ? Colors.grey
+                  : null,
+              elevation: 0,
+              label: currentUser.savedArtists.contains(artist.uid)
+                  ? const Text(
+                      'Following',
+                    )
+                  : const Text(
+                      'Follow',
+                      style: TextStyle(color: primaryWhite),
+                    ),
+            );
+          }),
+          const SizedBox(
+            height: 20,
+          ),
+          if (StateService().currentUser!.type == UserType.host)
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 30),
+              child: KKButton(
+                  onPressed: () {
+                    print('');
                   },
-                ),
-                KKIcon(
-                  color: Colors.pinkAccent,
-                  icon: const Icon(Icons.camera_alt_outlined),
-                  onPressed: () async {
-                    if (artist.externalLinks.instagram.isEmpty) return;
-                    final url = Uri.parse(artist.externalLinks.instagram);
-                    await launchUrl(url);
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            if (StateService().currentUser!.type == UserType.host)
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 30),
-                child: KKButton(
-                    onPressed: () {
-                      print('');
-                    },
-                    buttonText: 'Anfrage schicken'),
-              )
-          ],
-        ),
+                  buttonText: 'Anfrage schicken'),
+            )
+        ],
       ),
     );
   }

@@ -5,7 +5,7 @@ import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../widgets/kk_back_button.dart';
+import '../../../widgets/custom_icon_button.dart';
 
 class BaseEditProfilePage extends StatefulWidget {
   const BaseEditProfilePage({Key? key}) : super(key: key);
@@ -25,7 +25,7 @@ class _BaseEditProfilePageState extends State<BaseEditProfilePage> {
             children: [
               Row(
                 children: const [
-                  KKBackButton(),
+                  CustomIconButton(),
                 ],
               ),
               Expanded(

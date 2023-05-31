@@ -26,7 +26,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
 
   @override
   void initState() {
-    print('WRAPPER');
     CreateEventService().newEvent = NewEvent();
     super.initState();
   }

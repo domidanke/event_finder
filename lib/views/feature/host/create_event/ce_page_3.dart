@@ -30,68 +30,75 @@ class _CePage3State extends State<CePage3> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Spacer(),
-        if (CreateEventService().newEvent.selectedImageFile == null)
-          KKButton(
-              onPressed: () async {
-                final XFile? image =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                if (image == null) return;
-                setState(() {
-                  CreateEventService().newEvent.selectedImageFile =
-                      File(image.path);
-                });
-              },
-              buttonText: 'Bild hochladen'),
-        if (CreateEventService().newEvent.selectedImageFile != null)
-          Column(
-            children: [
-              SizedBox(
-                  height: 300,
-                  child: Image.file(
-                      CreateEventService().newEvent.selectedImageFile!)),
-              const SizedBox(
-                height: 20,
-              ),
-              IconButton(
-                  onPressed: () {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: Column(
+        children: [
+          FutureBuilder(
+              future: _getPlaceMarkers,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                final placeMark = snapshot.data!.first;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(Icons.location_on),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('${placeMark.street}'),
+                        Text('${placeMark.postalCode} ${placeMark.locality}'),
+                      ],
+                    ),
+                    KKButton(
+                        onPressed: () {
+                          _showChangeLocation();
+                        },
+                        buttonText: 'Andere Location')
+                  ],
+                );
+              }),
+          const Divider(
+            height: 50,
+          ),
+          if (CreateEventService().newEvent.selectedImageFile == null)
+            SizedBox(
+              width: 150,
+              child: KKButton(
+                  onPressed: () async {
+                    final XFile? image = await ImagePicker()
+                        .pickImage(source: ImageSource.gallery);
+                    if (image == null) return;
                     setState(() {
-                      CreateEventService().newEvent.selectedImageFile = null;
+                      CreateEventService().newEvent.selectedImageFile =
+                          File(image.path);
                     });
                   },
-                  icon: const Icon(Icons.remove_circle))
-            ],
-          ),
-        const Spacer(),
-        FutureBuilder(
-            future: _getPlaceMarkers,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              }
-              final placeMark = snapshot.data!.first;
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Icon(Icons.location_on),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('${placeMark.street}'),
-                      Text('${placeMark.postalCode} ${placeMark.locality}'),
-                    ],
-                  ),
-                  KKButton(
-                      onPressed: () {
-                        _showChangeLocation();
-                      },
-                      buttonText: 'Andere Location')
-                ],
-              );
-            }),
-      ],
+                  buttonText: 'Bild hochladen'),
+            ),
+          if (CreateEventService().newEvent.selectedImageFile != null)
+            Column(
+              children: [
+                SizedBox(
+                    height: 300,
+                    child: Image.file(
+                        CreateEventService().newEvent.selectedImageFile!)),
+                const SizedBox(
+                  height: 20,
+                ),
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        CreateEventService().newEvent.selectedImageFile = null;
+                      });
+                    },
+                    icon: const Icon(Icons.remove_circle))
+              ],
+            ),
+        ],
+      ),
     );
   }
 

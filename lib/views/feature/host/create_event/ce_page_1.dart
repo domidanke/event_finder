@@ -61,7 +61,7 @@ class _CePage1State extends State<CePage1> {
             ],
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter a price';
+                return 'Bitte geben Sie einen Preis an';
               }
               CreateEventService().newEvent.ticketPrice = int.parse(value);
               return null;
@@ -89,7 +89,7 @@ class _CePage1State extends State<CePage1> {
               initialValue: CreateEventService().newEvent.date.toString(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter a date';
+                  return 'Bitte geben Sie ein Datum ein';
                 }
                 return null;
               },

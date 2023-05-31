@@ -4,8 +4,7 @@ import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/location_snippet.dart';
-import 'package:event_finder/widgets/kk_back_button.dart';
-import 'package:event_finder/widgets/kk_icon.dart';
+import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +30,7 @@ class _HostPageState extends State<HostPage> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: const [
-                  KKBackButton(),
+                  CustomIconButton(),
                 ],
               ),
             ),
@@ -162,7 +161,7 @@ class _HostPageState extends State<HostPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                KKIcon(
+                CustomIconButton(
                   color: Colors.blue,
                   icon: const Icon(Icons.facebook),
                   onPressed: () async {
@@ -171,7 +170,7 @@ class _HostPageState extends State<HostPage> {
                     await launchUrl(url);
                   },
                 ),
-                KKIcon(
+                CustomIconButton(
                   color: Colors.pinkAccent,
                   icon: const Icon(Icons.camera_alt_outlined),
                   onPressed: () async {

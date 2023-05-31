@@ -1,6 +1,6 @@
 import 'package:event_finder/services/firestore/event_ticket_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/widgets/kk_back_button.dart';
+import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -27,7 +27,7 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: const [
-                  KKBackButton(),
+                  CustomIconButton(),
                 ],
               ),
             ),

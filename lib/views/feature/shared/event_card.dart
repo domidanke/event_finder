@@ -5,6 +5,7 @@ import 'package:event_finder/services/location.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/theme/theme.dart';
+import 'package:event_finder/widgets/genre_card.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -41,7 +42,7 @@ class _EventCardState extends State<EventCard> {
         child: SizedBox(
           width: 350,
           child: Card(
-            color: primaryBackgroundColor.withOpacity(0.7),
+            color: primaryGrey.withOpacity(0.4),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -108,15 +109,7 @@ class _EventCardState extends State<EventCard> {
                                 child: Row(
                                   children: widget.event.genres
                                       .map(
-                                        (genre) => Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2, horizontal: 8),
-                                            child: Text(
-                                              genre,
-                                            ),
-                                          ),
-                                        ),
+                                        (genre) => GenreCard(text: genre),
                                       )
                                       .toList(),
                                 ),

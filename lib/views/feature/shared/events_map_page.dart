@@ -7,8 +7,7 @@ import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/event_card.dart';
-import 'package:event_finder/widgets/kk_back_button.dart';
-import 'package:event_finder/widgets/kk_icon.dart';
+import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -171,13 +170,13 @@ class EventsMapPageState extends State<EventsMapPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const KKBackButton(),
+                        const CustomIconButton(),
                         Text(
                           'Events in ${_radiusInKm.toInt()}km Radius: '
                           '$_numOfEventsInRadius',
                           style: const TextStyle(color: Colors.white),
                         ),
-                        KKIcon(
+                        CustomIconButton(
                             onPressed: () {
                               if (_lastSearchedRadiusInKm == _radiusInKm) {
                                 return;

@@ -9,7 +9,7 @@ import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../widgets/kk_back_button.dart';
+import '../../../widgets/custom_icon_button.dart';
 
 class CurrentEventsPage extends StatefulWidget {
   const CurrentEventsPage({super.key});
@@ -28,9 +28,10 @@ class _CurrentEventsPageState extends State<CurrentEventsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: primaryGreen,
         child: const Icon(
           Icons.add,
-          color: primaryWhite,
+          color: primaryBackgroundColor,
         ),
         onPressed: () {
           if (!StateService().isProfileComplete()) {
@@ -47,8 +48,12 @@ class _CurrentEventsPageState extends State<CurrentEventsPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                children: const [
-                  KKBackButton(),
+                children: [
+                  CustomIconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
             ),

@@ -13,28 +13,32 @@ class _CePage2State extends State<CePage2> {
   final focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextFormField(
-          onTapOutside: (e) {
-            focusNode.unfocus();
-          },
-          focusNode: focusNode,
-          maxLines: 15,
-          keyboardType: TextInputType.multiline,
-          decoration: const InputDecoration(
-            labelText: 'Beschreibung',
-            border: OutlineInputBorder(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: SingleChildScrollView(
+        child: SizedBox(
+          height: 250,
+          child: TextFormField(
+            onTapOutside: (e) {
+              focusNode.unfocus();
+            },
+            focusNode: focusNode,
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            decoration: const InputDecoration(
+              labelText: 'Beschreibung',
+              border: OutlineInputBorder(),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              CreateEventService().newEvent.details = value;
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter some text';
-            }
-            CreateEventService().newEvent.details = value;
-            return null;
-          },
         ),
-      ],
+      ),
     );
   }
 }

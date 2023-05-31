@@ -6,7 +6,7 @@ import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widgets/kk_back_button.dart';
+import '../../../widgets/custom_icon_button.dart';
 
 class HostProfilePage extends StatefulWidget {
   const HostProfilePage({Key? key}) : super(key: key);
@@ -34,8 +34,12 @@ class _HostProfilePageState extends State<HostProfilePage> {
           child: Column(
             children: [
               Row(
-                children: const [
-                  KKBackButton(),
+                children: [
+                  CustomIconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
               Expanded(

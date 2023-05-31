@@ -1,3 +1,4 @@
+import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class ProgressBar extends StatelessWidget {
@@ -36,7 +37,7 @@ class ProgressBar extends StatelessWidget {
               child: Container(
                 height: 8,
                 decoration: BoxDecoration(
-                  color: const Color(0xffc1ed8c),
+                  color: primaryGreen,
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),

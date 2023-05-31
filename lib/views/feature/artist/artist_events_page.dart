@@ -6,7 +6,7 @@ import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../widgets/kk_back_button.dart';
+import '../../../widgets/custom_icon_button.dart';
 
 class ArtistEventsPage extends StatefulWidget {
   const ArtistEventsPage({super.key});
@@ -34,7 +34,7 @@ class _ArtistEventsPageState extends State<ArtistEventsPage> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: const [
-                  KKBackButton(),
+                  CustomIconButton(),
                 ],
               ),
             ),

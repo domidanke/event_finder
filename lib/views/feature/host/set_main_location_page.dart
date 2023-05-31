@@ -5,7 +5,7 @@ import 'package:event_finder/widgets/kk_button_async.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
-import '../../../widgets/kk_back_button.dart';
+import '../../../widgets/custom_icon_button.dart';
 
 class SetMainLocationPage extends StatefulWidget {
   const SetMainLocationPage({Key? key}) : super(key: key);
@@ -27,7 +27,7 @@ class _SetMainLocationPageState extends State<SetMainLocationPage> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: const [
-                  KKBackButton(),
+                  CustomIconButton(),
                 ],
               ),
             ),
