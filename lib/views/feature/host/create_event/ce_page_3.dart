@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/search_address_in_map.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -54,7 +55,7 @@ class _CePage3State extends State<CePage3> {
                     ),
                     KKButton(
                         onPressed: () {
-                          _showChangeLocation();
+                          _showLocationBottomSheet();
                         },
                         buttonText: 'Andere Location')
                   ],
@@ -82,7 +83,7 @@ class _CePage3State extends State<CePage3> {
             Column(
               children: [
                 SizedBox(
-                    height: 300,
+                    height: MediaQuery.of(context).size.height * 0.35,
                     child: Image.file(
                         CreateEventService().newEvent.selectedImageFile!)),
                 const SizedBox(
@@ -94,7 +95,10 @@ class _CePage3State extends State<CePage3> {
                         CreateEventService().newEvent.selectedImageFile = null;
                       });
                     },
-                    icon: const Icon(Icons.remove_circle))
+                    icon: const Icon(
+                      Icons.remove_circle,
+                      color: primaryGreen,
+                    ))
               ],
             ),
         ],
@@ -102,32 +106,34 @@ class _CePage3State extends State<CePage3> {
     );
   }
 
-  void _showChangeLocation() {
+  void _showLocationBottomSheet() {
     GeoFirePoint? newCoordinates;
-    showDialog<String>(
+    showModalBottomSheet<String>(
       context: context,
-      builder: (BuildContext context) => Dialog(
-        child: Container(
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    topRight: Radius.circular(10.0))),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.all(8),
-                    height: 300,
-                    clipBehavior: Clip.hardEdge,
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12))),
-                    child: SearchAddressInMap(onAddressSelected: (coordinates) {
-                      newCoordinates = coordinates;
-                    }),
-                  ),
+      isScrollControlled: true,
+      builder: (BuildContext context) => Container(
+          height: MediaQuery.of(context).size.height * 0.75,
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  topRight: Radius.circular(10.0))),
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(8),
+                  height: 300,
+                  clipBehavior: Clip.hardEdge,
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                  child: SearchAddressInMap(onAddressSelected: (coordinates) {
+                    newCoordinates = coordinates;
+                  }),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
+              ),
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: KKButton(
                     onPressed: () {
                       if (newCoordinates == null) return;
@@ -142,10 +148,10 @@ class _CePage3State extends State<CePage3> {
                     },
                     buttonText: 'Anwenden',
                   ),
-                )
-              ],
-            )),
-      ),
+                ),
+              )
+            ],
+          )),
     );
   }
 }

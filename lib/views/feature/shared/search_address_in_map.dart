@@ -8,6 +8,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../widgets/custom_icon_button.dart';
+
 class SearchAddressInMap extends StatefulWidget {
   const SearchAddressInMap({Key? key, required this.onAddressSelected})
       : super(key: key);
@@ -46,20 +48,21 @@ class SearchAddressInMapState extends State<SearchAddressInMap> {
                     ),
                   )),
               Expanded(
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        if (_addressController.text.isEmpty) return;
-                        try {
-                          List<Location> locations = await locationFromAddress(
-                              _addressController.text);
-                          await _pinAddress(locations[0]);
-                        } on Exception catch (e) {
-                          debugPrint(e.toString());
-                          AlertService()
-                              .showAlert('Fehler', 'not_found', context);
-                        }
-                      },
-                      child: const Icon(Icons.search))),
+                  child: CustomIconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () async {
+                  if (_addressController.text.isEmpty) return;
+                  FocusScope.of(context).unfocus();
+                  try {
+                    List<Location> locations =
+                        await locationFromAddress(_addressController.text);
+                    await _pinAddress(locations[0]);
+                  } on Exception catch (e) {
+                    debugPrint(e.toString());
+                    AlertService().showAlert('Fehler', 'not_found', context);
+                  }
+                },
+              )),
             ],
           ),
         ),

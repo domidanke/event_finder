@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../../../../models/app_user.dart';
 import '../../../../services/create_event.service.dart';
 import '../../../../services/storage/storage.service.dart';
+import '../../../../theme/theme.dart';
 
 class CePage4 extends StatefulWidget {
   const CePage4({Key? key}) : super(key: key);
@@ -25,6 +26,9 @@ class _CePage4State extends State<CePage4> {
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Column(
         children: [
+          const SizedBox(
+            height: 4,
+          ),
           Row(
             children: [
               Expanded(
@@ -33,10 +37,14 @@ class _CePage4State extends State<CePage4> {
                     setState(() {});
                   },
                   controller: _artistSearchController,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
                       labelText: 'Suche',
-                      suffixIcon: Icon(Icons.search)),
+                      suffixIconColor: MaterialStateColor.resolveWith(
+                          (states) => states.contains(MaterialState.focused)
+                              ? primaryWhite
+                              : Colors.grey),
+                      suffixIcon: const Icon(Icons.search)),
                 ),
               ),
             ],
@@ -62,6 +70,7 @@ class _CePage4State extends State<CePage4> {
                           builder: (BuildContext context,
                               void Function(void Function()) setState) {
                             return Checkbox(
+                                checkColor: primaryBackgroundColor,
                                 value: CreateEventService()
                                     .newEvent
                                     .enlistedArtists

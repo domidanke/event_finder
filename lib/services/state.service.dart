@@ -125,6 +125,15 @@ class StateService extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isLoadingFollow = false;
+
+  bool get isLoadingFollow => _isLoadingFollow;
+
+  set isLoadingFollow(bool isLoadingFollow) {
+    _isLoadingFollow = isLoadingFollow;
+    notifyListeners();
+  }
+
   /// TODO: Move to separate User State service class
   void toggleSavedEvent(String eventUid) {
     if (currentUser!.savedEvents.contains(eventUid)) {

@@ -17,11 +17,6 @@ final primaryThemeData = ThemeData(
               RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           )))),
-  floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: primaryColor,
-      elevation: 0.1,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)))),
   primaryColor: primaryColor,
   listTileTheme: const ListTileThemeData(
     textColor: primaryWhite,
@@ -55,10 +50,10 @@ final primaryThemeData = ThemeData(
   ),
   inputDecorationTheme: const InputDecorationTheme(
     labelStyle: TextStyle(color: Colors.white),
-    focusedBorder: UnderlineInputBorder(
+    focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.white),
     ),
-    enabledBorder: UnderlineInputBorder(
+    enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.white, width: 0),
     ),
   ),

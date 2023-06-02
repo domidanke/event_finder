@@ -30,6 +30,9 @@ class _CePage1State extends State<CePage1> {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Column(
         children: [
+          const SizedBox(
+            height: 4,
+          ),
           TextFormField(
             decoration: const InputDecoration(
               labelText: 'Titel',
@@ -65,7 +68,7 @@ class _CePage1State extends State<CePage1> {
                   ],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Bitte geben Sie einen Preis an';
+                      return 'Ticket Preis fehlt';
                     }
                     CreateEventService().newEvent.ticketPrice =
                         int.parse(value);
@@ -73,11 +76,13 @@ class _CePage1State extends State<CePage1> {
                   },
                 ),
               ),
-              const Spacer(),
+              const SizedBox(
+                width: 50,
+              ),
               Expanded(
                 child: TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'Ticketanzahl',
+                    labelText: 'Ticket Anzahl',
                     border: OutlineInputBorder(),
                   ),
                   keyboardType:
@@ -87,7 +92,7 @@ class _CePage1State extends State<CePage1> {
                   ],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Bitte geben Sie eine Ticketanzahl an';
+                      return 'Ticket Anzahl fehlt';
                     }
                     CreateEventService().newEvent.maxTickets = int.parse(value);
                     return null;

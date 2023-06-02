@@ -22,6 +22,7 @@ class _ArtistPageState extends State<ArtistPage> {
   Widget build(BuildContext context) {
     final AppUser artist =
         Provider.of<StateService>(context).lastSelectedArtist!;
+    Provider.of<StateService>(context).isLoadingFollow;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -57,7 +58,6 @@ class _ArtistPageState extends State<ArtistPage> {
                             },
                           ),
                           Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(artist.displayName,
@@ -76,9 +76,47 @@ class _ArtistPageState extends State<ArtistPage> {
                                       );
                                     } else {
                                       final x = snapshot.data!.data()!;
-                                      return Text(
-                                        '${x.follower.length} Follower',
-                                        style: const TextStyle(fontSize: 14),
+                                      return Row(
+                                        children: [
+                                          Text(
+                                            '${x.follower.length} Follower',
+                                            style:
+                                                const TextStyle(fontSize: 14),
+                                          ),
+                                          if (StateService()
+                                              .currentUser!
+                                              .savedArtists
+                                              .contains(artist.uid))
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 8),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  _showUnfollowSheet();
+                                                },
+                                                child: Row(
+                                                  children: const [
+                                                    Icon(
+                                                      Icons
+                                                          .check_circle_outline,
+                                                      size: 18,
+                                                      color: primaryGreen,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    Text(
+                                                      'Following',
+                                                      style: TextStyle(
+                                                          color: primaryGreen,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                        ],
                                       );
                                     }
                                   }),
@@ -139,47 +177,41 @@ class _ArtistPageState extends State<ArtistPage> {
           const SizedBox(
             height: 20,
           ),
-          StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-            final currentUser = StateService().currentUser!;
-            return FloatingActionButton.extended(
-              onPressed: () async {
-                if (!currentUser.savedArtists.contains(artist.uid)) {
-                  await UserDocService().toggleFollowArtist(artist);
-                  setState(() {
-                    StateService().toggleSavedArtist(artist.uid);
-                  });
-                } else {
-                  _showUnfollowSheet();
-                }
+          if (!StateService().currentUser!.savedArtists.contains(artist.uid))
+            GestureDetector(
+              onTap: () async {
+                StateService().isLoadingFollow = true;
+                await UserDocService().toggleFollowArtist(artist);
+                StateService().isLoadingFollow = false;
+                setState(() {
+                  StateService().toggleSavedArtist(artist.uid);
+                });
               },
-              backgroundColor: currentUser.savedArtists.contains(artist.uid)
-                  ? Colors.grey
-                  : primaryGreen,
-              label: currentUser.savedArtists.contains(artist.uid)
-                  ? Row(
-                      children: const [
-                        Icon(
-                          Icons.check_circle_outline,
-                          color: primaryWhite,
-                        ),
-                        Text(
-                          'Following',
-                          style: TextStyle(color: primaryWhite),
-                        ),
-                      ],
-                    )
-                  : Row(
-                      children: const [
-                        Icon(Icons.add_circle_outline),
-                        Text(
-                          'Follow',
-                          style: TextStyle(color: primaryBackgroundColor),
-                        ),
-                      ],
-                    ),
-            );
-          }),
+              child: SizedBox(
+                width: 100,
+                height: 50,
+                child: Card(
+                  color: Colors.transparent,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    side: const BorderSide(color: primaryGreen, width: 1),
+                  ),
+                  child: Center(
+                      child: StateService().isLoadingFollow
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: primaryGreen,
+                              ))
+                          : const Text(
+                              'Follow',
+                              style: TextStyle(color: primaryGreen),
+                            )),
+                ),
+              ),
+            ),
           const SizedBox(
             height: 20,
           ),
@@ -188,7 +220,7 @@ class _ArtistPageState extends State<ArtistPage> {
               margin: const EdgeInsets.symmetric(horizontal: 30),
               child: KKButton(
                   onPressed: () {
-                    print('');
+                    debugPrint('');
                   },
                   buttonText: 'Anfrage schicken'),
             )

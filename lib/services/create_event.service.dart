@@ -13,6 +13,15 @@ class CreateEventService extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   int currentStep = 1;
 
+  bool _isCreating = false;
+
+  bool get isCreating => _isCreating;
+
+  set isCreating(bool isCreating) {
+    _isCreating = isCreating;
+    notifyListeners();
+  }
+
   bool validateStep() {
     if (formKey.currentState!.validate()) {
       if (currentStep == 1) {
