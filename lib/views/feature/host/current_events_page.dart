@@ -4,7 +4,6 @@ import 'package:event_finder/services/alert.service.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
@@ -27,31 +26,28 @@ class _CurrentEventsPageState extends State<CurrentEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: primaryGreen,
-        child: const Icon(
-          Icons.add,
-          color: primaryBackgroundColor,
-        ),
-        onPressed: () {
-          if (!StateService().isProfileComplete()) {
-            AlertService().showAlert(
-                'Noch nicht moeglich', 'profile_incomplete', context);
-          } else {
-            Navigator.pushNamed(context, 'create_event_page');
-          }
-        },
-      ),
       body: SafeArea(
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomIconButton(
                     onPressed: () {
                       Navigator.pop(context);
+                    },
+                  ),
+                  CustomIconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      if (!StateService().isProfileComplete()) {
+                        AlertService().showAlert('Noch nicht moeglich',
+                            'profile_incomplete', context);
+                      } else {
+                        Navigator.pushNamed(context, 'create_event_page');
+                      }
                     },
                   ),
                 ],
