@@ -30,11 +30,19 @@ class _GenrePickerState extends State<GenrePicker> {
                           },
                           child: Card(
                             color: StateService().selectedGenres.contains(genre)
-                                ? primaryColor
+                                ? primaryGreen
                                 : primaryColor.withOpacity(0.2),
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
-                              child: Text(genre),
+                              child: Text(
+                                genre,
+                                style: TextStyle(
+                                    color: StateService()
+                                            .selectedGenres
+                                            .contains(genre)
+                                        ? primaryBackgroundColor
+                                        : primaryWhite),
+                              ),
                             ),
                           ),
                         );

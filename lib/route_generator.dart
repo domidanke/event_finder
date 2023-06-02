@@ -16,7 +16,7 @@ import 'package:event_finder/views/feature/base/tickets_page.dart';
 import 'package:event_finder/views/feature/host/create_event/create_event_page.dart';
 import 'package:event_finder/views/feature/host/current_events_page.dart';
 import 'package:event_finder/views/feature/host/edit_event_artists_page.dart';
-import 'package:event_finder/views/feature/host/edit_event_form.dart';
+import 'package:event_finder/views/feature/host/edit_event_details.dart';
 import 'package:event_finder/views/feature/host/host_edit_profile_page.dart';
 import 'package:event_finder/views/feature/host/host_events_page.dart';
 import 'package:event_finder/views/feature/host/host_home_page.dart';
@@ -72,7 +72,7 @@ class RouteGenerator {
             settings: settings, builder: (_) => const CreateEventPage());
       case 'edit_event':
         return MaterialPageRoute(
-            settings: settings, builder: (_) => const EditEventForm());
+            settings: settings, builder: (_) => const EditEventDetails());
       case 'edit_event_artists':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const EditEventArtistsPage());

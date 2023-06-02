@@ -24,9 +24,16 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
           child: Column(
             children: [
               Row(
-                children: const [
-                  CustomIconButton(),
+                children: [
+                  CustomIconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
+              ),
+              const SizedBox(
+                height: 16,
               ),
               Expanded(
                 child: ListView(

@@ -96,8 +96,8 @@ class StateService extends ChangeNotifier {
     notifyListeners();
   }
 
-  set lastSelectedEventDetails(String newDetails) {
-    _lastSelectedEvent!.details = newDetails;
+  set setLastSelectedEventDetails(String details) {
+    _lastSelectedEvent!.details = details;
     notifyListeners();
   }
 

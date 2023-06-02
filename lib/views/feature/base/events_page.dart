@@ -58,7 +58,7 @@ class _EventsPageState extends State<EventsPage> {
                           });
                         },
                         child: Chip(
-                          backgroundColor: _today ? Colors.teal : null,
+                          backgroundColor: _today ? primaryGreen : null,
                           label: const Text('Heute'),
                         ),
                       ),

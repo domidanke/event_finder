@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 class CustomIconButton extends StatelessWidget {
   const CustomIconButton({
     Key? key,
-    this.icon = const Icon(Icons.arrow_back),
+    this.icon = const Icon(
+      Icons.arrow_back,
+      color: primaryWhite,
+    ),
     this.color = primaryWhite,
     this.onPressed,
   }) : super(key: key);
@@ -23,13 +26,15 @@ class CustomIconButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.0),
             side: BorderSide(color: color, width: 1),
           ),
-          child: IconButton(
-            icon: icon,
-            color: color,
-            onPressed: onPressed,
-            splashRadius: 31,
-            splashColor: Colors.white.withOpacity(0.5),
-          ),
+          child: onPressed == null
+              ? icon
+              : IconButton(
+                  icon: icon,
+                  color: color,
+                  onPressed: onPressed,
+                  splashRadius: 31,
+                  splashColor: Colors.white.withOpacity(0.5),
+                ),
         ),
       );
 }

@@ -155,15 +155,28 @@ class _ArtistPageState extends State<ArtistPage> {
               },
               backgroundColor: currentUser.savedArtists.contains(artist.uid)
                   ? Colors.grey
-                  : null,
-              elevation: 0,
+                  : primaryGreen,
               label: currentUser.savedArtists.contains(artist.uid)
-                  ? const Text(
-                      'Following',
+                  ? Row(
+                      children: const [
+                        Icon(
+                          Icons.check_circle_outline,
+                          color: primaryWhite,
+                        ),
+                        Text(
+                          'Following',
+                          style: TextStyle(color: primaryWhite),
+                        ),
+                      ],
                     )
-                  : const Text(
-                      'Follow',
-                      style: TextStyle(color: primaryWhite),
+                  : Row(
+                      children: const [
+                        Icon(Icons.add_circle_outline),
+                        Text(
+                          'Follow',
+                          style: TextStyle(color: primaryBackgroundColor),
+                        ),
+                      ],
                     ),
             );
           }),

@@ -4,6 +4,7 @@ import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -12,6 +13,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/app_user.dart';
+import '../../../services/firestore/event_ticket_doc.service.dart';
 import 'location_snippet.dart';
 
 class EventDetailsPage extends StatefulWidget {
@@ -68,13 +70,19 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                                       fontSize: 24,
                                     )),
                                 Card(
-                                  //color: primaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    side: const BorderSide(
+                                        color: primaryWhite, width: 1),
+                                  ),
                                   child: SizedBox(
                                       width: 50,
                                       height: 30,
                                       child: Center(
                                         child: Text(
                                           '${event.ticketPrice} €',
+                                          style: const TextStyle(
+                                              color: primaryWhite),
                                         ),
                                       )),
                                 ),
@@ -115,6 +123,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         Container(
                           margin: const EdgeInsets.only(right: 12),
                           child: IconButton(
+                              color: primaryGreen,
                               onPressed: () async {
                                 Navigator.pushNamed(context, 'scan_qr_code');
                               },
@@ -129,7 +138,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         child: Row(
                           children: [
                             const CustomIconButton(
-                                icon: Icon(Icons.music_note)),
+                              icon: Icon(Icons.music_note),
+                            ),
                             const SizedBox(
                               width: 20,
                             ),
@@ -169,24 +179,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         ),
                       ],
                     ),
-
-                  /// Maybe not the best solution, but shows live number of bought tickets
-                  // Center(
-                  //   child: StreamBuilder(
-                  //       stream: EventTicketDocService()
-                  //           .eventTicketsCollection
-                  //           .doc(event.uid)
-                  //           .snapshots(),
-                  //       builder: (context, snapshot) {
-                  //         if (!snapshot.hasData) {
-                  //           return const Text('Verkaufte Tickets: -');
-                  //         } else {
-                  //           final x = snapshot.data!.data()!;
-                  //           return Text(
-                  //               'Verkaufte Tickets: ${x.allTickets.length}');
-                  //         }
-                  //       }),
-                  // ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -213,6 +205,23 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   const SizedBox(
                     height: 20,
                   ),
+                  if (event.creatorId == currentUser.uid)
+                    Center(
+                      child: StreamBuilder(
+                          stream: EventTicketDocService()
+                              .eventTicketsCollection
+                              .doc(event.uid)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const Text('Verkaufte Tickets: -');
+                            } else {
+                              final x = snapshot.data!.data()!;
+                              return Text(
+                                  'Verkaufte Tickets: ${x.allTickets.length} / ${event.maxTickets}');
+                            }
+                          }),
+                    ),
                 ],
               ),
             ),

@@ -13,6 +13,7 @@ class Event {
       required this.date,
       required this.genres,
       required this.ticketPrice,
+      required this.maxTickets,
       required this.creatorId,
       required this.creatorName,
       this.artists = const [],
@@ -29,6 +30,8 @@ class Event {
               ? List.from(json['genres']! as List<dynamic>)
               : [],
           ticketPrice: json['ticketPrice']! as int,
+          maxTickets:
+              json['maxTickets'] != null ? json['maxTickets']! as int : 0,
           creatorId: json['creatorId']! as String,
           creatorName: json['creatorName']! as String,
           artists: json['artists'] != null
@@ -44,6 +47,7 @@ class Event {
   late String details;
   final List<String> genres;
   final int ticketPrice;
+  final int maxTickets;
   final DateTime date;
   final String creatorId;
   final String creatorName;
@@ -61,6 +65,7 @@ class Event {
       'artists': artists,
       'genres': genres,
       'ticketPrice': ticketPrice,
+      'maxTickets': maxTickets,
       'location': location.toJson(),
     };
   }
@@ -73,6 +78,7 @@ class NewEvent {
   String details = '';
   List<String> genres = [];
   int ticketPrice = 0;
+  int maxTickets = 0;
   DateTime date = DateTime.now();
   File? selectedImageFile;
   List<String> enlistedArtists = [];
@@ -87,6 +93,7 @@ class NewEvent {
         creatorId: StateService().currentUser!.uid,
         creatorName: StateService().currentUser!.displayName,
         ticketPrice: ticketPrice,
+        maxTickets: maxTickets,
         artists: enlistedArtists,
         location: locationCoordinates != null
             ? LocationData.fromJson(locationCoordinates!.data)

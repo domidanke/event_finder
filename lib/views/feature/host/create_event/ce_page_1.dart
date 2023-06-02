@@ -50,22 +50,51 @@ class _CePage1State extends State<CePage1> {
           const SizedBox(
             height: 20,
           ),
-          TextFormField(
-            decoration: const InputDecoration(
-              labelText: 'Ticket Preis',
-              border: OutlineInputBorder(),
-            ),
-            keyboardType: const TextInputType.numberWithOptions(signed: true),
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Ticket Preis',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(signed: true),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Bitte geben Sie einen Preis an';
+                    }
+                    CreateEventService().newEvent.ticketPrice =
+                        int.parse(value);
+                    return null;
+                  },
+                ),
+              ),
+              const Spacer(),
+              Expanded(
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Ticketanzahl',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(signed: true),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Bitte geben Sie eine Ticketanzahl an';
+                    }
+                    CreateEventService().newEvent.maxTickets = int.parse(value);
+                    return null;
+                  },
+                ),
+              ),
             ],
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Bitte geben Sie einen Preis an';
-              }
-              CreateEventService().newEvent.ticketPrice = int.parse(value);
-              return null;
-            },
           ),
           const SizedBox(
             height: 20,

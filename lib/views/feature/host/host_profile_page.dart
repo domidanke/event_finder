@@ -28,111 +28,77 @@ class _HostProfilePageState extends State<HostProfilePage> {
   Widget build(BuildContext context) {
     final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Column(
-            children: [
-              Row(
+      body: Column(
+        children: [
+          FutureBuilder(
+              future: _imageUrl,
+              builder: (context, snapshot) {
+                currentUser.imageUrl = snapshot.data;
+                if (snapshot.hasData) {
+                  return Container(
+                      height: 400,
+                      width: 1000,
+                      decoration: BoxDecoration(
+                        image: currentUser.imageUrl != null
+                            ? DecorationImage(
+                                image: NetworkImage(
+                                  currentUser.imageUrl!,
+                                ),
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topCenter,
+                              )
+                            : null,
+                      ),
+                      child: _getImageContent());
+                } else {
+                  return SafeArea(
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 32),
+                      child: const SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: CircularProgressIndicator()),
+                    ),
+                  );
+                }
+              }),
+          Expanded(
+              flex: 8,
+              child: ListView(
                 children: [
-                  CustomIconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
+                  Opacity(
+                    opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
+                    child: ListTile(
+                      leading: const Icon(Icons.people),
+                      title: const Text('Meine Künstler'),
+                      onTap: () {
+                        if (currentUser.savedArtists.isEmpty) {
+                          return;
+                        }
+                        Navigator.pushNamed(context, 'saved_artists');
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.edit),
+                    title: const Text('Profil bearbeiten'),
+                    onTap: () {
+                      Navigator.pushNamed(context, 'host_edit_profile');
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.question_mark),
+                    title: const Text('Support'),
+                    onTap: () {
+                      Navigator.pushNamed(context, 'support_page');
                     },
                   ),
                 ],
-              ),
-              Expanded(
-                flex: 7,
-                child: Column(
-                  children: [
-                    currentUser.imageUrl != null
-                        ? CircleAvatar(
-                            radius: 100,
-                            backgroundImage:
-                                NetworkImage(currentUser.imageUrl!))
-                        : FutureBuilder(
-                            future: _imageUrl,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) {
-                                return CircleAvatar(
-                                  radius: 100,
-                                  backgroundImage: Image.asset(
-                                          'assets/images/profile_placeholder.png')
-                                      .image,
-                                );
-                              }
-                              currentUser.imageUrl = snapshot.data;
-                              if (snapshot.hasData) {
-                                return CircleAvatar(
-                                  radius: 100,
-                                  backgroundImage: snapshot.connectionState ==
-                                          ConnectionState.waiting
-                                      ? null
-                                      : currentUser.imageUrl != null
-                                          ? NetworkImage(currentUser.imageUrl!)
-                                          : Image.asset(
-                                                  'assets/images/profile_placeholder.png')
-                                              .image,
-                                  child: snapshot.connectionState ==
-                                          ConnectionState.waiting
-                                      ? const CircularProgressIndicator()
-                                      : null,
-                                );
-                              } else {
-                                return const SizedBox(
-                                    height: 100,
-                                    width: 100,
-                                    child: CircularProgressIndicator());
-                              }
-                            }),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Center(
-                      child: Text(currentUser.displayName),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const Divider(),
-                  ],
-                ),
-              ),
-              Expanded(
-                  flex: 8,
-                  child: ListView(
-                    children: [
-                      Opacity(
-                        opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
-                        child: ListTile(
-                          leading: const Icon(Icons.people),
-                          title: const Text('Meine Künstler'),
-                          onTap: () {
-                            if (currentUser.savedArtists.isEmpty) {
-                              return;
-                            }
-                            Navigator.pushNamed(context, 'saved_artists');
-                          },
-                        ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.edit),
-                        title: const Text('Profil bearbeiten'),
-                        onTap: () {
-                          Navigator.pushNamed(context, 'host_edit_profile');
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.question_mark),
-                        title: const Text('Support'),
-                        onTap: () {
-                          Navigator.pushNamed(context, 'support_page');
-                        },
-                      ),
-                    ],
-                  )),
-              KKButton(
+              )),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SafeArea(
+              child: KKButton(
                   onPressed: () async {
                     await AuthService().signOut().then((value) => {
                           StateService().resetCurrentUserSilent(),
@@ -141,8 +107,43 @@ class _HostProfilePageState extends State<HostProfilePage> {
                         });
                   },
                   buttonText: 'Abmelden'),
-            ],
+            ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _getImageContent() {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomIconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(StateService().currentUser!.displayName,
+                        style: const TextStyle(
+                          fontSize: 32,
+                        )),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

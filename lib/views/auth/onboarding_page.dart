@@ -1,3 +1,4 @@
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 
@@ -49,7 +50,10 @@ class _OnboardingPageState extends State<OnboardingPage>
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: LinearProgressIndicator(
-                        minHeight: 8, value: _controller.value),
+                        color: primaryGreen,
+                        backgroundColor: primaryColorTransparent,
+                        minHeight: 8,
+                        value: _controller.value),
                   );
                 },
               ),

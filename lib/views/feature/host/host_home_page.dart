@@ -20,55 +20,37 @@ class _HostHomePageState extends State<HostHomePage> {
             SliverPadding(
               padding: const EdgeInsets.all(20),
               sliver: SliverGrid.count(
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 5,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
                 crossAxisCount: 2,
+                childAspectRatio: 1.25,
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, 'current_events');
                     },
                     child: Card(
-                        color: primaryColorTransparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          side: const BorderSide(color: primaryWhite, width: 1),
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.event),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
+                          children: [
+                            const Text(
                               'Aktuelle Events',
                               style: TextStyle(fontSize: 18),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
-                            Icon(Icons.arrow_forward_ios)
-                          ],
-                        )),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, 'host_profile');
-                    },
-                    child: Card(
-                        color: primaryColorTransparent,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.person),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'Mein Profil',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Icon(Icons.arrow_forward_ios)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: const [
+                                Icon(Icons.event),
+                                Icon(Icons.arrow_forward_ios),
+                              ],
+                            )
                           ],
                         )),
                   ),
@@ -77,22 +59,27 @@ class _HostHomePageState extends State<HostHomePage> {
                       Navigator.pushNamed(context, 'artist_search');
                     },
                     child: Card(
-                        color: primaryColorTransparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          side: const BorderSide(color: primaryWhite, width: 1),
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.people),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
+                          children: [
+                            const Text(
                               'Künstlersuche',
                               style: TextStyle(fontSize: 18),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
-                            Icon(Icons.arrow_forward_ios)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: const [
+                                Icon(Icons.people),
+                                Icon(Icons.arrow_forward_ios),
+                              ],
+                            )
                           ],
                         )),
                   ),
@@ -101,22 +88,56 @@ class _HostHomePageState extends State<HostHomePage> {
                       Navigator.pushNamed(context, 'past_events');
                     },
                     child: Card(
-                        color: primaryColorTransparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          side: const BorderSide(color: primaryWhite, width: 1),
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.event),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
+                          children: [
+                            const Text(
                               'Alte Events',
                               style: TextStyle(fontSize: 18),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
-                            Icon(Icons.arrow_forward_ios)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: const [
+                                Icon(Icons.event),
+                                Icon(Icons.arrow_forward_ios),
+                              ],
+                            )
+                          ],
+                        )),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'host_profile');
+                    },
+                    child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          side: const BorderSide(color: primaryWhite, width: 1),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Mein Profil',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: const [
+                                Icon(Icons.person),
+                                Icon(Icons.arrow_forward_ios),
+                              ],
+                            )
                           ],
                         )),
                   ),

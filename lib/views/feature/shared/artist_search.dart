@@ -9,6 +9,8 @@ import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../../theme/theme.dart';
+
 class ArtistSearch extends StatefulWidget {
   const ArtistSearch({super.key});
 
@@ -52,7 +54,7 @@ class _ArtistSearchState extends State<ArtistSearch> {
                           labelText: 'Suche',
                           suffixIcon: Icon(
                             Icons.search,
-                            color: Colors.teal,
+                            color: primaryGreen,
                           )),
                     ),
                   ),

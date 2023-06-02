@@ -239,7 +239,7 @@ class EventsMapPageState extends State<EventsMapPage> {
     } else {
       return CupertinoSlider(
         key: const Key('slider'),
-        activeColor: Colors.teal,
+        activeColor: primaryGreen,
         value: _radiusInKm,
         min: 1,
         max: 50,

@@ -67,7 +67,10 @@ class _CurrentEventsPageState extends State<CurrentEventsPage> {
                 query: _getQuery(),
                 itemBuilder: (context, snapshot) {
                   Event event = snapshot.data();
-                  return EventCard(event: event);
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: EventCard(event: event),
+                  );
                 },
               ),
             ),

@@ -81,7 +81,7 @@ List<OnboardingPageModel> onboardingPageModels = [
     imageUrl: 'page5',
   ),
   OnboardingPageModel(
-    title: 'Event Finder',
+    title: 'Musaic',
     description: 'dein Partybegleiter',
     imageUrl: 'page6',
   ),

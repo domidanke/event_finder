@@ -72,7 +72,7 @@ class _EventCardState extends State<EventCard> {
                       );
                     }),
                 SizedBox(
-                    height: 350,
+                    height: 306,
                     child: Padding(
                       padding: const EdgeInsets.all(6),
                       child: Column(
@@ -83,6 +83,11 @@ class _EventCardState extends State<EventCard> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  side: const BorderSide(
+                                      color: primaryWhite, width: 1),
+                                ),
                                 child: SizedBox(
                                   width: 50,
                                   height: 50,
@@ -114,20 +119,26 @@ class _EventCardState extends State<EventCard> {
                                       .toList(),
                                 ),
                               ),
-                              Text(
-                                widget.event.title,
-                                style: const TextStyle(fontSize: 24),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4),
+                                child: Text(
+                                  widget.event.title,
+                                  style: const TextStyle(fontSize: 24),
+                                ),
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '${widget.event.date.toString().substring(11, 16)} Uhr',
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  _getDistanceWidget()
-                                ],
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '${widget.event.date.toString().substring(11, 16)} Uhr',
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                    _getDistanceWidget()
+                                  ],
+                                ),
                               )
                             ],
                           )

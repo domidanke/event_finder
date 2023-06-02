@@ -31,7 +31,7 @@ class _CePage2State extends State<CePage2> {
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter some text';
+                return 'Bitte geben Sie eine Beschreibung an';
               }
               CreateEventService().newEvent.details = value;
               return null;

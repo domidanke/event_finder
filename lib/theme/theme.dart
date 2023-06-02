@@ -28,11 +28,11 @@ final primaryThemeData = ThemeData(
     iconColor: primaryWhite,
   ),
   badgeTheme: const BadgeThemeData(
-      textColor: primaryWhite, backgroundColor: Colors.teal),
+      textColor: primaryBackgroundColor, backgroundColor: primaryGreen),
   sliderTheme: const SliderThemeData(
-      activeTrackColor: Colors.teal,
+      activeTrackColor: primaryGreen,
       inactiveTrackColor: primaryWhite,
-      thumbColor: Colors.teal,
+      thumbColor: primaryGreen,
       activeTickMarkColor: Colors.transparent,
       inactiveTickMarkColor: Colors.transparent),
   progressIndicatorTheme: ProgressIndicatorThemeData(
@@ -51,7 +51,7 @@ final primaryThemeData = ThemeData(
   dividerColor: primaryWhite,
   checkboxTheme: CheckboxThemeData(
     checkColor: MaterialStateProperty.all(primaryWhite),
-    fillColor: MaterialStateProperty.all(Colors.teal),
+    fillColor: MaterialStateProperty.all(primaryGreen),
   ),
   inputDecorationTheme: const InputDecorationTheme(
     labelStyle: TextStyle(color: Colors.white),
@@ -69,8 +69,8 @@ final primaryThemeData = ThemeData(
   dialogBackgroundColor: primaryBackgroundColor,
   textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
   textButtonTheme: TextButtonThemeData(
-      style:
-          ButtonStyle(foregroundColor: MaterialStateProperty.all(Colors.teal))),
+      style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(primaryGreen))),
 );
 
 const primaryGradient = LinearGradient(
