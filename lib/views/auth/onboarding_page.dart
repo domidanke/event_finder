@@ -90,6 +90,7 @@ class _OnboardingPageState extends State<OnboardingPage>
                       'assets/images/onboarding/${pageModel.imageUrl}.png',
                       height: 400,
                       width: 400,
+                      color: pageModel.title == 'Musaic' ? primaryWhite : null,
                     ),
                   ),
                 ),
@@ -132,7 +133,7 @@ class _OnboardingPageState extends State<OnboardingPage>
         children: [
           const GoogleSignInButton(),
           const SizedBox(
-            height: 10,
+            height: 16,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
