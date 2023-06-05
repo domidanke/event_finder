@@ -3,7 +3,6 @@ import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/consts.dart';
-import '../../widgets/google_sign_in_button.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -131,10 +130,6 @@ class _OnboardingPageState extends State<OnboardingPage>
     if (_currentPage + 1 == onboardingPageModels.length) {
       return Column(
         children: [
-          const GoogleSignInButton(),
-          const SizedBox(
-            height: 16,
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

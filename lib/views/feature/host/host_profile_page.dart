@@ -2,7 +2,6 @@ import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
-import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -88,22 +87,19 @@ class _HostProfilePageState extends State<HostProfilePage> {
                       Navigator.pushNamed(context, 'support_page');
                     },
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.logout),
+                    title: const Text('Logout'),
+                    onTap: () async {
+                      await AuthService().signOut().then((value) => {
+                            StateService().resetCurrentUserSilent(),
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/', (Route<dynamic> route) => false),
+                          });
+                    },
+                  ),
                 ],
               )),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SafeArea(
-              child: KKButton(
-                  onPressed: () async {
-                    await AuthService().signOut().then((value) => {
-                          StateService().resetCurrentUserSilent(),
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/', (Route<dynamic> route) => false),
-                        });
-                  },
-                  buttonText: 'Abmelden'),
-            ),
-          ),
         ],
       ),
     );

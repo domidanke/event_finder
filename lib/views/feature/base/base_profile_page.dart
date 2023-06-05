@@ -1,7 +1,6 @@
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/widgets/kk_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -105,20 +104,19 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                       Navigator.pushNamed(context, 'support_page');
                     },
                   ),
-                ],
-              )),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: KKButton(
-                    onPressed: () async {
+                  ListTile(
+                    leading: const Icon(Icons.logout),
+                    title: const Text('Logout'),
+                    onTap: () async {
                       await AuthService().signOut().then((value) => {
                             StateService().resetCurrentUserSilent(),
                             Navigator.pushNamedAndRemoveUntil(
                                 context, '/', (Route<dynamic> route) => false),
                           });
                     },
-                    buttonText: 'Abmelden'),
-              ),
+                  ),
+                ],
+              )),
             ],
           ),
         ),

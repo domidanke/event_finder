@@ -10,15 +10,16 @@ class GuestHomePage extends StatefulWidget {
 }
 
 class _GuestHomePageState extends State<GuestHomePage> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 2;
   static const List<Widget> _widgetOptions = <Widget>[
+    Placeholder(),
     Placeholder(),
     EventsPage(),
     GuestProfilePage()
   ];
 
   void _onItemTapped(int index) {
-    if (index == 0) return;
+    if (index == 0 || index == 1) return;
     setState(() {
       _selectedIndex = index;
     });
@@ -40,6 +41,10 @@ class _GuestHomePageState extends State<GuestHomePage> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Opacity(opacity: 0.2, child: Icon(Icons.map)),
+              label: 'Karte',
+            ),
             BottomNavigationBarItem(
               icon: Opacity(opacity: 0.2, child: Icon(Icons.search)),
               label: 'Suche',

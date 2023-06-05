@@ -48,10 +48,6 @@ class _GenreSearchResultPageState extends State<GenreSearchResultPage> {
                     StateService().lastSelectedGenre!,
                     style: const TextStyle(fontSize: 32, color: primaryGreen),
                   ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  const Divider()
                 ],
               ),
               const SizedBox(
@@ -73,6 +69,7 @@ class _GenreSearchResultPageState extends State<GenreSearchResultPage> {
                         const SizedBox(
                           height: 8,
                         ),
+                        const Divider(),
                         SizedBox(
                           height: 150,
                           child: FirestoreListView<AppUser>(
@@ -108,6 +105,10 @@ class _GenreSearchResultPageState extends State<GenreSearchResultPage> {
                             style: TextStyle(fontSize: 20),
                           ),
                         ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        const Divider(),
                         const SizedBox(
                           height: 8,
                         ),

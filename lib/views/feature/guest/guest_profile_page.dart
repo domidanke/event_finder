@@ -21,17 +21,9 @@ class _GuestProfilePageState extends State<GuestProfilePage> {
           child: Column(
             children: [
               Expanded(
-                child: ListView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      radius: 70,
-                      backgroundImage:
-                          Image.asset('assets/images/profile_placeholder.png')
-                              .image,
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
                     KKButton(
                         onPressed: () {
                           Navigator.pushNamed(context, 'activate_account');
@@ -80,18 +72,20 @@ class _GuestProfilePageState extends State<GuestProfilePage> {
                         onTap: () {},
                       ),
                     ),
+                    ListTile(
+                      leading: const Icon(Icons.logout),
+                      title: const Text('Logout'),
+                      onTap: () async {
+                        await AuthService().signOut().then((value) => {
+                              StateService().resetCurrentUserSilent(),
+                              Navigator.pushNamedAndRemoveUntil(context, '/',
+                                  (Route<dynamic> route) => false),
+                            });
+                      },
+                    ),
                   ],
                 ),
               ),
-              KKButton(
-                  onPressed: () async {
-                    await AuthService().signOut().then((value) => {
-                          StateService().resetCurrentUserSilent(),
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/', (Route<dynamic> route) => false),
-                        });
-                  },
-                  buttonText: 'Abmelden'),
             ],
           ),
         ),

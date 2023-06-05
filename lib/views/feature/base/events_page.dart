@@ -183,24 +183,32 @@ class _EventsPageState extends State<EventsPage> {
                               const Spacer(),
                               StatefulBuilder(builder:
                                   (BuildContext context, StateSetter setState) {
-                                return IconButton(
-                                    onPressed: () async {
-                                      await UserDocService()
-                                          .saveEvent(event.uid);
-                                      setState(() {
-                                        StateService()
-                                            .toggleSavedEvent(event.uid);
-                                      });
-                                    },
-                                    icon: StateService()
-                                            .currentUser!
-                                            .savedEvents
-                                            .contains(event.uid)
-                                        ? const Icon(
-                                            Icons.bookmark,
-                                            color: primaryGreen,
-                                          )
-                                        : const Icon(Icons.bookmark_border));
+                                return Opacity(
+                                  opacity: StateService().currentUser!.type ==
+                                          UserType.guest
+                                      ? 0.2
+                                      : 1,
+                                  child: IconButton(
+                                      onPressed: () async {
+                                        if (StateService().currentUser!.type ==
+                                            UserType.guest) return;
+                                        await UserDocService()
+                                            .saveEvent(event.uid);
+                                        setState(() {
+                                          StateService()
+                                              .toggleSavedEvent(event.uid);
+                                        });
+                                      },
+                                      icon: StateService()
+                                              .currentUser!
+                                              .savedEvents
+                                              .contains(event.uid)
+                                          ? const Icon(
+                                              Icons.bookmark,
+                                              color: primaryGreen,
+                                            )
+                                          : const Icon(Icons.bookmark_border)),
+                                );
                               }),
                             ],
                           ),
