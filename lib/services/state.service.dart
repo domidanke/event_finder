@@ -134,6 +134,15 @@ class StateService extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isUploadingImage = false;
+
+  bool get isUploadingImage => _isUploadingImage;
+
+  set isUploadingImage(bool isUploadingImage) {
+    _isUploadingImage = isUploadingImage;
+    notifyListeners();
+  }
+
   /// TODO: Move to separate User State service class
   void toggleSavedEvent(String eventUid) {
     if (currentUser!.savedEvents.contains(eventUid)) {

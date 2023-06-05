@@ -75,7 +75,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       Container(
                         margin: const EdgeInsets.only(left: 12.0),
                         child: const Text(
-                          'Neue Veranstaltung',
+                          'Neues Event',
                           style: TextStyle(fontSize: 22),
                         ),
                       ),
@@ -127,6 +127,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       ),
                       KKButton(
                         onPressed: () {
+                          if (isCreating) return;
                           if (CreateEventService().validateStep()) {
                             if (currentStep == 4) {
                               _createEvent();

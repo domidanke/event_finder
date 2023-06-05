@@ -69,28 +69,34 @@ class _CePage4State extends State<CePage4> {
                         child: StatefulBuilder(
                           builder: (BuildContext context,
                               void Function(void Function()) setState) {
-                            return Checkbox(
-                                checkColor: primaryBackgroundColor,
-                                value: CreateEventService()
-                                    .newEvent
-                                    .enlistedArtists
-                                    .contains(artist.uid),
-                                onChanged: (v) {
-                                  setState(() {
-                                    CreateEventService()
-                                            .newEvent
-                                            .enlistedArtists
-                                            .contains(artist.uid)
-                                        ? CreateEventService()
-                                            .newEvent
-                                            .enlistedArtists
-                                            .remove(artist.uid)
-                                        : CreateEventService()
-                                            .newEvent
-                                            .enlistedArtists
-                                            .add(artist.uid);
-                                  });
-                                });
+                            return Transform.scale(
+                              scale: 1.2,
+                              child: Checkbox(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  checkColor: primaryBackgroundColor,
+                                  value: CreateEventService()
+                                      .newEvent
+                                      .enlistedArtists
+                                      .contains(artist.uid),
+                                  onChanged: (v) {
+                                    setState(() {
+                                      CreateEventService()
+                                              .newEvent
+                                              .enlistedArtists
+                                              .contains(artist.uid)
+                                          ? CreateEventService()
+                                              .newEvent
+                                              .enlistedArtists
+                                              .remove(artist.uid)
+                                          : CreateEventService()
+                                              .newEvent
+                                              .enlistedArtists
+                                              .add(artist.uid);
+                                    });
+                                  }),
+                            );
                           },
                         ),
                       ),

@@ -21,7 +21,7 @@ class _KKButtonAsyncState extends State<KKButtonAsync> {
         onPressed: widget.loading ? null : widget.onPressed,
         child: Container(
           constraints: const BoxConstraints(
-              maxHeight: 70, minHeight: 36.0, minWidth: 100),
+              maxHeight: 50, minHeight: 36.0, minWidth: 100),
           alignment: Alignment.center,
           child: widget.loading
               ? const SizedBox(

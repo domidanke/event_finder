@@ -26,8 +26,12 @@ class _SetMainLocationPageState extends State<SetMainLocationPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                children: const [
-                  CustomIconButton(),
+                children: [
+                  CustomIconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
             ),

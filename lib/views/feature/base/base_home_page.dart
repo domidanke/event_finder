@@ -2,6 +2,7 @@ import 'package:event_finder/services/location.service.dart';
 import 'package:event_finder/views/feature/base/base_profile_page.dart';
 import 'package:event_finder/views/feature/base/events_page.dart';
 import 'package:event_finder/views/feature/base/search_page.dart';
+import 'package:event_finder/views/feature/shared/events_map_page.dart';
 import 'package:flutter/material.dart';
 
 class BaseHomePage extends StatefulWidget {
@@ -11,8 +12,9 @@ class BaseHomePage extends StatefulWidget {
 }
 
 class _BaseHomePageState extends State<BaseHomePage> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 2;
   static const List<Widget> _widgetOptions = <Widget>[
+    EventsMapPage(),
     SearchPage(),
     EventsPage(),
     BaseProfilePage()
@@ -40,6 +42,10 @@ class _BaseHomePageState extends State<BaseHomePage> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map),
+              label: 'karte',
+            ),
             BottomNavigationBarItem(
               icon: Icon(Icons.search),
               label: 'Suche',

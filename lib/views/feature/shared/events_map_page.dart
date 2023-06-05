@@ -107,11 +107,10 @@ class EventsMapPageState extends State<EventsMapPage> {
                   CameraPosition(
                       target: LatLng(event.location.geoPoint.latitude,
                           event.location.geoPoint.longitude),
-                      zoom: 17)));
+                      zoom: 16)));
             }),
       );
     }
-    _events.sort((a, b) => a.date.compareTo(b.date));
     setState(() {});
   }
 
@@ -170,7 +169,6 @@ class EventsMapPageState extends State<EventsMapPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const CustomIconButton(),
                         Text(
                           'Events in ${_radiusInKm.toInt()}km Radius: '
                           '$_numOfEventsInRadius',
@@ -205,16 +203,18 @@ class EventsMapPageState extends State<EventsMapPage> {
                 left: 10,
                 right: 10,
                 child: SizedBox(
-                  height: 220,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: _events.map((event) {
-                      return Container(
-                          margin: const EdgeInsets.only(right: 8),
-                          child: EventCard(event: event));
-                    }).toList(),
-                  ),
-                ),
+                    height: 220,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        prototypeItem: EventCard(
+                          event: _events.first,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          if (_events.length == index) return null;
+                          return Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              child: EventCard(event: _events[index]));
+                        })),
               ),
           ],
         ),

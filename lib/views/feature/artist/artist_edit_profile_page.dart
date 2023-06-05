@@ -24,8 +24,12 @@ class _ArtistEditProfilePageState extends State<ArtistEditProfilePage> {
           child: Column(
             children: [
               Row(
-                children: const [
-                  CustomIconButton(),
+                children: [
+                  CustomIconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
               Expanded(

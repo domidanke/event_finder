@@ -25,6 +25,7 @@ class CreateEventService extends ChangeNotifier {
   bool validateStep() {
     if (formKey.currentState!.validate()) {
       if (currentStep == 1) {
+        if (StateService().selectedGenres.isEmpty) return false;
         newEvent.genres = StateService().selectedGenres;
         return true;
       }

@@ -31,47 +31,49 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: ListView(
-                children: [
-                  Container(
-                      height: 250,
-                      decoration: BoxDecoration(
-                        image: event.imageUrl != null
-                            ? DecorationImage(
-                                image: NetworkImage(
-                                  event.imageUrl!,
-                                ),
-                                fit: BoxFit.cover,
-                                alignment: Alignment.topCenter,
-                              )
-                            : null,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              child: Container(
+                  height: 250,
+                  decoration: BoxDecoration(
+                    image: event.imageUrl != null
+                        ? DecorationImage(
+                            image: NetworkImage(
+                              event.imageUrl!,
+                            ),
+                            fit: BoxFit.cover,
+                            alignment: Alignment.topCenter,
+                          )
+                        : null,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [CustomIconButton()],
-                            ),
-                            Text(
-                              event.title,
-                              style: const TextStyle(fontSize: 24),
-                            ),
+                            CustomIconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            )
                           ],
                         ),
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                        Text(
+                          event.title,
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                      ],
+                    ),
+                  )),
+            ),
+            Expanded(
+              child: ListView(
+                children: [
                   const SizedBox(
                     height: 10,
-                  ),
-                  const SizedBox(
-                    height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -94,15 +96,19 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                   color: numberOfTickets == 1
-                                      ? primaryColor
+                                      ? primaryGreen
                                       : null,
                                   child: Container(
                                       alignment: Alignment.center,
                                       height: 50,
                                       width: 50,
-                                      child: const Text(
+                                      child: Text(
                                         '1',
-                                        style: TextStyle(fontSize: 24),
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: numberOfTickets == 1
+                                                ? primaryBackgroundColor
+                                                : null),
                                       )),
                                 )),
                             GestureDetector(
@@ -115,15 +121,19 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                   color: numberOfTickets == 2
-                                      ? primaryColor
+                                      ? primaryGreen
                                       : null,
                                   child: Container(
                                       alignment: Alignment.center,
                                       height: 50,
                                       width: 50,
-                                      child: const Text(
+                                      child: Text(
                                         '2',
-                                        style: TextStyle(fontSize: 24),
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: numberOfTickets == 2
+                                                ? primaryBackgroundColor
+                                                : null),
                                       )),
                                 )),
                             GestureDetector(
@@ -136,15 +146,19 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                   color: numberOfTickets == 3
-                                      ? primaryColor
+                                      ? primaryGreen
                                       : null,
                                   child: Container(
                                       alignment: Alignment.center,
                                       height: 50,
                                       width: 50,
-                                      child: const Text(
+                                      child: Text(
                                         '3',
-                                        style: TextStyle(fontSize: 24),
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: numberOfTickets == 3
+                                                ? primaryBackgroundColor
+                                                : null),
                                       )),
                                 )),
                             GestureDetector(
@@ -157,15 +171,19 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                   color: numberOfTickets == 4
-                                      ? primaryColor
+                                      ? primaryGreen
                                       : null,
                                   child: Container(
                                       alignment: Alignment.center,
                                       height: 50,
                                       width: 50,
-                                      child: const Text(
+                                      child: Text(
                                         '4',
-                                        style: TextStyle(fontSize: 24),
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: numberOfTickets == 4
+                                                ? primaryBackgroundColor
+                                                : null),
                                       )),
                                 )),
                             GestureDetector(
@@ -178,15 +196,19 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                   color: numberOfTickets == 5
-                                      ? primaryColor
+                                      ? primaryGreen
                                       : null,
                                   child: Container(
                                       alignment: Alignment.center,
                                       height: 50,
                                       width: 50,
-                                      child: const Text(
+                                      child: Text(
                                         '5',
-                                        style: TextStyle(fontSize: 24),
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: numberOfTickets == 5
+                                                ? primaryBackgroundColor
+                                                : null),
                                       )),
                                 ))
                           ],
@@ -214,7 +236,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                           },
                           child: Card(
                             color: selectedPaymentMethod == 'Paypal'
-                                ? primaryColor
+                                ? primaryGreen
                                 : null,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -223,82 +245,91 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                                   const EdgeInsets.symmetric(horizontal: 16),
                               height: 50,
                               child: Row(
-                                children: const [
-                                  Icon(Icons.paypal),
-                                  SizedBox(
+                                children: [
+                                  Icon(
+                                    Icons.paypal,
+                                    color: selectedPaymentMethod == 'Paypal'
+                                        ? primaryBackgroundColor
+                                        : null,
+                                  ),
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
                                     'Paypal',
-                                    style: TextStyle(fontSize: 20),
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: selectedPaymentMethod == 'Paypal'
+                                            ? primaryBackgroundColor
+                                            : null),
                                   )
                                 ],
                               ),
                             ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedPaymentMethod = 'Apple';
-                            });
-                          },
-                          child: Card(
-                            color: selectedPaymentMethod == 'Apple'
-                                ? primaryColor
-                                : null,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              height: 50,
-                              child: Row(
-                                children: const [
-                                  Icon(Icons.apple),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    'Apple Pay',
-                                    style: TextStyle(fontSize: 20),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedPaymentMethod = 'Google';
-                            });
-                          },
-                          child: Card(
-                            color: selectedPaymentMethod == 'Google'
-                                ? primaryColor
-                                : null,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              height: 50,
-                              child: Row(
-                                children: const [
-                                  Icon(Icons.g_mobiledata),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    'Google Pay',
-                                    style: TextStyle(fontSize: 20),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     setState(() {
+                        //       selectedPaymentMethod = 'Apple';
+                        //     });
+                        //   },
+                        //   child: Card(
+                        //     color: selectedPaymentMethod == 'Apple'
+                        //         ? primaryColor
+                        //         : null,
+                        //     shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(10)),
+                        //     child: Container(
+                        //       margin:
+                        //           const EdgeInsets.symmetric(horizontal: 16),
+                        //       height: 50,
+                        //       child: Row(
+                        //         children: const [
+                        //           Icon(Icons.apple),
+                        //           SizedBox(
+                        //             width: 10,
+                        //           ),
+                        //           Text(
+                        //             'Apple Pay',
+                        //             style: TextStyle(fontSize: 20),
+                        //           )
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     setState(() {
+                        //       selectedPaymentMethod = 'Google';
+                        //     });
+                        //   },
+                        //   child: Card(
+                        //     color: selectedPaymentMethod == 'Google'
+                        //         ? primaryColor
+                        //         : null,
+                        //     shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(10)),
+                        //     child: Container(
+                        //       margin:
+                        //           const EdgeInsets.symmetric(horizontal: 16),
+                        //       height: 50,
+                        //       child: Row(
+                        //         children: const [
+                        //           Icon(Icons.g_mobiledata),
+                        //           SizedBox(
+                        //             width: 10,
+                        //           ),
+                        //           Text(
+                        //             'Google Pay',
+                        //             style: TextStyle(fontSize: 20),
+                        //           )
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

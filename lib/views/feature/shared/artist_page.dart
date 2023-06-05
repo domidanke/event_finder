@@ -52,7 +52,6 @@ class _ArtistPageState extends State<ArtistPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomIconButton(
-                            icon: const Icon(Icons.arrow_back),
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -72,7 +71,7 @@ class _ArtistPageState extends State<ArtistPage> {
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return const Text(
-                                        'No Data...',
+                                        '',
                                       );
                                     } else {
                                       final x = snapshot.data!.data()!;

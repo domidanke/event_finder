@@ -4,6 +4,7 @@ import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -32,8 +33,12 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                children: const [
-                  CustomIconButton(),
+                children: [
+                  CustomIconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
             ),
@@ -130,7 +135,10 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
                                           .currentUser!
                                           .savedEvents
                                           .contains(event.uid)
-                                      ? const Icon(Icons.bookmark)
+                                      ? const Icon(
+                                          Icons.bookmark,
+                                          color: primaryGreen,
+                                        )
                                       : const Icon(Icons.bookmark_border));
                             }),
                           ],

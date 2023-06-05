@@ -34,14 +34,15 @@ final primaryThemeData = ThemeData(
       color: primaryWhite, linearTrackColor: primaryWhite.withOpacity(0.8)),
   drawerTheme: const DrawerThemeData(shadowColor: primaryColor),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    elevation: 0.1,
-  ),
+      elevation: 0.1,
+      selectedItemColor: primaryGreen,
+      unselectedItemColor: primaryWhite),
   cardTheme: const CardTheme(color: Colors.transparent, elevation: 0),
   canvasColor: primaryBackgroundColor,
   fontFamily: 'Quicksand',
   appBarTheme: const AppBarTheme(color: primaryColor),
   hintColor: Colors.pinkAccent,
-  indicatorColor: Colors.yellow,
+  indicatorColor: primaryGreen,
   dialogTheme: const DialogTheme(elevation: 0.1),
   dividerColor: primaryWhite,
   checkboxTheme: CheckboxThemeData(

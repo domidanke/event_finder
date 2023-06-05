@@ -19,14 +19,9 @@ class _HostProfilePageState extends State<HostProfilePage> {
   late Future<String> _imageUrl;
 
   @override
-  void initState() {
-    _imageUrl = StorageService().getProfileImageUrl();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
+    _imageUrl = StorageService().getProfileImageUrl();
     return Scaffold(
       body: Column(
         children: [
@@ -55,9 +50,9 @@ class _HostProfilePageState extends State<HostProfilePage> {
                     child: Container(
                       margin: const EdgeInsets.only(top: 32),
                       child: const SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: CircularProgressIndicator()),
+                          height: 400,
+                          width: 1000,
+                          child: Center(child: CircularProgressIndicator())),
                     ),
                   );
                 }

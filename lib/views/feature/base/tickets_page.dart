@@ -51,8 +51,27 @@ class _TicketsPageState extends State<TicketsPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
+                children: [
+                  CustomIconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
                 children: const [
-                  CustomIconButton(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Aktuelle Tickets',
+                      style: TextStyle(fontSize: 18, color: primaryGreen),
+                    ),
+                  ),
+                  Divider(),
                 ],
               ),
             ),
@@ -80,6 +99,9 @@ class _TicketsPageState extends State<TicketsPage> {
                 },
               ),
             ),
+            const SizedBox(
+              height: 30,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -88,6 +110,7 @@ class _TicketsPageState extends State<TicketsPage> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Bereits eingescannt',
+                      style: TextStyle(fontSize: 18, color: primaryGreen),
                     ),
                   ),
                   Divider(),

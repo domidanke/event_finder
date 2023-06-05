@@ -4,6 +4,7 @@ import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -35,13 +36,17 @@ class _GenreSearchResultPageState extends State<GenreSearchResultPage> {
               Column(
                 children: [
                   Row(
-                    children: const [
-                      CustomIconButton(),
+                    children: [
+                      CustomIconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
                     ],
                   ),
                   Text(
                     StateService().lastSelectedGenre!,
-                    style: const TextStyle(fontSize: 28),
+                    style: const TextStyle(fontSize: 32, color: primaryGreen),
                   ),
                   const SizedBox(
                     height: 40,
@@ -107,7 +112,7 @@ class _GenreSearchResultPageState extends State<GenreSearchResultPage> {
                           height: 8,
                         ),
                         SizedBox(
-                          height: 350,
+                          height: 300,
                           child: FirestoreListView<Event>(
                             scrollDirection: Axis.horizontal,
                             emptyBuilder: (context) {

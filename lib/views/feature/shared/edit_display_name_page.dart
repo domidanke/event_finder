@@ -26,7 +26,11 @@ class _EditDisplayNamePageState extends State<EditDisplayNamePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    const CustomIconButton(),
+                    CustomIconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
                     const Spacer(),
                     CustomIconButton(
                       icon: const Icon(Icons.save),
@@ -47,6 +51,9 @@ class _EditDisplayNamePageState extends State<EditDisplayNamePage> {
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 32,
               ),
               TextField(
                 style: TextStyle(

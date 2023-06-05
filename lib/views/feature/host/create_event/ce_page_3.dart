@@ -69,8 +69,8 @@ class _CePage3State extends State<CePage3> {
               width: 150,
               child: KKButton(
                   onPressed: () async {
-                    final XFile? image = await ImagePicker()
-                        .pickImage(source: ImageSource.gallery);
+                    final XFile? image = await ImagePicker().pickImage(
+                        source: ImageSource.gallery, imageQuality: 10);
                     if (image == null) return;
                     setState(() {
                       CreateEventService().newEvent.selectedImageFile =

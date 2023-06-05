@@ -42,7 +42,7 @@ class _EventCardState extends State<EventCard> {
         child: SizedBox(
           width: 350,
           child: Card(
-            color: primaryGrey.withOpacity(0.4),
+            color: primaryGrey.withOpacity(0.8),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -51,6 +51,11 @@ class _EventCardState extends State<EventCard> {
                 FutureBuilder(
                     future: _eventImageUrlFuture,
                     builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const SizedBox(
+                            height: 250,
+                            child: Center(child: CircularProgressIndicator()));
+                      }
                       widget.event.imageUrl = snapshot.data;
                       return Container(
                         height: 250,

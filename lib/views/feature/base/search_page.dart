@@ -7,6 +7,8 @@ import 'package:event_finder/widgets/top_genres.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../../theme/theme.dart';
+
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
@@ -36,10 +38,14 @@ class _SearchPageState extends State<SearchPage> {
                         setState(() {});
                       },
                       controller: _searchController,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                          suffixIconColor: MaterialStateColor.resolveWith(
+                              (states) => states.contains(MaterialState.focused)
+                                  ? primaryWhite
+                                  : Colors.grey),
+                          border: const OutlineInputBorder(),
                           labelText: 'Suche Künstler oder Hosts',
-                          suffixIcon: Icon(
+                          suffixIcon: const Icon(
                             Icons.search,
                           )),
                     ),

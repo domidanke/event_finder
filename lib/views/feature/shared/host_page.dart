@@ -29,16 +29,44 @@ class _HostPageState extends State<HostPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                children: const [
-                  CustomIconButton(),
+                children: [
+                  CustomIconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
             ),
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: host.imageUrl != null
-                  ? NetworkImage(host.imageUrl!)
-                  : Image.asset('assets/images/profile_placeholder.png').image,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomIconButton(
+                  color: Colors.blue,
+                  icon: const Icon(Icons.facebook),
+                  onPressed: () async {
+                    if (host.externalLinks.facebook.isEmpty) return;
+                    final url = Uri.parse(host.externalLinks.facebook);
+                    await launchUrl(url);
+                  },
+                ),
+                CircleAvatar(
+                  radius: 75,
+                  backgroundImage: host.imageUrl != null
+                      ? NetworkImage(host.imageUrl!)
+                      : Image.asset('assets/images/profile_placeholder.png')
+                          .image,
+                ),
+                CustomIconButton(
+                  color: Colors.pinkAccent,
+                  icon: const Icon(Icons.camera_alt_outlined),
+                  onPressed: () async {
+                    if (host.externalLinks.instagram.isEmpty) return;
+                    final url = Uri.parse(host.externalLinks.instagram);
+                    await launchUrl(url);
+                  },
+                ),
+              ],
             ),
             const SizedBox(
               height: 8,
@@ -47,6 +75,36 @@ class _HostPageState extends State<HostPage> {
               host.displayName,
               style: const TextStyle(fontSize: 20),
             ),
+            const SizedBox(
+              height: 12,
+            ),
+            if (StateService().currentUser!.savedHosts.contains(host.uid))
+              Container(
+                margin: const EdgeInsets.only(left: 8),
+                child: GestureDetector(
+                  onTap: () {
+                    _showUnfollowSheet();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.check_circle_outline,
+                        size: 18,
+                        color: primaryGreen,
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        'Following',
+                        style: TextStyle(
+                            color: primaryGreen, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             const SizedBox(
               height: 12,
             ),
@@ -64,7 +122,7 @@ class _HostPageState extends State<HostPage> {
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return const Text(
-                                'No Data...',
+                                '',
                               );
                             } else {
                               final x = snapshot.data;
@@ -130,57 +188,41 @@ class _HostPageState extends State<HostPage> {
             const SizedBox(
               height: 20,
             ),
-            StatefulBuilder(builder: (context, setState) {
-              final currentUser = StateService().currentUser!;
-              return FloatingActionButton.extended(
-                onPressed: () async {
-                  if (!currentUser.savedHosts.contains(host.uid)) {
-                    await UserDocService().toggleFollowHost(host);
-                    setState(() {
-                      StateService().toggleSavedHost(host.uid);
-                    });
-                  } else {
-                    _showUnfollowSheet();
-                  }
+            if (!StateService().currentUser!.savedHosts.contains(host.uid))
+              GestureDetector(
+                onTap: () async {
+                  StateService().isLoadingFollow = true;
+                  await UserDocService().toggleFollowHost(host);
+                  StateService().isLoadingFollow = false;
+                  setState(() {
+                    StateService().toggleSavedHost(host.uid);
+                  });
                 },
-                backgroundColor: currentUser.savedHosts.contains(host.uid)
-                    ? Colors.grey
-                    : null,
-                elevation: 0,
-                label: currentUser.savedHosts.contains(host.uid)
-                    ? const Text('Following')
-                    : const Text(
-                        'Follow',
-                        style: TextStyle(color: primaryWhite),
-                      ),
-              );
-            }),
-            const SizedBox(
-              height: 50,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomIconButton(
-                  color: Colors.blue,
-                  icon: const Icon(Icons.facebook),
-                  onPressed: () async {
-                    if (host.externalLinks.facebook.isEmpty) return;
-                    final url = Uri.parse(host.externalLinks.facebook);
-                    await launchUrl(url);
-                  },
+                child: SizedBox(
+                  width: 100,
+                  height: 50,
+                  child: Card(
+                    color: Colors.transparent,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      side: const BorderSide(color: primaryGreen, width: 1),
+                    ),
+                    child: Center(
+                        child: StateService().isLoadingFollow
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  color: primaryGreen,
+                                ))
+                            : const Text(
+                                'Follow',
+                                style: TextStyle(color: primaryGreen),
+                              )),
+                  ),
                 ),
-                CustomIconButton(
-                  color: Colors.pinkAccent,
-                  icon: const Icon(Icons.camera_alt_outlined),
-                  onPressed: () async {
-                    if (host.externalLinks.instagram.isEmpty) return;
-                    final url = Uri.parse(host.externalLinks.instagram);
-                    await launchUrl(url);
-                  },
-                ),
-              ],
-            ),
+              ),
             const SizedBox(
               height: 20,
             ),
@@ -195,9 +237,6 @@ class _HostPageState extends State<HostPage> {
                         coordinates: LatLng(host.mainLocation.geoPoint.latitude,
                             host.mainLocation.geoPoint.longitude))),
               ),
-            const SizedBox(
-              height: 20,
-            ),
           ],
         ),
       ),

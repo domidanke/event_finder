@@ -35,65 +35,67 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         child: Column(
           children: [
             Expanded(
-              child: ListView(
-                children: [
-                  Container(
-                      height: 250,
-                      decoration: BoxDecoration(
-                        image: event.imageUrl != null
-                            ? DecorationImage(
-                                image: NetworkImage(
-                                  event.imageUrl!,
-                                ),
-                                fit: BoxFit.cover,
-                                alignment: Alignment.topCenter,
-                              )
-                            : null,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              child: Container(
+                  height: 250,
+                  decoration: BoxDecoration(
+                    image: event.imageUrl != null
+                        ? DecorationImage(
+                            image: NetworkImage(
+                              event.imageUrl!,
+                            ),
+                            fit: BoxFit.cover,
+                            alignment: Alignment.topCenter,
+                          )
+                        : null,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomIconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CustomIconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(event.title,
-                                    style: const TextStyle(
-                                      fontSize: 24,
-                                    )),
-                                Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                    side: const BorderSide(
-                                        color: primaryWhite, width: 1),
-                                  ),
-                                  child: SizedBox(
-                                      width: 50,
-                                      height: 30,
-                                      child: Center(
-                                        child: Text(
-                                          '${event.ticketPrice} €',
-                                          style: const TextStyle(
-                                              color: primaryWhite),
-                                        ),
-                                      )),
-                                ),
-                              ],
+                            Text(event.title,
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                )),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                side: const BorderSide(
+                                    color: primaryWhite, width: 1),
+                              ),
+                              child: SizedBox(
+                                  width: 50,
+                                  height: 30,
+                                  child: Center(
+                                    child: Text(
+                                      '${event.ticketPrice} €',
+                                      style:
+                                          const TextStyle(color: primaryWhite),
+                                    ),
+                                  )),
                             ),
                           ],
                         ),
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                      ],
+                    ),
+                  )),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: ListView(
+                children: [
                   Row(
                     children: [
                       Container(

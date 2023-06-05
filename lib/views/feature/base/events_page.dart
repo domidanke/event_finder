@@ -5,14 +5,13 @@ import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
-import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:event_finder/views/feature/shared/genre_picker.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 import '../../../theme/theme.dart';
+import '../shared/event_card.dart';
 
 class EventsPage extends StatefulWidget {
   const EventsPage({super.key});
@@ -23,12 +22,16 @@ class EventsPage extends StatefulWidget {
 
 class _EventsPageState extends State<EventsPage> {
   bool _today = false;
-  bool _mapLoading = false;
   late Future<String> _hostImageUrlFuture;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -59,54 +62,16 @@ class _EventsPageState extends State<EventsPage> {
                         },
                         child: Chip(
                           backgroundColor: _today ? primaryGreen : null,
-                          label: const Text('Heute'),
+                          label: Text(
+                            'Heute',
+                            style: TextStyle(
+                                color: _today ? primaryBackgroundColor : null),
+                          ),
                         ),
                       ),
                     ),
                   ),
                   const Spacer(),
-                  Opacity(
-                      opacity:
-                          StateService().currentUser!.type == UserType.guest
-                              ? 0.2
-                              : 1,
-                      child: StatefulBuilder(
-                        builder: (BuildContext context,
-                            void Function(void Function()) setState) {
-                          if (_mapLoading) {
-                            return Container(
-                                margin: const EdgeInsets.only(right: 16),
-                                width: 15,
-                                height: 15,
-                                child: const CircularProgressIndicator(
-                                    color: primaryWhite));
-                          } else {
-                            return IconButton(
-                              icon: const Icon(
-                                Icons.map,
-                                color: Colors.white,
-                              ),
-                              onPressed: () async {
-                                if (StateService().currentUser!.type ==
-                                    UserType.guest) {
-                                  return;
-                                }
-                                setState(() {
-                                  _mapLoading = true;
-                                });
-                                StateService().currentUserLocation =
-                                    await Geolocator.getCurrentPosition();
-                                setState(() {
-                                  _mapLoading = false;
-                                });
-                                if (mounted) {
-                                  Navigator.pushNamed(context, 'maps_page');
-                                }
-                              },
-                            );
-                          }
-                        },
-                      )),
                   Opacity(
                     opacity: StateService().currentUser!.type == UserType.guest
                         ? 0.2
@@ -231,7 +196,10 @@ class _EventsPageState extends State<EventsPage> {
                                             .currentUser!
                                             .savedEvents
                                             .contains(event.uid)
-                                        ? const Icon(Icons.bookmark)
+                                        ? const Icon(
+                                            Icons.bookmark,
+                                            color: primaryGreen,
+                                          )
                                         : const Icon(Icons.bookmark_border));
                               }),
                             ],
