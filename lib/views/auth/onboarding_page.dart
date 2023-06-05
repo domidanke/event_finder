@@ -104,7 +104,9 @@ class _OnboardingPageState extends State<OnboardingPage>
                                 .titleLarge
                                 ?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: pageModel.textColor,
+                                  color: pageModel.title == 'Musaic'
+                                      ? primaryGreen
+                                      : pageModel.textColor,
                                 )),
                       ),
                       Container(
