@@ -88,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                             if (authService.loginLoading) return;
                             if (formKey.currentState!.validate()) {
                               try {
+                                FocusScope.of(context).unfocus();
                                 authService.loginLoading = true;
                                 await authService
                                     .signInNative(emailController.text,

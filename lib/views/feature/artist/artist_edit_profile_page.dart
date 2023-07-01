@@ -88,7 +88,7 @@ class _ArtistEditProfilePageState extends State<ArtistEditProfilePage> {
                                 StateService().isUploadingImage = false;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                      content: Text('Profilbild geaendert')),
+                                      content: Text('Profilbild geändert')),
                                 );
                               }
                             },

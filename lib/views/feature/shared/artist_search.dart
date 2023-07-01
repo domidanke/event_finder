@@ -4,9 +4,9 @@ import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/genre_picker.dart';
-import 'package:event_finder/widgets/artist_tile.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:event_finder/widgets/kk_button.dart';
+import 'package:event_finder/widgets/user_tile.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 

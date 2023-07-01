@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
-import 'package:event_finder/widgets/artist_tile.dart';
 import 'package:event_finder/widgets/top_genres.dart';
+import 'package:event_finder/widgets/user_tile.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
