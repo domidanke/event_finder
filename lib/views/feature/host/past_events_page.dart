@@ -49,7 +49,10 @@ class _PastEventsPageState extends State<PastEventsPage> {
                 query: _getQuery(),
                 itemBuilder: (context, snapshot) {
                   Event event = snapshot.data();
-                  return EventCard(event: event);
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: EventCard(event: event),
+                  );
                 },
               ),
             ),
@@ -66,7 +69,7 @@ class _PastEventsPageState extends State<PastEventsPage> {
         .eventsCollection
         .where('creatorId',
             isEqualTo: AuthService().getCurrentFirebaseUser()!.uid)
-        .orderBy('date')
-        .where('date', isLessThanOrEqualTo: startOfDay);
+        .orderBy('startDate', descending: true)
+        .where('startDate', isLessThanOrEqualTo: startOfDay);
   }
 }

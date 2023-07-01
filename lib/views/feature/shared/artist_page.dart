@@ -1,14 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/models/enums.dart';
+import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:event_finder/widgets/genre_card.dart';
 import 'package:event_finder/widgets/kk_button.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../models/consts.dart';
+import '../../../models/event.dart';
+import 'event_card.dart';
 
 class ArtistPage extends StatefulWidget {
   const ArtistPage({Key? key}) : super(key: key);
@@ -99,7 +106,7 @@ class _ArtistPageState extends State<ArtistPage> {
                                                       Icons
                                                           .check_circle_outline,
                                                       size: 18,
-                                                      color: primaryGreen,
+                                                      color: secondaryColor,
                                                     ),
                                                     SizedBox(
                                                       width: 4,
@@ -107,7 +114,7 @@ class _ArtistPageState extends State<ArtistPage> {
                                                     Text(
                                                       'Following',
                                                       style: TextStyle(
-                                                          color: primaryGreen,
+                                                          color: secondaryColor,
                                                           fontWeight:
                                                               FontWeight.bold),
                                                     ),
@@ -194,7 +201,7 @@ class _ArtistPageState extends State<ArtistPage> {
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
-                    side: const BorderSide(color: primaryGreen, width: 1),
+                    side: const BorderSide(color: secondaryColor, width: 1),
                   ),
                   child: Center(
                       child: StateService().isLoadingFollow
@@ -202,15 +209,40 @@ class _ArtistPageState extends State<ArtistPage> {
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
-                                color: primaryGreen,
+                                color: secondaryColor,
                               ))
                           : const Text(
                               'Follow',
-                              style: TextStyle(color: primaryGreen),
+                              style: TextStyle(color: secondaryColor),
                             )),
                 ),
               ),
             ),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            width: 60,
+            height: 60,
+            child: Material(
+              color: secondaryColor,
+              shape: const CircleBorder(),
+              child: InkWell(
+                splashColor: primaryWhite.withOpacity(0.5),
+                customBorder: const CircleBorder(),
+                onTap: () {
+                  _showArtistEventsModal(artist);
+                },
+                child: const Center(
+                  child: Icon(
+                    Icons.event_available,
+                    size: 30,
+                    color: primaryBackgroundColor,
+                  ),
+                ),
+              ),
+            ),
+          ),
           const SizedBox(
             height: 20,
           ),
@@ -226,6 +258,51 @@ class _ArtistPageState extends State<ArtistPage> {
         ],
       ),
     );
+  }
+
+  void _showArtistEventsModal(AppUser artist) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        insetPadding: dialogPadding,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: FirestoreListView<Event>(
+                  emptyBuilder: (context) {
+                    return const Center(
+                      child: Text('Keine Events'),
+                    );
+                  },
+                  query: _getArtistEventsQuery(artist),
+                  itemBuilder: (context, snapshot) {
+                    return EventCard(event: snapshot.data());
+                  },
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'Schließen',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Query<Event> _getArtistEventsQuery(AppUser artist) {
+    return EventDocService()
+        .eventsCollection
+        .where('artists', arrayContains: artist.uid)
+        .orderBy('startDate');
   }
 
   void _showUnfollowSheet() {

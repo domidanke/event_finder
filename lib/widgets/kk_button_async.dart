@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/theme.dart';
+
 class KKButtonAsync extends StatefulWidget {
   const KKButtonAsync({
     Key? key,
@@ -18,6 +20,9 @@ class KKButtonAsync extends StatefulWidget {
 class _KKButtonAsyncState extends State<KKButtonAsync> {
   @override
   Widget build(BuildContext context) => ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(secondaryColor),
+        ),
         onPressed: widget.loading ? null : widget.onPressed,
         child: Container(
           constraints: const BoxConstraints(
@@ -35,6 +40,8 @@ class _KKButtonAsyncState extends State<KKButtonAsync> {
               : Text(
                   widget.loading ? '' : widget.buttonText,
                   textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 18, color: primaryBackgroundColor),
                 ),
         ),
       );

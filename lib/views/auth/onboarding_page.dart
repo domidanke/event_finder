@@ -49,7 +49,7 @@ class _OnboardingPageState extends State<OnboardingPage>
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: LinearProgressIndicator(
-                        color: primaryGreen,
+                        color: secondaryColor,
                         backgroundColor: primaryColorTransparent,
                         minHeight: 8,
                         value: _controller.value),
@@ -89,7 +89,7 @@ class _OnboardingPageState extends State<OnboardingPage>
                       'assets/images/onboarding/${pageModel.imageUrl}.png',
                       height: 400,
                       width: 400,
-                      color: pageModel.title == 'Musaic' ? primaryWhite : null,
+                      color: pageModel.title == 'Nocstar' ? primaryWhite : null,
                     ),
                   ),
                 ),
@@ -104,8 +104,8 @@ class _OnboardingPageState extends State<OnboardingPage>
                                 .titleLarge
                                 ?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: pageModel.title == 'Musaic'
-                                      ? primaryGreen
+                                  color: pageModel.title == 'Nocstar'
+                                      ? secondaryColor
                                       : pageModel.textColor,
                                 )),
                       ),

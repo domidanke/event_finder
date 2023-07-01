@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../../services/image.service.dart';
 import '../../../widgets/custom_icon_button.dart';
 
 class HostEditProfilePage extends StatefulWidget {
@@ -85,14 +85,12 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
                             leading: const Icon(Icons.image),
                             title: const Text('Anderes Profilbild'),
                             onTap: () async {
-                              final XFile? image = await ImagePicker()
-                                  .pickImage(
-                                      source: ImageSource.gallery,
-                                      imageQuality: 10);
-                              if (image == null) return;
+                              final cropped =
+                                  await ImageService().selectImage();
+                              if (cropped == null) return;
                               StateService().isUploadingImage = true;
-                              await StorageService()
-                                  .saveProfileImageToStorage(File(image.path));
+                              await StorageService().saveProfileImageToStorage(
+                                  File(cropped.path));
                               await StateService().refreshCurrentUserImageUrl();
                               StateService().currentUser!.imageUrl =
                                   await StorageService().getProfileImageUrl();
@@ -102,7 +100,6 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
                                   const SnackBar(
                                       content: Text('Profilbild geändert')),
                                 );
-                                Navigator.pop(context);
                               }
                             },
                           ),

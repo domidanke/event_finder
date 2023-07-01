@@ -27,7 +27,7 @@ class _CePage4State extends State<CePage4> {
       child: Column(
         children: [
           const SizedBox(
-            height: 4,
+            height: 6,
           ),
           Row(
             children: [
@@ -42,7 +42,7 @@ class _CePage4State extends State<CePage4> {
                       labelText: 'Suche',
                       suffixIconColor: MaterialStateColor.resolveWith(
                           (states) => states.contains(MaterialState.focused)
-                              ? primaryWhite
+                              ? secondaryColor
                               : Colors.grey),
                       suffixIcon: const Icon(Icons.search)),
                 ),

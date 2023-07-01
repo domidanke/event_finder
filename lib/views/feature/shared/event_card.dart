@@ -38,124 +38,131 @@ class _EventCardState extends State<EventCard> {
         StateService().lastSelectedEvent = widget.event;
         Navigator.pushNamed(context, 'event_details');
       },
-      child: FittedBox(
-        child: SizedBox(
-          width: 350,
-          child: Card(
-            color: primaryGrey.withOpacity(0.8),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Stack(
-              children: [
-                FutureBuilder(
-                    future: _eventImageUrlFuture,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const SizedBox(
-                            height: 250,
-                            child: Center(child: CircularProgressIndicator()));
-                      }
-                      widget.event.imageUrl = snapshot.data;
-                      return Container(
-                        height: 250,
-                        decoration: BoxDecoration(
-                          image: widget.event.imageUrl != null
-                              ? DecorationImage(
-                                  image:
-                                      NetworkImage(widget.event.imageUrl ?? ''),
-                                  fit: BoxFit.cover,
-                                )
-                              : null,
+      child: AspectRatio(
+        aspectRatio: 3 / 3,
+        child: Card(
+          color: primaryGrey.withOpacity(0.3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: const BorderSide(color: primaryWhite, width: 0.2),
+          ),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: Stack(
+            children: [
+              FutureBuilder(
+                  future: _eventImageUrlFuture,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    widget.event.imageUrl = snapshot.data;
+                    return Container(
+                      decoration: BoxDecoration(
+                        image: widget.event.imageUrl != null
+                            ? DecorationImage(
+                                image:
+                                    NetworkImage(widget.event.imageUrl ?? ''),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                      ),
+                      child: snapshot.connectionState == ConnectionState.waiting
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : null,
+                    );
+                  }),
+              Padding(
+                padding: const EdgeInsets.all(6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 75,
+                      height: 75,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          side:
+                              const BorderSide(color: secondaryColor, width: 1),
                         ),
-                        child:
-                            snapshot.connectionState == ConnectionState.waiting
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : null,
-                      );
-                    }),
-                SizedBox(
-                    height: 306,
-                    child: Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.event.startDate.day.toString(),
+                              style: const TextStyle(
+                                  fontSize: 24, color: secondaryColor),
+                            ),
+                            Text(
+                              monthMap[
+                                  widget.event.startDate.month.toString()]!,
+                              style: const TextStyle(
+                                  fontSize: 18, color: secondaryColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FittedBox(
+                          child: Row(
+                            children: widget.event.genres
+                                .map(
+                                  (genre) => GenreCard(text: genre),
+                                )
+                                .toList(),
+                          ),
+                        ),
+                        FittedBox(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              widget.event.title,
+                              style: const TextStyle(
+                                  fontSize: 32, color: secondaryColor),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  side: const BorderSide(
-                                      color: primaryWhite, width: 1),
-                                ),
-                                child: SizedBox(
-                                  width: 50,
-                                  height: 50,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        widget.event.date.day.toString(),
-                                      ),
-                                      Text(
-                                        monthMap[widget.event.date.month
-                                            .toString()]!,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              Text(
+                                _getTimeText(),
+                                style: const TextStyle(
+                                    fontSize: 16, color: secondaryColor),
                               ),
+                              _getDistanceWidget()
                             ],
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FittedBox(
-                                child: Row(
-                                  children: widget.event.genres
-                                      .map(
-                                        (genre) => GenreCard(text: genre),
-                                      )
-                                      .toList(),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 4),
-                                child: Text(
-                                  widget.event.title,
-                                  style: const TextStyle(fontSize: 24),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 4),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '${widget.event.date.toString().substring(11, 16)} Uhr',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    _getDistanceWidget()
-                                  ],
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    )),
-              ],
-            ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  String _getTimeText() {
+    if (widget.event.endDate == null) {
+      return '${widget.event.startDate.toString().substring(11, 16)} Uhr';
+    } else {
+      return '${widget.event.startDate.toString().substring(11, 16)} - ${widget.event.endDate.toString().substring(11, 16)} Uhr';
+    }
   }
 
   Widget _getDistanceWidget() {
@@ -167,7 +174,10 @@ class _EventCardState extends State<EventCard> {
     final Position? currentPosition =
         Provider.of<StateService>(context).currentUserLocation;
     if (currentPosition == null) {
-      return const Text('kein GPS');
+      return const Text(
+        'kein GPS',
+        style: TextStyle(color: secondaryColor),
+      );
     }
     var currentLatLng =
         LatLng(currentPosition.latitude, currentPosition.longitude);
@@ -175,7 +185,7 @@ class _EventCardState extends State<EventCard> {
         widget.event.location.geoPoint.longitude);
     return Text(
       '${LocationService().getDistanceFromLatLonInKm(currentLatLng, eventLatLng)}km',
-      style: const TextStyle(fontSize: 16),
+      style: const TextStyle(fontSize: 16, color: secondaryColor),
     );
   }
 }

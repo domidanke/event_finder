@@ -1,3 +1,4 @@
+import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class KKButton extends StatelessWidget {
@@ -11,6 +12,9 @@ class KKButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(secondaryColor),
+        ),
         onPressed: onPressed,
         child: Container(
           constraints: const BoxConstraints(
@@ -19,6 +23,7 @@ class KKButton extends StatelessWidget {
           child: Text(
             buttonText,
             textAlign: TextAlign.center,
+            style: const TextStyle(color: primaryBackgroundColor),
           ),
         ),
       );

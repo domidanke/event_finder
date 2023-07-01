@@ -17,7 +17,9 @@ class CePage1 extends StatefulWidget {
 
 class _CePage1State extends State<CePage1> {
   TextEditingController dateController = TextEditingController();
-  TextEditingController androidTimeController = TextEditingController();
+  TextEditingController iosEndTimeController = TextEditingController();
+  TextEditingController androidStartTimeController = TextEditingController();
+  TextEditingController androidEndTimeController = TextEditingController();
 
   @override
   void initState() {
@@ -31,7 +33,7 @@ class _CePage1State extends State<CePage1> {
       child: Column(
         children: [
           const SizedBox(
-            height: 4,
+            height: 6,
           ),
           TextFormField(
             decoration: const InputDecoration(
@@ -77,12 +79,12 @@ class _CePage1State extends State<CePage1> {
                 ),
               ),
               const SizedBox(
-                width: 50,
+                width: 12,
               ),
               Expanded(
                 child: TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'Ticket Anzahl',
+                    labelText: 'Anzahl',
                     border: OutlineInputBorder(),
                   ),
                   keyboardType:
@@ -120,7 +122,6 @@ class _CePage1State extends State<CePage1> {
               style: TextStyle(
                   color: Theme.of(context).textTheme.bodyMedium?.color),
               controller: dateController,
-              initialValue: CreateEventService().newEvent.date.toString(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Bitte geben Sie ein Datum ein';
@@ -137,69 +138,124 @@ class _CePage1State extends State<CePage1> {
                 setState(() {
                   dateController.text =
                       selectedDate.toString().substring(0, 10);
-                  newEvent.date = selectedDate;
+                  newEvent.startDate = selectedDate;
                 });
               },
             ),
           ),
           const SizedBox(
-            width: 20,
+            width: 12,
           ),
-          if (dateController.text.isNotEmpty)
-            Expanded(
-              child: TextFormField(
-                readOnly: true,
-                controller: androidTimeController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a date';
-                  }
-                  return null;
-                },
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Uhrzeit',
-                ),
-                onTap: () async {
-                  final selectedTime =
-                      await DateService().showAndroidTimePicker(context);
-                  setState(() {
-                    androidTimeController.text =
-                        '${selectedTime!.hour}:${selectedTime.minute} Uhr';
-                    newEvent.date = DateTime(
-                        newEvent.date.year,
-                        newEvent.date.month,
-                        newEvent.date.day,
-                        selectedTime.hour,
-                        selectedTime.minute);
-                  });
-                },
+          Expanded(
+            child: TextFormField(
+              readOnly: true,
+              controller: androidStartTimeController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Uhrzeit fehlt';
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Start',
               ),
+              onTap: () async {
+                final selectedTime =
+                    await DateService().showAndroidTimePicker(context);
+                setState(() {
+                  androidStartTimeController.text =
+                      '${selectedTime!.hour}:${selectedTime.minute.toString().length == 1 ? '0${selectedTime.minute}' : selectedTime.minute} Uhr';
+                  newEvent.startDate = DateTime(
+                      newEvent.startDate.year,
+                      newEvent.startDate.month,
+                      newEvent.startDate.day,
+                      selectedTime.hour,
+                      selectedTime.minute);
+                });
+              },
             ),
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          Expanded(
+            child: TextFormField(
+              readOnly: true,
+              controller: androidEndTimeController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Ende',
+              ),
+              onTap: () async {
+                final selectedTime =
+                    await DateService().showAndroidTimePicker(context);
+                setState(() {
+                  androidEndTimeController.text =
+                      '${selectedTime!.hour}:${selectedTime.minute.toString().length == 1 ? '0${selectedTime.minute}' : selectedTime.minute} Uhr';
+                  newEvent.endDate = DateTime(
+                      newEvent.startDate.year,
+                      newEvent.startDate.month,
+                      newEvent.startDate.day,
+                      selectedTime.hour,
+                      selectedTime.minute);
+                });
+              },
+            ),
+          ),
         ],
       );
     } else {
-      return TextFormField(
-        readOnly: true,
-        controller: dateController,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter a date';
-          }
-          return null;
-        },
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Datum',
-        ),
-        onTap: () async {
-          final selectedDate =
-              await DateService().showPlatformDatePicker(context);
-          setState(() {
-            dateController.text = selectedDate.toString().substring(0, 16);
-            newEvent.date = selectedDate;
-          });
-        },
+      return Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              readOnly: true,
+              controller: dateController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Datum fehlt';
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Datum',
+              ),
+              onTap: () async {
+                final selectedDate =
+                    await DateService().showPlatformDatePicker(context);
+                setState(() {
+                  dateController.text =
+                      selectedDate.toString().substring(0, 16);
+                  newEvent.startDate = selectedDate;
+                });
+              },
+            ),
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          Expanded(
+            child: TextFormField(
+              readOnly: true,
+              controller: iosEndTimeController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Ende',
+              ),
+              onTap: () async {
+                final selectedTime =
+                    await DateService().showIosTimePicker(context);
+                setState(() {
+                  iosEndTimeController.text =
+                      '${selectedTime.hour}:${selectedTime.minute.toString().length == 1 ? '0${selectedTime.minute}' : selectedTime.minute}';
+                  newEvent.endDate = selectedTime;
+                });
+              },
+            ),
+          ),
+        ],
       );
     }
   }

@@ -36,7 +36,7 @@ class _ActivateAccountPageState extends State<ActivateAccountPage> {
                     height: 18,
                   ),
                   const Text(
-                    'Willkommen auf Musaic, eine Plattform für Künstler, Veranstalter und Fans...',
+                    'Willkommen auf Nocstar, eine Plattform für Künstler, Veranstalter und Fans...',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 22),
                   ),

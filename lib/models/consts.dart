@@ -10,6 +10,18 @@ const genres = [
   'pop',
   '90s',
   '80s',
+  'indie',
+  'folk',
+  'rock',
+  'alternative',
+  'heavy',
+  'lofi',
+  '2000s',
+  'jazz',
+  'country',
+  'hispanic',
+  'spanish',
+  'electro',
 ];
 
 List<TopGenre> topGenres = [
@@ -81,8 +93,10 @@ List<OnboardingPageModel> onboardingPageModels = [
     imageUrl: 'page5',
   ),
   OnboardingPageModel(
-    title: 'Musaic',
+    title: 'Nocstar',
     description: 'dein Partybegleiter',
     imageUrl: 'page6',
   ),
 ];
+
+const dialogPadding = EdgeInsets.symmetric(horizontal: 12, vertical: 24);

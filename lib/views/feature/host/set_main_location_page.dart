@@ -20,6 +20,7 @@ class _SetMainLocationPageState extends State<SetMainLocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           children: [

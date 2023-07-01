@@ -10,7 +10,8 @@ class Event {
       {this.uid = '',
       required this.title,
       required this.details,
-      required this.date,
+      required this.startDate,
+      required this.endDate,
       required this.genres,
       required this.ticketPrice,
       required this.maxTickets,
@@ -24,8 +25,12 @@ class Event {
           uid: uid,
           title: json['title']! as String,
           details: json['details']! as String,
-          date:
-              DateTime.parse((json['date']! as Timestamp).toDate().toString()),
+          startDate: DateTime.parse(
+              (json['startDate']! as Timestamp).toDate().toString()),
+          endDate: json['endDate'] != null
+              ? DateTime.parse(
+                  (json['endDate']! as Timestamp).toDate().toString())
+              : null,
           genres: json['genres'] != null
               ? List.from(json['genres']! as List<dynamic>)
               : [],
@@ -48,7 +53,8 @@ class Event {
   final List<String> genres;
   final int ticketPrice;
   final int maxTickets;
-  final DateTime date;
+  final DateTime startDate;
+  final DateTime? endDate;
   final String creatorId;
   final String creatorName;
   final LocationData location;
@@ -59,7 +65,8 @@ class Event {
     return {
       'title': title,
       'details': details,
-      'date': date,
+      'startDate': startDate,
+      'endDate': endDate,
       'creatorId': creatorId,
       'creatorName': creatorName,
       'artists': artists,
@@ -73,13 +80,13 @@ class Event {
 
 class NewEvent {
   NewEvent();
-
   String title = '';
   String details = '';
   List<String> genres = [];
   int ticketPrice = 0;
   int maxTickets = 0;
-  DateTime date = DateTime.now();
+  DateTime startDate = DateTime.now();
+  DateTime? endDate;
   File? selectedImageFile;
   List<String> enlistedArtists = [];
   GeoFirePoint? locationCoordinates;
@@ -88,7 +95,8 @@ class NewEvent {
     return Event(
         title: title,
         details: details,
-        date: date,
+        startDate: startDate,
+        endDate: endDate,
         genres: genres,
         creatorId: StateService().currentUser!.uid,
         creatorName: StateService().currentUser!.displayName,

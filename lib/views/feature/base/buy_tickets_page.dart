@@ -63,7 +63,8 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                         ),
                         Text(
                           event.title,
-                          style: const TextStyle(fontSize: 24),
+                          style: const TextStyle(
+                              fontSize: 24, color: secondaryColor),
                         ),
                       ],
                     ),
@@ -84,133 +85,56 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                           'Menge',
                           style: TextStyle(fontSize: 18),
                         ),
+                        const SizedBox(
+                          height: 6,
+                        ),
                         Row(
                           children: [
-                            GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    numberOfTickets = 1;
-                                  });
-                                },
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  color: numberOfTickets == 1
-                                      ? primaryGreen
-                                      : null,
-                                  child: Container(
-                                      alignment: Alignment.center,
-                                      height: 50,
-                                      width: 50,
-                                      child: Text(
-                                        '1',
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            color: numberOfTickets == 1
-                                                ? primaryBackgroundColor
-                                                : null),
-                                      )),
-                                )),
-                            GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    numberOfTickets = 2;
-                                  });
-                                },
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  color: numberOfTickets == 2
-                                      ? primaryGreen
-                                      : null,
-                                  child: Container(
-                                      alignment: Alignment.center,
-                                      height: 50,
-                                      width: 50,
-                                      child: Text(
-                                        '2',
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            color: numberOfTickets == 2
-                                                ? primaryBackgroundColor
-                                                : null),
-                                      )),
-                                )),
-                            GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    numberOfTickets = 3;
-                                  });
-                                },
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  color: numberOfTickets == 3
-                                      ? primaryGreen
-                                      : null,
-                                  child: Container(
-                                      alignment: Alignment.center,
-                                      height: 50,
-                                      width: 50,
-                                      child: Text(
-                                        '3',
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            color: numberOfTickets == 3
-                                                ? primaryBackgroundColor
-                                                : null),
-                                      )),
-                                )),
-                            GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    numberOfTickets = 4;
-                                  });
-                                },
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  color: numberOfTickets == 4
-                                      ? primaryGreen
-                                      : null,
-                                  child: Container(
-                                      alignment: Alignment.center,
-                                      height: 50,
-                                      width: 50,
-                                      child: Text(
-                                        '4',
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            color: numberOfTickets == 4
-                                                ? primaryBackgroundColor
-                                                : null),
-                                      )),
-                                )),
-                            GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    numberOfTickets = 5;
-                                  });
-                                },
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  color: numberOfTickets == 5
-                                      ? primaryGreen
-                                      : null,
-                                  child: Container(
-                                      alignment: Alignment.center,
-                                      height: 50,
-                                      width: 50,
-                                      child: Text(
-                                        '5',
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            color: numberOfTickets == 5
-                                                ? primaryBackgroundColor
-                                                : null),
-                                      )),
-                                ))
+                            TicketNumberCard(
+                              onTap: () {
+                                setState(() {
+                                  numberOfTickets = 1;
+                                });
+                              },
+                              ticketNumber: 1,
+                              numberOfTickets: numberOfTickets,
+                            ),
+                            TicketNumberCard(
+                              onTap: () {
+                                setState(() {
+                                  numberOfTickets = 2;
+                                });
+                              },
+                              ticketNumber: 2,
+                              numberOfTickets: numberOfTickets,
+                            ),
+                            TicketNumberCard(
+                              onTap: () {
+                                setState(() {
+                                  numberOfTickets = 3;
+                                });
+                              },
+                              ticketNumber: 3,
+                              numberOfTickets: numberOfTickets,
+                            ),
+                            TicketNumberCard(
+                              onTap: () {
+                                setState(() {
+                                  numberOfTickets = 4;
+                                });
+                              },
+                              ticketNumber: 4,
+                              numberOfTickets: numberOfTickets,
+                            ),
+                            TicketNumberCard(
+                              onTap: () {
+                                setState(() {
+                                  numberOfTickets = 5;
+                                });
+                              },
+                              ticketNumber: 5,
+                              numberOfTickets: numberOfTickets,
+                            ),
                           ],
                         )
                       ],
@@ -228,15 +152,93 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                           'Zahlungsmethode',
                           style: TextStyle(fontSize: 18),
                         ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     setState(() {
+                        //       selectedPaymentMethod = 'Paypal';
+                        //     });
+                        //   },
+                        //   child: Card(
+                        //     color: selectedPaymentMethod == 'Paypal'
+                        //         ? secondaryColor
+                        //         : null,
+                        //     shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(10)),
+                        //     child: Container(
+                        //       margin:
+                        //           const EdgeInsets.symmetric(horizontal: 16),
+                        //       height: 50,
+                        //       child: Row(
+                        //         children: [
+                        //           Icon(
+                        //             Icons.paypal,
+                        //             color: selectedPaymentMethod == 'Paypal'
+                        //                 ? primaryBackgroundColor
+                        //                 : null,
+                        //           ),
+                        //           const SizedBox(
+                        //             width: 10,
+                        //           ),
+                        //           Text(
+                        //             'Paypal',
+                        //             style: TextStyle(
+                        //                 fontSize: 20,
+                        //                 color: selectedPaymentMethod == 'Paypal'
+                        //                     ? primaryBackgroundColor
+                        //                     : null),
+                        //           )
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              selectedPaymentMethod = 'Paypal';
+                              selectedPaymentMethod = 'Apple';
                             });
                           },
                           child: Card(
-                            color: selectedPaymentMethod == 'Paypal'
-                                ? primaryGreen
+                            color: selectedPaymentMethod == 'Apple'
+                                ? secondaryColor
+                                : null,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              height: 50,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.apple,
+                                      color: selectedPaymentMethod == 'Apple'
+                                          ? primaryBackgroundColor
+                                          : primaryWhite),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Apple Pay',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: selectedPaymentMethod == 'Apple'
+                                            ? primaryBackgroundColor
+                                            : primaryWhite),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedPaymentMethod = 'Google';
+                            });
+                          },
+                          child: Card(
+                            color: selectedPaymentMethod == 'Google'
+                                ? secondaryColor
                                 : null,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -247,89 +249,27 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                               child: Row(
                                 children: [
                                   Icon(
-                                    Icons.paypal,
-                                    color: selectedPaymentMethod == 'Paypal'
+                                    Icons.g_mobiledata,
+                                    color: selectedPaymentMethod == 'Google'
                                         ? primaryBackgroundColor
-                                        : null,
+                                        : primaryWhite,
                                   ),
                                   const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
-                                    'Paypal',
+                                    'Google Pay',
                                     style: TextStyle(
                                         fontSize: 20,
-                                        color: selectedPaymentMethod == 'Paypal'
+                                        color: selectedPaymentMethod == 'Google'
                                             ? primaryBackgroundColor
-                                            : null),
+                                            : primaryWhite),
                                   )
                                 ],
                               ),
                             ),
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     setState(() {
-                        //       selectedPaymentMethod = 'Apple';
-                        //     });
-                        //   },
-                        //   child: Card(
-                        //     color: selectedPaymentMethod == 'Apple'
-                        //         ? primaryColor
-                        //         : null,
-                        //     shape: RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(10)),
-                        //     child: Container(
-                        //       margin:
-                        //           const EdgeInsets.symmetric(horizontal: 16),
-                        //       height: 50,
-                        //       child: Row(
-                        //         children: const [
-                        //           Icon(Icons.apple),
-                        //           SizedBox(
-                        //             width: 10,
-                        //           ),
-                        //           Text(
-                        //             'Apple Pay',
-                        //             style: TextStyle(fontSize: 20),
-                        //           )
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     setState(() {
-                        //       selectedPaymentMethod = 'Google';
-                        //     });
-                        //   },
-                        //   child: Card(
-                        //     color: selectedPaymentMethod == 'Google'
-                        //         ? primaryColor
-                        //         : null,
-                        //     shape: RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(10)),
-                        //     child: Container(
-                        //       margin:
-                        //           const EdgeInsets.symmetric(horizontal: 16),
-                        //       height: 50,
-                        //       child: Row(
-                        //         children: const [
-                        //           Icon(Icons.g_mobiledata),
-                        //           SizedBox(
-                        //             width: 10,
-                        //           ),
-                        //           Text(
-                        //             'Google Pay',
-                        //             style: TextStyle(fontSize: 20),
-                        //           )
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -411,7 +351,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text('Datum: '),
-                          Text(event.date.toString().substring(0, 16)),
+                          Text(_getTimeText(event)),
                         ],
                       ),
                     ),
@@ -464,6 +404,14 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
     );
   }
 
+  String _getTimeText(Event event) {
+    if (event.endDate == null) {
+      return '${event.startDate.toString().substring(11, 16)} Uhr';
+    } else {
+      return '${event.startDate.toString().substring(11, 16)} - ${event.endDate.toString().substring(11, 16)} Uhr';
+    }
+  }
+
   List<TicketInfo> createIdsForQrCode() {
     List<TicketInfo> ticketInfos = [];
     var dateAndTime = DateTime.now().toString().substring(0, 19);
@@ -472,9 +420,51 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
       final ticketInfo = TicketInfo(
           id: '${StateService().currentUser!.uid}_${event.uid}_${dateAndTime}_${i + 1}/$numberOfTickets',
           eventTitle: event.title,
-          eventDate: event.date);
+          eventDate: event.startDate);
       ticketInfos.add(ticketInfo);
     }
     return ticketInfos;
+  }
+}
+
+class TicketNumberCard extends StatefulWidget {
+  const TicketNumberCard(
+      {Key? key,
+      required this.onTap,
+      required this.ticketNumber,
+      required this.numberOfTickets})
+      : super(key: key);
+  final int ticketNumber;
+  final int numberOfTickets;
+  final Function() onTap;
+
+  @override
+  State<TicketNumberCard> createState() => _TicketNumberCardState();
+}
+
+class _TicketNumberCardState extends State<TicketNumberCard> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: widget.onTap,
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          color: widget.numberOfTickets == widget.ticketNumber
+              ? secondaryColor
+              : null,
+          child: Container(
+              alignment: Alignment.center,
+              height: 50,
+              width: 50,
+              child: Text(
+                '${widget.ticketNumber}',
+                style: TextStyle(
+                    fontSize: 24,
+                    color: widget.numberOfTickets == widget.ticketNumber
+                        ? primaryBackgroundColor
+                        : null),
+              )),
+        ));
   }
 }

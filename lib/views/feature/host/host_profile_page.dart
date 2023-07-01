@@ -24,38 +24,38 @@ class _HostProfilePageState extends State<HostProfilePage> {
     return Scaffold(
       body: Column(
         children: [
-          FutureBuilder(
-              future: _imageUrl,
-              builder: (context, snapshot) {
-                currentUser.imageUrl = snapshot.data;
-                if (snapshot.hasData) {
-                  return Container(
-                      height: 400,
-                      width: 1000,
-                      decoration: BoxDecoration(
-                        image: currentUser.imageUrl != null
-                            ? DecorationImage(
-                                image: NetworkImage(
-                                  currentUser.imageUrl!,
-                                ),
-                                fit: BoxFit.cover,
-                                alignment: Alignment.topCenter,
-                              )
-                            : null,
-                      ),
-                      child: _getImageContent());
-                } else {
-                  return SafeArea(
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 32),
-                      child: const SizedBox(
-                          height: 400,
-                          width: 1000,
-                          child: Center(child: CircularProgressIndicator())),
-                    ),
-                  );
-                }
-              }),
+          AspectRatio(
+            aspectRatio: 1,
+            child: FutureBuilder(
+                future: _imageUrl,
+                builder: (context, snapshot) {
+                  currentUser.imageUrl = snapshot.data;
+                  if (snapshot.hasData) {
+                    return Container(
+                        height: 400,
+                        width: 1000,
+                        decoration: BoxDecoration(
+                          image: currentUser.imageUrl != null
+                              ? DecorationImage(
+                                  image: NetworkImage(
+                                    currentUser.imageUrl!,
+                                  ),
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.topCenter,
+                                )
+                              : null,
+                        ),
+                        child: _getImageContent());
+                  } else {
+                    return Stack(
+                      children: [
+                        _getImageContent(),
+                        const Center(child: CircularProgressIndicator()),
+                      ],
+                    );
+                  }
+                }),
+          ),
           Expanded(
               flex: 8,
               child: ListView(

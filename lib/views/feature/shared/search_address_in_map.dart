@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/services/alert.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
@@ -50,6 +51,7 @@ class SearchAddressInMapState extends State<SearchAddressInMap> {
               Expanded(
                   child: CustomIconButton(
                 icon: const Icon(Icons.search),
+                color: secondaryColor,
                 onPressed: () async {
                   if (_addressController.text.isEmpty) return;
                   FocusScope.of(context).unfocus();

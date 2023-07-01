@@ -52,7 +52,7 @@ class _SupportPageState extends State<SupportPage> {
 
   Widget _buildPanel() {
     return ExpansionPanelList(
-      dividerColor: primaryWhite,
+      dividerColor: primaryWhite.withOpacity(0.25),
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _supportItems[index].isExpanded = !isExpanded;
@@ -60,7 +60,7 @@ class _SupportPageState extends State<SupportPage> {
       },
       children: _supportItems.map<ExpansionPanel>((SupportItem item) {
         return ExpansionPanel(
-          backgroundColor: primaryBackgroundColor,
+          backgroundColor: primaryColor.withOpacity(0.25),
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
               title: Text(item.headerValue),

@@ -30,7 +30,7 @@ class TicketDetailsPage extends StatelessWidget {
             ),
             Text(
               '${ticketInfo.eventTitle} (${ticketInfo.id.split('_')[3]})',
-              style: const TextStyle(fontSize: 28, color: primaryGreen),
+              style: const TextStyle(fontSize: 28, color: secondaryColor),
             ),
             const SizedBox(
               height: 8,

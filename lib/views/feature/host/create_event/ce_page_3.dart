@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:event_finder/services/image.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/search_address_in_map.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../../services/create_event.service.dart';
 import '../../../../widgets/kk_button.dart';
@@ -68,16 +68,7 @@ class _CePage3State extends State<CePage3> {
             SizedBox(
               width: 150,
               child: KKButton(
-                  onPressed: () async {
-                    final XFile? image = await ImagePicker().pickImage(
-                        source: ImageSource.gallery, imageQuality: 10);
-                    if (image == null) return;
-                    setState(() {
-                      CreateEventService().newEvent.selectedImageFile =
-                          File(image.path);
-                    });
-                  },
-                  buttonText: 'Bild hochladen'),
+                  onPressed: _selectImage, buttonText: 'Bild hochladen'),
             ),
           if (CreateEventService().newEvent.selectedImageFile != null)
             Column(
@@ -97,7 +88,7 @@ class _CePage3State extends State<CePage3> {
                     },
                     icon: const Icon(
                       Icons.remove_circle,
-                      color: primaryGreen,
+                      color: secondaryColor,
                     ))
               ],
             ),
@@ -153,5 +144,13 @@ class _CePage3State extends State<CePage3> {
             ],
           )),
     );
+  }
+
+  void _selectImage() async {
+    final cropped = await ImageService().selectImage();
+    if (cropped == null) return;
+    setState(() {
+      CreateEventService().newEvent.selectedImageFile = File(cropped.path);
+    });
   }
 }

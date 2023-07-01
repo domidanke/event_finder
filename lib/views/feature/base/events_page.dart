@@ -61,7 +61,7 @@ class _EventsPageState extends State<EventsPage> {
                           });
                         },
                         child: Chip(
-                          backgroundColor: _today ? primaryGreen : null,
+                          backgroundColor: _today ? secondaryColor : null,
                           label: Text(
                             'Heute',
                             style: TextStyle(
@@ -205,7 +205,7 @@ class _EventsPageState extends State<EventsPage> {
                                               .contains(event.uid)
                                           ? const Icon(
                                               Icons.bookmark,
-                                              color: primaryGreen,
+                                              color: secondaryColor,
                                             )
                                           : const Icon(Icons.bookmark_border)),
                                 );
@@ -234,12 +234,12 @@ class _EventsPageState extends State<EventsPage> {
     final startOfDay = DateTime(now.year, now.month, now.day);
     var query = EventDocService()
         .eventsCollection
-        .orderBy('date')
-        .where('date', isGreaterThanOrEqualTo: startOfDay);
+        .orderBy('startDate')
+        .where('startDate', isGreaterThanOrEqualTo: startOfDay);
 
     if (_today) {
       final endOfDay = DateTime(now.year, now.month, now.day + 1);
-      query = query.where('date', isLessThanOrEqualTo: endOfDay);
+      query = query.where('startDate', isLessThanOrEqualTo: endOfDay);
     }
 
     if (StateService().selectedGenres.isNotEmpty) {

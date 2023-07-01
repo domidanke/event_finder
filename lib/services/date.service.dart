@@ -43,6 +43,29 @@ class DateService {
     }
   }
 
+  Future<DateTime> showIosTimePicker(BuildContext context) async {
+    late DateTime? selectedDate;
+    await showModalBottomSheet(
+        context: context,
+        builder: (_) => SizedBox(
+              height: 250,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 200,
+                    child: CupertinoDatePicker(
+                        mode: CupertinoDatePickerMode.time,
+                        use24hFormat: true,
+                        onDateTimeChanged: (val) {
+                          selectedDate = val;
+                        }),
+                  ),
+                ],
+              ),
+            ));
+    return selectedDate!;
+  }
+
   Future<TimeOfDay?> showAndroidTimePicker(context) async {
     return await showTimePicker(
       initialTime: TimeOfDay.now(),

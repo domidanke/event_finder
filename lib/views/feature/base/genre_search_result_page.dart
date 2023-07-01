@@ -46,7 +46,7 @@ class _GenreSearchResultPageState extends State<GenreSearchResultPage> {
                   ),
                   Text(
                     StateService().lastSelectedGenre!,
-                    style: const TextStyle(fontSize: 32, color: primaryGreen),
+                    style: const TextStyle(fontSize: 32, color: secondaryColor),
                   ),
                 ],
               ),
@@ -146,8 +146,8 @@ class _GenreSearchResultPageState extends State<GenreSearchResultPage> {
     final startOfDay = DateTime(now.year, now.month, now.day);
     var query = EventDocService()
         .eventsCollection
-        .orderBy('date')
-        .where('date', isGreaterThanOrEqualTo: startOfDay)
+        .orderBy('startDate')
+        .where('startDate', isGreaterThanOrEqualTo: startOfDay)
         .where('genres', arrayContains: StateService().lastSelectedGenre);
 
     return query;

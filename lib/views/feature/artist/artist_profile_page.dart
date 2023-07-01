@@ -1,6 +1,7 @@
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,95 +28,107 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   @override
   Widget build(BuildContext context) {
     final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
+    _imageUrl = StorageService().getProfileImageUrl();
     return Scaffold(
       body: Column(
         children: [
-          FutureBuilder(
-            future: _imageUrl,
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              currentUser.imageUrl = snapshot.data;
-              if (snapshot.hasData) {
-                return Container(
-                    height: 400,
-                    width: 1000,
-                    decoration: BoxDecoration(
-                      image: currentUser.imageUrl != null
-                          ? DecorationImage(
-                              image: NetworkImage(
-                                currentUser.imageUrl!,
-                              ),
-                              fit: BoxFit.cover,
-                              alignment: Alignment.topCenter,
-                            )
-                          : null,
-                    ),
-                    child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
+          AspectRatio(
+            aspectRatio: 1,
+            child: FutureBuilder(
+              future: _imageUrl,
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                currentUser.imageUrl = snapshot.data;
+                if (snapshot.hasData) {
+                  return AspectRatio(
+                    aspectRatio: 1,
+                    child: Container(
+                        decoration: BoxDecoration(
+                          image: currentUser.imageUrl != null
+                              ? DecorationImage(
+                                  image: NetworkImage(
+                                    currentUser.imageUrl!,
+                                  ),
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.topCenter,
+                                )
+                              : null,
+                        ),
+                        child: SafeArea(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Text(currentUser.displayName,
-                                        style: const TextStyle(
-                                          fontSize: 32,
-                                        )),
-                                    StreamBuilder(
-                                        stream: UserDocService()
-                                            .usersCollection
-                                            .doc(currentUser.uid)
-                                            .snapshots(),
-                                        builder: (context, snapshot) {
-                                          if (!snapshot.hasData) {
-                                            return const Text(
-                                              '',
-                                            );
-                                          } else {
-                                            final x = snapshot.data!.data()!;
-                                            return Row(
-                                              children: [
-                                                Text(
-                                                  '${x.follower.length} Follower',
-                                                  style: const TextStyle(
-                                                      fontSize: 14),
-                                                ),
-                                              ],
-                                            );
-                                          }
-                                        }),
-                                    const SizedBox(
-                                      height: 4,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(currentUser.displayName,
+                                            style: const TextStyle(
+                                                fontSize: 32,
+                                                color: secondaryColor)),
+                                        StreamBuilder(
+                                            stream: UserDocService()
+                                                .usersCollection
+                                                .doc(currentUser.uid)
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (!snapshot.hasData) {
+                                                return const Text(
+                                                  '',
+                                                );
+                                              } else {
+                                                final x =
+                                                    snapshot.data!.data()!;
+                                                return Row(
+                                                  children: [
+                                                    Text(
+                                                      '${x.follower.length} Follower',
+                                                      style: const TextStyle(
+                                                          fontSize: 14,
+                                                          color:
+                                                              secondaryColor),
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                            }),
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ));
-              } else {
-                return const SizedBox(
-                  height: 400,
-                  width: 1000,
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
-            },
+                          ),
+                        )),
+                  );
+                } else {
+                  return const SizedBox(
+                    height: 400,
+                    width: 1000,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+              },
+            ),
           ),
           const SizedBox(
-            height: 4,
+            height: 8,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Wrap(
+            //mainAxisAlignment: MainAxisAlignment.center,
             children: currentUser.genres
                 .map((genre) => GenreCard(text: genre))
                 .toList(),
+          ),
+          const SizedBox(
+            height: 8,
           ),
           Expanded(
               child: ListView(

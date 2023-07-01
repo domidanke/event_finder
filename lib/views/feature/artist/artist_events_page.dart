@@ -102,8 +102,8 @@ class _ArtistEventsPageState extends State<ArtistEventsPage> {
     final startOfDay = DateTime(now.year, now.month, now.day);
     var query = EventDocService()
         .eventsCollection
-        .orderBy('date')
-        .where('date', isGreaterThanOrEqualTo: startOfDay);
+        .orderBy('startDate')
+        .where('startDate', isGreaterThanOrEqualTo: startOfDay);
 
     return query.where('artists', arrayContains: artistId);
   }
@@ -113,8 +113,8 @@ class _ArtistEventsPageState extends State<ArtistEventsPage> {
     final startOfDay = DateTime(now.year, now.month, now.day);
     var query = EventDocService()
         .eventsCollection
-        .orderBy('date')
-        .where('date', isLessThan: startOfDay);
+        .orderBy('startDate')
+        .where('startDate', isLessThan: startOfDay);
 
     return query.where('artists', arrayContains: artistId);
   }

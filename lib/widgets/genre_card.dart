@@ -14,13 +14,13 @@ class GenreCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
-        color: primaryGreen,
+        color: secondaryColor,
         child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
             child: Text(
               text,
               style:
-                  const TextStyle(fontSize: 14, color: primaryBackgroundColor),
+                  const TextStyle(fontSize: 18, color: primaryBackgroundColor),
             )),
       );
 }

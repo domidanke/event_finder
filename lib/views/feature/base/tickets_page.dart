@@ -26,7 +26,8 @@ class _TicketsPageState extends State<TicketsPage> {
   void fillUnusedTickets() {
     final AppUser currentUser = StateService().currentUser!;
     for (var ticket in currentUser.allTickets) {
-      if (!currentUser.usedTickets.contains(ticket.id)) {
+      if (!currentUser.usedTickets.contains(ticket.id) &&
+          ticket.eventDate.isAfter(DateTime.now())) {
         unusedTickets.add(ticket);
       }
     }
@@ -68,7 +69,7 @@ class _TicketsPageState extends State<TicketsPage> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Aktuelle Tickets',
-                      style: TextStyle(fontSize: 18, color: primaryGreen),
+                      style: TextStyle(fontSize: 18, color: secondaryColor),
                     ),
                   ),
                   Divider(),
@@ -110,7 +111,7 @@ class _TicketsPageState extends State<TicketsPage> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Bereits eingescannt',
-                      style: TextStyle(fontSize: 18, color: primaryGreen),
+                      style: TextStyle(fontSize: 18, color: secondaryColor),
                     ),
                   ),
                   Divider(),

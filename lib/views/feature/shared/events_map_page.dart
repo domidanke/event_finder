@@ -91,7 +91,7 @@ class EventsMapPageState extends State<EventsMapPage> {
       final event = ds.data()!;
       final now = DateTime.now();
       final startOfDay = DateTime(now.year, now.month, now.day);
-      if (event.date.isBefore(startOfDay)) continue;
+      if (event.startDate.isBefore(startOfDay)) continue;
       _numOfEventsInRadius++;
       _events.add(event);
       _markers.add(
@@ -175,20 +175,22 @@ class EventsMapPageState extends State<EventsMapPage> {
                           style: const TextStyle(color: Colors.white),
                         ),
                         CustomIconButton(
-                            onPressed: () {
-                              if (_lastSearchedRadiusInKm == _radiusInKm) {
-                                return;
-                              }
-                              _lastSearchedRadiusInKm = _radiusInKm;
-                              _subscription = _geoQuerySubscription(
-                                centerGeoPoint: GeoPoint(
-                                  currentPosition.latitude,
-                                  currentPosition.longitude,
-                                ),
-                                radiusInKm: _radiusInKm,
-                              );
-                            },
-                            icon: const Icon(Icons.search))
+                          onPressed: () {
+                            if (_lastSearchedRadiusInKm == _radiusInKm) {
+                              return;
+                            }
+                            _lastSearchedRadiusInKm = _radiusInKm;
+                            _subscription = _geoQuerySubscription(
+                              centerGeoPoint: GeoPoint(
+                                currentPosition.latitude,
+                                currentPosition.longitude,
+                              ),
+                              radiusInKm: _radiusInKm,
+                            );
+                          },
+                          icon: const Icon(Icons.search),
+                          color: secondaryColor,
+                        )
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -239,7 +241,7 @@ class EventsMapPageState extends State<EventsMapPage> {
     } else {
       return CupertinoSlider(
         key: const Key('slider'),
-        activeColor: primaryGreen,
+        activeColor: secondaryColor,
         value: _radiusInKm,
         min: 1,
         max: 50,

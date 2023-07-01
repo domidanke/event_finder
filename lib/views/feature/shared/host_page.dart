@@ -91,7 +91,7 @@ class _HostPageState extends State<HostPage> {
                       Icon(
                         Icons.check_circle_outline,
                         size: 18,
-                        color: primaryGreen,
+                        color: secondaryColor,
                       ),
                       SizedBox(
                         width: 4,
@@ -99,7 +99,7 @@ class _HostPageState extends State<HostPage> {
                       Text(
                         'Following',
                         style: TextStyle(
-                            color: primaryGreen, fontWeight: FontWeight.bold),
+                            color: secondaryColor, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -206,7 +206,7 @@ class _HostPageState extends State<HostPage> {
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
-                      side: const BorderSide(color: primaryGreen, width: 1),
+                      side: const BorderSide(color: secondaryColor, width: 1),
                     ),
                     child: Center(
                         child: StateService().isLoadingFollow
@@ -214,11 +214,11 @@ class _HostPageState extends State<HostPage> {
                                 width: 20,
                                 height: 20,
                                 child: CircularProgressIndicator(
-                                  color: primaryGreen,
+                                  color: secondaryColor,
                                 ))
                             : const Text(
                                 'Follow',
-                                style: TextStyle(color: primaryGreen),
+                                style: TextStyle(color: secondaryColor),
                               )),
                   ),
                 ),

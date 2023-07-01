@@ -44,7 +44,7 @@ class _BaseHomePageState extends State<BaseHomePage> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.map),
-              label: 'karte',
+              label: 'Entdecke',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.search),

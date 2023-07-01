@@ -18,7 +18,7 @@ class _CePage2State extends State<CePage2> {
       child: Column(
         children: [
           const SizedBox(
-            height: 4,
+            height: 6,
           ),
           SingleChildScrollView(
             child: Container(

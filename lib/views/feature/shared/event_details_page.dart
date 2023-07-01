@@ -13,6 +13,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/app_user.dart';
+import '../../../models/consts.dart';
 import '../../../services/firestore/event_ticket_doc.service.dart';
 import 'location_snippet.dart';
 
@@ -31,23 +32,24 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     final Event event = Provider.of<StateService>(context).lastSelectedEvent!;
     final currentUser = StateService().currentUser!;
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                  height: 250,
-                  decoration: BoxDecoration(
-                    image: event.imageUrl != null
-                        ? DecorationImage(
-                            image: NetworkImage(
-                              event.imageUrl!,
-                            ),
-                            fit: BoxFit.cover,
-                            alignment: Alignment.topCenter,
-                          )
-                        : null,
-                  ),
+      body: Column(
+        children: [
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+                decoration: BoxDecoration(
+                  image: event.imageUrl != null
+                      ? DecorationImage(
+                          image: NetworkImage(
+                            event.imageUrl!,
+                          ),
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                        )
+                      : null,
+                ),
+                child: SafeArea(
+                  bottom: false,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 12, horizontal: 16),
@@ -65,13 +67,12 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           children: [
                             Text(event.title,
                                 style: const TextStyle(
-                                  fontSize: 24,
-                                )),
+                                    fontSize: 24, color: secondaryColor)),
                             Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
                                 side: const BorderSide(
-                                    color: primaryWhite, width: 1),
+                                    color: secondaryColor, width: 1),
                               ),
                               child: SizedBox(
                                   width: 50,
@@ -79,8 +80,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                                   child: Center(
                                     child: Text(
                                       '${event.ticketPrice} €',
-                                      style:
-                                          const TextStyle(color: primaryWhite),
+                                      style: const TextStyle(
+                                          color: secondaryColor),
                                     ),
                                   )),
                             ),
@@ -88,196 +89,205 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         ),
                       ],
                     ),
-                  )),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: ListView(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Row(
-                          children: [
-                            const CustomIconButton(
-                              icon: Icon(Icons.access_time),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(event.date.toString().substring(0, 10)),
-                                Text(
-                                    '${event.date.toString().substring(11, 16)} Uhr')
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      if (currentUser.type == UserType.host &&
-                          event.date.isAfter(DateTime.now()))
-                        Container(
-                          margin: const EdgeInsets.only(right: 12),
-                          child: IconButton(
-                              color: primaryGreen,
-                              onPressed: () async {
-                                Navigator.pushNamed(context, 'scan_qr_code');
-                              },
-                              icon: const Icon(Icons.qr_code)),
-                        )
-                    ],
                   ),
+                )),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Expanded(
+            child: ListView(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        children: [
+                          const CustomIconButton(
+                            icon: Icon(Icons.access_time),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(event.startDate.toString().substring(0, 10)),
+                              Text(_getTimeText(event))
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    if (currentUser.type == UserType.host &&
+                        event.startDate.isAfter(DateTime.now()))
+                      Container(
+                        margin: const EdgeInsets.only(right: 12),
+                        child: IconButton(
+                            color: secondaryColor,
+                            onPressed: () async {
+                              Navigator.pushNamed(context, 'scan_qr_code');
+                            },
+                            icon: const Icon(Icons.qr_code)),
+                      )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        children: [
+                          const CustomIconButton(
+                            icon: Icon(Icons.music_note),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ..._getGenreWidgets(),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    if (event.artists.isNotEmpty)
+                      Container(
+                        margin: const EdgeInsets.only(right: 12),
+                        child: IconButton(
+                            onPressed: () {
+                              _showArtistsModal();
+                            },
+                            icon: const Icon(
+                              Icons.people,
+                              color: secondaryColor,
+                            )),
+                      ),
+                  ],
+                ),
+                if (currentUser.type != UserType.host)
                   Row(
                     children: [
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         child: Row(
                           children: [
-                            const CustomIconButton(
-                              icon: Icon(Icons.music_note),
-                            ),
+                            const CustomIconButton(icon: Icon(Icons.house)),
                             const SizedBox(
-                              width: 20,
+                              width: 12,
                             ),
-                            ..._getGenreWidgets(),
+                            TextButton(
+                              onPressed: _navigateToHost,
+                              child: Text(event.creatorName),
+                            ),
                           ],
                         ),
                       ),
-                      const Spacer(),
-                      if (event.artists.isNotEmpty)
-                        Container(
-                          margin: const EdgeInsets.only(right: 12),
-                          child: IconButton(
-                              onPressed: () {
-                                _showArtistsModal();
-                              },
-                              icon: const Icon(Icons.people)),
-                        ),
                     ],
                   ),
-                  if (currentUser.type != UserType.host)
-                    Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Row(
-                            children: [
-                              const CustomIconButton(icon: Icon(Icons.house)),
-                              const SizedBox(
-                                width: 12,
-                              ),
-                              TextButton(
-                                onPressed: _navigateToHost,
-                                child: Text(event.creatorName),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  const SizedBox(
-                    height: 20,
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    clipBehavior: Clip.hardEdge,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(12))),
+                    height: 200,
+                    child: LocationSnippet(
+                        coordinates: LatLng(event.location.geoPoint.latitude,
+                            event.location.geoPoint.longitude))),
+                const SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: SingleChildScrollView(
+                        child: Text(
+                      event.details,
+                      style: const TextStyle(height: 1.5),
+                    ))),
+                const SizedBox(
+                  height: 20,
+                ),
+                if (event.creatorId == currentUser.uid)
+                  Center(
+                    child: StreamBuilder(
+                        stream: EventTicketDocService()
+                            .eventTicketsCollection
+                            .doc(event.uid)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Text('Verkaufte Tickets: -');
+                          } else {
+                            final x = snapshot.data!.data()!;
+                            return Text(
+                                'Verkaufte Tickets: ${x.allTickets.length} / ${event.maxTickets}');
+                          }
+                        }),
                   ),
-                  Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      clipBehavior: Clip.hardEdge,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12))),
-                      height: 200,
-                      child: LocationSnippet(
-                          coordinates: LatLng(event.location.geoPoint.latitude,
-                              event.location.geoPoint.longitude))),
+              ],
+            ),
+          ),
+          if (currentUser.type == UserType.base &&
+              event.startDate.isAfter(DateTime.now()))
+            Container(
+              margin: const EdgeInsets.all(20),
+              child: KKButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, 'buy_tickets');
+                },
+                buttonText: 'Tickets hier kaufen',
+              ),
+            ),
+          if (currentUser.type == UserType.guest)
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                children: [
+                  const Text('Du willst Tickets kaufen? Dann registriere Dich'),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
-                  Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      height: 400,
-                      child: SingleChildScrollView(
-                          child: Text(
-                        event.details,
-                        style: const TextStyle(height: 1.5),
-                      ))),
-                  const SizedBox(
-                    height: 20,
+                  KKButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'activate_account');
+                    },
+                    buttonText: 'Aktiviere Account',
                   ),
-                  if (event.creatorId == currentUser.uid)
-                    Center(
-                      child: StreamBuilder(
-                          stream: EventTicketDocService()
-                              .eventTicketsCollection
-                              .doc(event.uid)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return const Text('Verkaufte Tickets: -');
-                            } else {
-                              final x = snapshot.data!.data()!;
-                              return Text(
-                                  'Verkaufte Tickets: ${x.allTickets.length} / ${event.maxTickets}');
-                            }
-                          }),
-                    ),
                 ],
               ),
             ),
-            if (currentUser.type == UserType.base &&
-                event.date.isAfter(DateTime.now()))
-              Container(
-                margin: const EdgeInsets.all(20),
-                child: KKButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'buy_tickets');
-                  },
-                  buttonText: 'Tickets hier kaufen',
-                ),
+          if (event.creatorId == currentUser.uid &&
+              event.startDate.isAfter(DateTime.now()))
+            Container(
+              margin: const EdgeInsets.all(20),
+              child: KKButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, 'edit_event');
+                },
+                buttonText: 'Beschreibung bearbeiten',
               ),
-            if (currentUser.type == UserType.guest)
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                child: Column(
-                  children: [
-                    const Text(
-                        'Du willst Tickets kaufen? Dann registriere Dich'),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    KKButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, 'activate_account');
-                      },
-                      buttonText: 'Aktiviere Account',
-                    ),
-                  ],
-                ),
-              ),
-            if (event.creatorId == currentUser.uid &&
-                event.date.isAfter(DateTime.now()))
-              Container(
-                margin: const EdgeInsets.all(20),
-                child: KKButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'edit_event');
-                  },
-                  buttonText: 'Beschreibung bearbeiten',
-                ),
-              ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
+  }
+
+  String _getTimeText(Event event) {
+    if (event.endDate == null) {
+      return '${event.startDate.toString().substring(11, 16)} Uhr';
+    } else {
+      return '${event.startDate.toString().substring(11, 16)} - ${event.endDate.toString().substring(11, 16)} Uhr';
+    }
   }
 
   void _showArtistsModal() {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => Dialog(
+        insetPadding: dialogPadding,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

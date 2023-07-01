@@ -54,7 +54,7 @@ class _ArtistSearchState extends State<ArtistSearch> {
                       decoration: InputDecoration(
                           suffixIconColor: MaterialStateColor.resolveWith(
                               (states) => states.contains(MaterialState.focused)
-                                  ? primaryWhite
+                                  ? secondaryColor
                                   : Colors.grey),
                           labelText: 'Suche',
                           suffixIcon: const Icon(

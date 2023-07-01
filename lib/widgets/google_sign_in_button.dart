@@ -71,17 +71,6 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                       image: AssetImage('assets/images/google_logo.png'),
                       height: 25.0,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),

@@ -137,7 +137,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
                                           .contains(event.uid)
                                       ? const Icon(
                                           Icons.bookmark,
-                                          color: primaryGreen,
+                                          color: secondaryColor,
                                         )
                                       : const Icon(Icons.bookmark_border));
                             }),
