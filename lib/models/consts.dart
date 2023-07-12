@@ -69,17 +69,17 @@ const Map<String, String> monthMap = {
 List<OnboardingPageModel> onboardingPageModels = [
   OnboardingPageModel(
     title: 'Vereint',
-    description: 'Events, Hosts, Kuenstler und DICH in einer App!',
+    description: 'Events, Hosts, Künstler und DICH in einer App!',
     imageUrl: 'page1',
   ),
   OnboardingPageModel(
     title: 'Finde',
-    description: 'Events in deiner Naehe!',
+    description: 'Events in deiner Nähe!',
     imageUrl: 'page2',
   ),
   OnboardingPageModel(
     title: 'Folge',
-    description: 'Hosts und Kuenstlern!',
+    description: 'Hosts und Künstlern!',
     imageUrl: 'page3',
   ),
   OnboardingPageModel(
@@ -89,7 +89,7 @@ List<OnboardingPageModel> onboardingPageModels = [
   ),
   OnboardingPageModel(
     title: 'Komm',
-    description: 'zum Event und lass es krachen!',
+    description: 'zu Events und lass es krachen!',
     imageUrl: 'page5',
   ),
   OnboardingPageModel(

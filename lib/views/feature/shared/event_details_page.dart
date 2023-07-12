@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
+import 'package:event_finder/services/location.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/theme/theme.dart';
@@ -9,13 +10,12 @@ import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/app_user.dart';
 import '../../../models/consts.dart';
 import '../../../services/firestore/event_ticket_doc.service.dart';
-import 'location_snippet.dart';
 
 class EventDetailsPage extends StatefulWidget {
   const EventDetailsPage({super.key});
@@ -26,6 +26,15 @@ class EventDetailsPage extends StatefulWidget {
 
 class _EventDetailsPageState extends State<EventDetailsPage> {
   late Future<String> _imageUrl;
+  late Future<List<Placemark>> _placeMarks;
+
+  @override
+  void initState() {
+    final event = StateService().lastSelectedEvent!;
+    _placeMarks = placemarkFromCoordinates(
+        event.location.geoPoint.latitude, event.location.geoPoint.longitude);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,37 +175,57 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   ],
                 ),
                 if (currentUser.type != UserType.host)
-                  Row(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Row(
-                          children: [
-                            const CustomIconButton(icon: Icon(Icons.house)),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            TextButton(
-                              onPressed: _navigateToHost,
-                              child: Text(event.creatorName),
-                            ),
-                          ],
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        const CustomIconButton(icon: Icon(Icons.house)),
+                        const SizedBox(
+                          width: 12,
                         ),
-                      ),
-                    ],
+                        TextButton(
+                          onPressed: _navigateToHost,
+                          child: Text(event.creatorName),
+                        ),
+                      ],
+                    ),
                   ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    clipBehavior: Clip.hardEdge,
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12))),
-                    height: 200,
-                    child: LocationSnippet(
-                        coordinates: LatLng(event.location.geoPoint.latitude,
-                            event.location.geoPoint.longitude))),
+                if (currentUser.type != UserType.host)
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        const CustomIconButton(icon: Icon(Icons.location_city)),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        Expanded(
+                          child: Container(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: FutureBuilder(
+                              future: _placeMarks,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<Placemark>> snapshot) {
+                                if (snapshot.hasData) {
+                                  final placeMark = snapshot.data![0];
+                                  return TextButton(
+                                    onPressed: () async {
+                                      await LocationService()
+                                          .openEventInMap(event);
+                                    },
+                                    child: Text(
+                                      '${placeMark.street}, ${placeMark.postalCode}, ${placeMark.locality}',
+                                    ),
+                                  );
+                                }
+                                return const Text('');
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 const SizedBox(
                   height: 20,
                 ),

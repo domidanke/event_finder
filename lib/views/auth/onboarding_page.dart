@@ -87,8 +87,6 @@ class _OnboardingPageState extends State<OnboardingPage>
                     padding: const EdgeInsets.all(32.0),
                     child: Image.asset(
                       'assets/images/onboarding/${pageModel.imageUrl}.png',
-                      height: 400,
-                      width: 400,
                       color: pageModel.title == 'Nocstar' ? primaryWhite : null,
                     ),
                   ),

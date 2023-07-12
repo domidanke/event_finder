@@ -32,6 +32,11 @@ class EventDocService {
     return ref.id;
   }
 
+  Future<Event?> getEventDocument(String eventId) async {
+    final doc = await eventsCollection.doc(eventId).get();
+    return doc.data();
+  }
+
   Future<void> updateEventDocument(Event event) async {
     await eventsCollection.doc(event.uid).update({'details': event.details});
   }
