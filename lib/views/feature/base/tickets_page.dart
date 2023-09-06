@@ -79,8 +79,8 @@ class _TicketsPageState extends State<TicketsPage> {
             Expanded(
               child: ListView.builder(
                 itemCount: unusedTickets.length,
-                prototypeItem: ListTile(
-                  title: Text(unusedTickets.first.eventTitle),
+                prototypeItem: const ListTile(
+                  title: Text('Event Titel'),
                 ),
                 itemBuilder: (context, index) {
                   var ticketNumber = unusedTickets[index].id.split('_')[3];
@@ -121,8 +121,8 @@ class _TicketsPageState extends State<TicketsPage> {
             Expanded(
               child: ListView.builder(
                 itemCount: currentUser.usedTickets.length,
-                prototypeItem: ListTile(
-                  title: Text(currentUser.allTickets.first.eventTitle),
+                prototypeItem: const ListTile(
+                  title: Text('Event Titel'),
                 ),
                 itemBuilder: (context, index) {
                   var ticket = currentUser.allTickets.singleWhere((element) =>
