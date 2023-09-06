@@ -12,7 +12,7 @@ import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../theme/theme.dart';
+import '../../../services/events_page.service.dart';
 import '../shared/event_card.dart';
 
 class EventsPage extends StatefulWidget {
@@ -37,7 +37,7 @@ class _EventsPageState extends State<EventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<StateService>(context).selectedDate;
+    Provider.of<EventsPageService>(context).selectedDate;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -108,102 +108,74 @@ class _EventsPageState extends State<EventsPage> {
                                 FutureBuilder(
                                     future: _hostImageUrlFuture,
                                     builder: (context, snapshot) {
-                                      return Row(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () async {
-                                              final host =
-                                                  await UserDocService()
-                                                      .getUserData(
-                                                          event.creatorId);
-                                              if (host == null) return;
-                                              host.imageUrl = snapshot.data;
-                                              StateService().lastSelectedHost =
-                                                  host;
-                                              if (mounted) {
-                                                Navigator.pushNamed(
-                                                    context, 'host_page');
-                                              }
-                                            },
-                                            child: CircleAvatar(
-                                              radius: 18,
-                                              backgroundImage: snapshot
-                                                          .connectionState ==
-                                                      ConnectionState.waiting
-                                                  ? null
-                                                  : NetworkImage(
-                                                      snapshot.data ?? ''),
-                                              child: snapshot.connectionState ==
-                                                      ConnectionState.waiting
-                                                  ? const SizedBox(
-                                                      height: 18,
-                                                      width: 18,
-                                                      child:
-                                                          CircularProgressIndicator(),
-                                                    )
-                                                  : null,
+                                      return Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 8),
+                                        child: Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () async {
+                                                final host =
+                                                    await UserDocService()
+                                                        .getUserData(
+                                                            event.creatorId);
+                                                if (host == null) return;
+                                                host.imageUrl = snapshot.data;
+                                                StateService()
+                                                    .lastSelectedHost = host;
+                                                if (mounted) {
+                                                  Navigator.pushNamed(
+                                                      context, 'host_page');
+                                                }
+                                              },
+                                              child: CircleAvatar(
+                                                radius: 18,
+                                                backgroundImage: snapshot
+                                                            .connectionState ==
+                                                        ConnectionState.waiting
+                                                    ? null
+                                                    : NetworkImage(
+                                                        snapshot.data ?? ''),
+                                                child: snapshot
+                                                            .connectionState ==
+                                                        ConnectionState.waiting
+                                                    ? const SizedBox(
+                                                        height: 18,
+                                                        width: 18,
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      )
+                                                    : null,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () async {
-                                              final host =
-                                                  await UserDocService()
-                                                      .getUserData(
-                                                          event.creatorId);
-                                              if (host == null) return;
-                                              host.imageUrl = snapshot.data;
-                                              StateService().lastSelectedHost =
-                                                  host;
-                                              if (mounted) {
-                                                Navigator.pushNamed(
-                                                    context, 'host_page');
-                                              }
-                                            },
-                                            child: Text(
-                                              event.creatorName,
-                                              style:
-                                                  const TextStyle(fontSize: 12),
+                                            const SizedBox(
+                                              width: 10,
                                             ),
-                                          ),
-                                        ],
+                                            GestureDetector(
+                                              onTap: () async {
+                                                final host =
+                                                    await UserDocService()
+                                                        .getUserData(
+                                                            event.creatorId);
+                                                if (host == null) return;
+                                                host.imageUrl = snapshot.data;
+                                                StateService()
+                                                    .lastSelectedHost = host;
+                                                if (mounted) {
+                                                  Navigator.pushNamed(
+                                                      context, 'host_page');
+                                                }
+                                              },
+                                              child: Text(
+                                                event.creatorName,
+                                                style: const TextStyle(
+                                                    fontSize: 12),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       );
                                     }),
-                                const Spacer(),
-                                StatefulBuilder(builder: (BuildContext context,
-                                    StateSetter setState) {
-                                  return Opacity(
-                                    opacity: StateService().currentUser!.type ==
-                                            UserType.guest
-                                        ? 0.2
-                                        : 1,
-                                    child: IconButton(
-                                        onPressed: () async {
-                                          if (StateService()
-                                                  .currentUser!
-                                                  .type ==
-                                              UserType.guest) return;
-                                          await UserDocService()
-                                              .saveEvent(event.uid);
-                                          setState(() {
-                                            StateService()
-                                                .toggleSavedEvent(event.uid);
-                                          });
-                                        },
-                                        icon: StateService()
-                                                .currentUser!
-                                                .savedEvents
-                                                .contains(event.uid)
-                                            ? const Icon(
-                                                Icons.bookmark,
-                                                color: secondaryColor,
-                                              )
-                                            : const Icon(
-                                                Icons.bookmark_border)),
-                                  );
-                                }),
                               ],
                             ),
                           ),
@@ -229,8 +201,8 @@ class _EventsPageState extends State<EventsPage> {
     var startOfDay = DateTime(now.year, now.month, now.day);
     var query = EventDocService().eventsCollection.orderBy('startDate');
 
-    if (StateService().selectedDate != null) {
-      startOfDay = StateService().selectedDate!;
+    if (EventsPageService().selectedDate != null) {
+      startOfDay = EventsPageService().selectedDate!;
       final endOfDay =
           DateTime(startOfDay.year, startOfDay.month, startOfDay.day + 1);
       query = query.where('startDate', isLessThanOrEqualTo: endOfDay);

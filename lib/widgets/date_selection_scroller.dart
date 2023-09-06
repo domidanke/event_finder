@@ -1,8 +1,8 @@
+import 'package:event_finder/services/events_page.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../models/consts.dart';
-import '../services/state.service.dart';
 
 class DateSelectionScroller extends StatefulWidget {
   const DateSelectionScroller({super.key});
@@ -58,10 +58,10 @@ class _DateSelectionState extends State<DateSelectionScroller> {
                   setState(() {
                     if (selectedIndex == index) {
                       selectedIndex = -1;
-                      StateService().selectedDate = null;
+                      EventsPageService().selectedDate = null;
                     } else {
                       selectedIndex = index;
-                      StateService().selectedDate = dateList[index];
+                      EventsPageService().selectedDate = dateList[index];
                     }
                   });
                 },

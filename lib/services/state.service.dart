@@ -22,14 +22,6 @@ class StateService extends ChangeNotifier {
     notifyListeners();
   }
 
-  DateTime? _selectedDate;
-  DateTime? get selectedDate => _selectedDate;
-
-  set selectedDate(DateTime? date) {
-    _selectedDate = date;
-    notifyListeners();
-  }
-
   void setCurrentUserDisplayName(String displayName) async {
     currentUser!.displayName = displayName;
     notifyListeners();

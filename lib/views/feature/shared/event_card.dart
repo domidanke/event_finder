@@ -11,6 +11,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/consts.dart';
+import '../../../widgets/save_event_button.dart';
 
 class EventCard extends StatefulWidget {
   final Event event;
@@ -50,30 +51,51 @@ class _EventCardState extends State<EventCard> {
                 side: const BorderSide(color: primaryWhite, width: 0.2),
               ),
               clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: FutureBuilder(
-                  future: _eventImageUrlFuture,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    widget.event.imageUrl = snapshot.data;
-                    return Container(
-                      decoration: BoxDecoration(
-                        image: widget.event.imageUrl != null
-                            ? DecorationImage(
-                                image:
-                                    NetworkImage(widget.event.imageUrl ?? ''),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                      ),
-                      child: snapshot.connectionState == ConnectionState.waiting
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : null,
-                    );
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  FutureBuilder(
+                      future: _eventImageUrlFuture,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        widget.event.imageUrl = snapshot.data;
+                        return Container(
+                          decoration: BoxDecoration(
+                            image: widget.event.imageUrl != null
+                                ? DecorationImage(
+                                    image: NetworkImage(
+                                        widget.event.imageUrl ?? ''),
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
+                          ),
+                          child: snapshot.connectionState ==
+                                  ConnectionState.waiting
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : null,
+                        );
+                      }),
+                  StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                    return Opacity(
+                        opacity:
+                            StateService().currentUser!.type == UserType.guest
+                                ? 0.2
+                                : 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: SaveEventButton(
+                            event: widget.event,
+                          ),
+                        ));
                   }),
+                ],
+              ),
             ),
           ),
           Padding(
@@ -103,10 +125,39 @@ class _EventCardState extends State<EventCard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            _getDateText(),
-                            style: const TextStyle(
-                                fontSize: 16, color: secondaryColor),
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: _getDateText(),
+                                  style: const TextStyle(
+                                      fontSize: 14, color: secondaryColor),
+                                ),
+                                const TextSpan(
+                                  text: ' | ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w100,
+                                      fontSize: 18),
+                                ),
+                                TextSpan(
+                                  text: _getTimeText(),
+                                  style: const TextStyle(
+                                      fontSize: 14, color: secondaryColor),
+                                ),
+                                const TextSpan(
+                                  text: ' | ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w100,
+                                      fontSize: 18),
+                                ),
+                                TextSpan(
+                                  text:
+                                      '${widget.event.ticketPrice.toString()}€',
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
                           ),
                           _getDistanceWidget()
                         ],
@@ -143,15 +194,15 @@ class _EventCardState extends State<EventCard> {
 
   String _getDateText() {
     final date = widget.event.startDate;
-    var dateText =
-        '${weekdayMap[date.weekday]} ${date.day} ${monthMap[date.month]} | ';
+    return '${weekdayMap[date.weekday]} ${date.day} ${monthMap[date.month]}';
+  }
+
+  String _getTimeText() {
     if (widget.event.endDate == null) {
-      dateText += '${widget.event.startDate.toString().substring(11, 16)} Uhr';
+      return widget.event.startDate.toString().substring(11, 16);
     } else {
-      dateText +=
-          '${widget.event.startDate.toString().substring(11, 16)} - ${widget.event.endDate.toString().substring(11, 16)} Uhr';
+      return '${widget.event.startDate.toString().substring(11, 16)} - ${widget.event.endDate.toString().substring(11, 16)}';
     }
-    return dateText;
   }
 
   Widget _getDistanceWidget() {
