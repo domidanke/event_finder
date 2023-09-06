@@ -48,15 +48,6 @@ final primaryThemeData = ThemeData(
     checkColor: MaterialStateProperty.all(primaryWhite),
     fillColor: MaterialStateProperty.all(secondaryColor),
   ),
-  inputDecorationTheme: const InputDecorationTheme(
-    labelStyle: TextStyle(color: Colors.white),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white, width: 0),
-    ),
-  ),
   focusColor: Colors.redAccent,
   hoverColor: Colors.orange,
   shadowColor: primaryWhite,

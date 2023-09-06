@@ -5,6 +5,7 @@ import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/genre_picker.dart';
 import 'package:event_finder/widgets/date_selection_scroller.dart';
 import 'package:event_finder/widgets/kk_button.dart';
@@ -44,8 +45,8 @@ class _EventsPageState extends State<EventsPage> {
           gradient: LinearGradient(
             end: Alignment.topLeft,
             begin: Alignment.bottomRight,
-            colors: [Color(0xFF11001C), Color(0xFF1DD9DA)],
-            stops: [0.75, 1.0],
+            colors: [primaryBackgroundColor, secondaryColor],
+            stops: [0.7, 1.0],
           ),
         ),
         child: SafeArea(
@@ -109,8 +110,8 @@ class _EventsPageState extends State<EventsPage> {
                                     future: _hostImageUrlFuture,
                                     builder: (context, snapshot) {
                                       return Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8),
                                         child: Row(
                                           children: [
                                             GestureDetector(
