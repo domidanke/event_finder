@@ -1,4 +1,3 @@
-import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/location.service.dart';
@@ -10,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../../../models/consts.dart';
 
 class EventCard extends StatefulWidget {
   final Event event;
@@ -38,18 +39,18 @@ class _EventCardState extends State<EventCard> {
         StateService().lastSelectedEvent = widget.event;
         Navigator.pushNamed(context, 'event_details');
       },
-      child: AspectRatio(
-        aspectRatio: 3 / 3,
-        child: Card(
-          color: primaryGrey.withOpacity(0.3),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: const BorderSide(color: primaryWhite, width: 0.2),
-          ),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Stack(
-            children: [
-              FutureBuilder(
+      child: Column(
+        children: [
+          AspectRatio(
+            aspectRatio: 5 / 3,
+            child: Card(
+              color: primaryGrey.withOpacity(0.3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: const BorderSide(color: primaryWhite, width: 0.2),
+              ),
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              child: FutureBuilder(
                   future: _eventImageUrlFuture,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -73,96 +74,84 @@ class _EventCardState extends State<EventCard> {
                           : null,
                     );
                   }),
-              Padding(
-                padding: const EdgeInsets.all(6),
-                child: Column(
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(6),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: 75,
-                      height: 75,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          side:
-                              const BorderSide(color: secondaryColor, width: 1),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.event.startDate.day.toString(),
-                              style: const TextStyle(
-                                  fontSize: 24, color: secondaryColor),
-                            ),
-                            Text(
-                              monthMap[
-                                  widget.event.startDate.month.toString()]!,
-                              style: const TextStyle(
-                                  fontSize: 18, color: secondaryColor),
-                            ),
-                          ],
+                    FittedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          widget.event.title,
+                          style: const TextStyle(
+                              fontSize: 20, color: primaryWhite),
                         ),
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FittedBox(
-                          child: Row(
-                            children: widget.event.genres
-                                .map(
-                                  (genre) => GenreCard(text: genre),
-                                )
-                                .toList(),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _getDateText(),
+                            style: const TextStyle(
+                                fontSize: 16, color: secondaryColor),
                           ),
-                        ),
-                        FittedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              widget.event.title,
-                              style: const TextStyle(
-                                  fontSize: 32, color: secondaryColor),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _getTimeText(),
-                                style: const TextStyle(
-                                    fontSize: 16, color: secondaryColor),
-                              ),
-                              _getDistanceWidget()
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        )
-                      ],
-                    )
+                          _getDistanceWidget()
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    FittedBox(
+                      child: Row(
+                        children: [
+                          ...widget.event.genres
+                              .map(
+                                (genre) => GenreCard(text: genre),
+                              )
+                              .take(3)
+                              .toList(),
+                          if (widget.event.genres.length > 3)
+                            GenreCard(
+                                text:
+                                    '+${(widget.event.genres.length - 3).toString()}')
+                        ],
+                      ),
+                    ),
                   ],
-                ),
-              ),
-            ],
+                )
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  String _getTimeText() {
+  String _getDateText() {
+    final date = widget.event.startDate;
+    var dateText =
+        '${weekdayMap[date.weekday]} ${date.day} ${monthMap[date.month]} | ';
     if (widget.event.endDate == null) {
-      return '${widget.event.startDate.toString().substring(11, 16)} Uhr';
+      dateText += '${widget.event.startDate.toString().substring(11, 16)} Uhr';
     } else {
-      return '${widget.event.startDate.toString().substring(11, 16)} - ${widget.event.endDate.toString().substring(11, 16)} Uhr';
+      dateText +=
+          '${widget.event.startDate.toString().substring(11, 16)} - ${widget.event.endDate.toString().substring(11, 16)} Uhr';
     }
+    return dateText;
   }
 
   Widget _getDistanceWidget() {
@@ -174,9 +163,9 @@ class _EventCardState extends State<EventCard> {
     final Position? currentPosition =
         Provider.of<StateService>(context).currentUserLocation;
     if (currentPosition == null) {
-      return const Text(
+      return Text(
         'kein GPS',
-        style: TextStyle(color: secondaryColor),
+        style: TextStyle(color: primaryWhite.withOpacity(0.6)),
       );
     }
     var currentLatLng =
@@ -185,7 +174,7 @@ class _EventCardState extends State<EventCard> {
         widget.event.location.geoPoint.longitude);
     return Text(
       '${LocationService().getDistanceFromLatLonInKm(currentLatLng, eventLatLng)}km',
-      style: const TextStyle(fontSize: 16, color: secondaryColor),
+      style: TextStyle(fontSize: 16, color: primaryWhite.withOpacity(0.6)),
     );
   }
 }

@@ -51,19 +51,29 @@ List<TopGenre> topGenres = [
       imagePath: 'assets/images/onboarding/page6.png'),
 ];
 
-const Map<String, String> monthMap = {
-  '1': 'Jan',
-  '2': 'Feb',
-  '3': 'Mär',
-  '4': 'Apr',
-  '5': 'Mai',
-  '6': 'Jun',
-  '7': 'Jul',
-  '8': 'Aug',
-  '9': 'Sep',
-  '10': 'Okt',
-  '11': 'Nov',
-  '12': 'Dez',
+const Map<int, String> monthMap = {
+  1: 'Jan',
+  2: 'Feb',
+  3: 'Mär',
+  4: 'Apr',
+  5: 'Mai',
+  6: 'Jun',
+  7: 'Jul',
+  8: 'Aug',
+  9: 'Sep',
+  10: 'Okt',
+  11: 'Nov',
+  12: 'Dez',
+};
+
+const Map<int, String> weekdayMap = {
+  1: 'Mon',
+  2: 'Die',
+  3: 'Mit',
+  4: 'Don',
+  5: 'Fre',
+  6: 'Sam',
+  7: 'Son',
 };
 
 List<OnboardingPageModel> onboardingPageModels = [
