@@ -41,14 +41,7 @@ class _EventsPageState extends State<EventsPage> {
     Provider.of<EventsPageService>(context).selectedDate;
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            end: Alignment.topLeft,
-            begin: Alignment.bottomRight,
-            colors: [primaryBackgroundColor, secondaryColor],
-            stops: [0.7, 1.0],
-          ),
-        ),
+        decoration: BoxDecoration(gradient: primaryGradient),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(4),

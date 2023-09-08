@@ -63,12 +63,12 @@ class _UserSearchFieldState extends State<UserSearchField> {
                 prefixIcon: const Icon(Icons.search),
                 prefixIconColor: MaterialStateColor.resolveWith((states) =>
                     states.contains(MaterialState.focused)
-                        ? primaryWhite.withOpacity(0.8)
+                        ? primaryWhite.withOpacity(0.9)
                         : primaryWhite.withOpacity(0.4)),
                 hintText: 'Künstler oder Hosts',
                 hintStyle: TextStyle(
                   color: _isFocused
-                      ? primaryWhite.withOpacity(0.8)
+                      ? primaryWhite.withOpacity(0.9)
                       : primaryWhite.withOpacity(0.4),
                 ),
               ),

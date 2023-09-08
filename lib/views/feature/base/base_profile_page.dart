@@ -4,6 +4,8 @@ import 'package:event_finder/services/state.service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../theme/theme.dart';
+
 class BaseProfilePage extends StatefulWidget {
   const BaseProfilePage({Key? key}) : super(key: key);
 
@@ -16,87 +18,90 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
   Widget build(BuildContext context) {
     final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-          child: ListView(
-            children: [
-              Opacity(
-                opacity: currentUser.allTickets.isEmpty ? 0.4 : 1,
-                child: ListTile(
-                  leading: const Icon(Icons.receipt),
-                  title: const Text('Meine Tickets'),
+      body: Container(
+        decoration: BoxDecoration(gradient: primaryGradient),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+            child: ListView(
+              children: [
+                Opacity(
+                  opacity: currentUser.allTickets.isEmpty ? 0.4 : 1,
+                  child: ListTile(
+                    leading: const Icon(Icons.receipt),
+                    title: const Text('Meine Tickets'),
+                    onTap: () {
+                      if (currentUser.allTickets.isEmpty) return;
+                      Navigator.pushNamed(context, 'tickets');
+                    },
+                  ),
+                ),
+                Opacity(
+                  opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
+                  child: ListTile(
+                    leading: const Icon(Icons.people),
+                    title: const Text('Meine Künstler'),
+                    onTap: () {
+                      if (currentUser.savedArtists.isEmpty) {
+                        return;
+                      }
+                      Navigator.pushNamed(context, 'saved_artists');
+                    },
+                  ),
+                ),
+                Opacity(
+                  opacity: currentUser.savedHosts.isEmpty ? 0.4 : 1,
+                  child: ListTile(
+                    leading: const Icon(Icons.house),
+                    title: const Text('Meine Hosts'),
+                    onTap: () {
+                      if (currentUser.savedHosts.isEmpty) {
+                        return;
+                      }
+                      Navigator.pushNamed(context, 'saved_hosts');
+                    },
+                  ),
+                ),
+                Opacity(
+                  opacity: currentUser.savedEvents.isEmpty ? 0.4 : 1,
+                  child: ListTile(
+                    leading: const Icon(Icons.event_available),
+                    title: const Text('Gespeicherte Veranstaltungen'),
+                    onTap: () {
+                      if (currentUser.savedEvents.isEmpty) {
+                        return;
+                      }
+                      Navigator.pushNamed(context, 'saved_events');
+                    },
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.password),
+                  title: const Text('Passwort ändern'),
                   onTap: () {
-                    if (currentUser.allTickets.isEmpty) return;
-                    Navigator.pushNamed(context, 'tickets');
+                    print('edit password');
                   },
                 ),
-              ),
-              Opacity(
-                opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
-                child: ListTile(
-                  leading: const Icon(Icons.people),
-                  title: const Text('Meine Künstler'),
+                ListTile(
+                  leading: const Icon(Icons.question_mark),
+                  title: const Text('Support'),
                   onTap: () {
-                    if (currentUser.savedArtists.isEmpty) {
-                      return;
-                    }
-                    Navigator.pushNamed(context, 'saved_artists');
+                    Navigator.pushNamed(context, 'support_page');
                   },
                 ),
-              ),
-              Opacity(
-                opacity: currentUser.savedHosts.isEmpty ? 0.4 : 1,
-                child: ListTile(
-                  leading: const Icon(Icons.house),
-                  title: const Text('Meine Hosts'),
-                  onTap: () {
-                    if (currentUser.savedHosts.isEmpty) {
-                      return;
-                    }
-                    Navigator.pushNamed(context, 'saved_hosts');
+                ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () async {
+                    await AuthService().signOut().then((value) => {
+                          StateService().resetCurrentUserSilent(),
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/', (Route<dynamic> route) => false),
+                        });
                   },
                 ),
-              ),
-              Opacity(
-                opacity: currentUser.savedEvents.isEmpty ? 0.4 : 1,
-                child: ListTile(
-                  leading: const Icon(Icons.event_available),
-                  title: const Text('Gespeicherte Veranstaltungen'),
-                  onTap: () {
-                    if (currentUser.savedEvents.isEmpty) {
-                      return;
-                    }
-                    Navigator.pushNamed(context, 'saved_events');
-                  },
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.password),
-                title: const Text('Passwort ändern'),
-                onTap: () {
-                  print('edit password');
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.question_mark),
-                title: const Text('Support'),
-                onTap: () {
-                  Navigator.pushNamed(context, 'support_page');
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: () async {
-                  await AuthService().signOut().then((value) => {
-                        StateService().resetCurrentUserSilent(),
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/', (Route<dynamic> route) => false),
-                      });
-                },
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -1,4 +1,3 @@
-import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/qr_code.dart';
@@ -23,8 +22,8 @@ class _TicketDetailsPageState extends State<TicketDetailsPage> {
 
   @override
   void initState() {
-    _eventFuture =
-        EventDocService().getEventDocument(ticketInfo.id.split('_')[1]);
+    // _eventFuture =
+    //     EventDocService().getEventDocument(ticketInfo.qrCodeId.split('_')[1]);
     super.initState();
   }
 
@@ -62,7 +61,8 @@ class _TicketDetailsPageState extends State<TicketDetailsPage> {
                     child: Column(
                       children: [
                         Text(
-                          '${ticketInfo.eventTitle} (${ticketInfo.id.split('_')[3]})',
+                          //'${ticketInfo.eventTitle} (${ticketInfo.qrCodeId.split('_')[3]})',
+                          '',
                           style: const TextStyle(
                               fontSize: 28, color: secondaryColor),
                         ),
@@ -127,7 +127,7 @@ class _TicketDetailsPageState extends State<TicketDetailsPage> {
                         const Spacer(),
                         QrCode(
                           size: 250,
-                          data: ticketInfo.id,
+                          data: 'ticketInfo.qrCodeId',
                         ),
                         const Spacer()
                       ],

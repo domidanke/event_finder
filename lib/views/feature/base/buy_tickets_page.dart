@@ -1,6 +1,6 @@
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/models/ticket_info.dart';
-import 'package:event_finder/services/firestore/event_ticket_doc.service.dart';
+import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
@@ -293,11 +293,11 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
 
                     /// TODO: Add Payment
                     await Future.delayed(const Duration(seconds: 1));
-                    final ticketInfos = createIdsForQrCode();
-                    await UserDocService().addUserTickets(ticketInfos);
-                    StateService().addTickets(ticketInfos);
-                    await EventTicketDocService()
-                        .addTicketsToEvent(ticketInfos, event.uid);
+                    final ticketInfo = createTicketInfo();
+                    await UserDocService().addUserTickets(ticketInfo);
+                    StateService().addTicket(ticketInfo);
+                    await EventDocService().addSoldTicketsToEvent(
+                        ticketInfo.ticketQrCodeIds, event.uid);
                     setState(() {
                       _isLoading = false;
                     });
@@ -412,18 +412,24 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
     }
   }
 
-  List<TicketInfo> createIdsForQrCode() {
-    List<TicketInfo> ticketInfos = [];
+  TicketInfo createTicketInfo() {
     var dateAndTime = DateTime.now().toString().substring(0, 19);
     var event = StateService().lastSelectedEvent!;
+    final ticketInfo = TicketInfo(
+        ticketQrCodeIds: [],
+        userId: StateService().currentUser!.uid,
+        eventId: event.uid,
+        creatorId: event.creatorId,
+        creatorName: event.creatorName,
+        eventTitle: event.title,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        ticketPrice: event.ticketPrice);
     for (var i = 0; i < numberOfTickets; i++) {
-      final ticketInfo = TicketInfo(
-          id: '${StateService().currentUser!.uid}_${event.uid}_${dateAndTime}_${i + 1}/$numberOfTickets',
-          eventTitle: event.title,
-          eventDate: event.startDate);
-      ticketInfos.add(ticketInfo);
+      ticketInfo.ticketQrCodeIds.add(
+          '${StateService().currentUser!.uid}_${event.creatorId}_${event.creatorName}_${event.uid}_${dateAndTime}_${i + 1}/$numberOfTickets');
     }
-    return ticketInfos;
+    return ticketInfo;
   }
 }
 

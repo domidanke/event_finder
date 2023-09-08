@@ -1,4 +1,4 @@
-import 'package:event_finder/services/firestore/event_ticket_doc.service.dart';
+import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
@@ -80,8 +80,8 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
                   color: Colors.red,
                 ));
           } else {
-            final isValid = await EventTicketDocService()
-                .checkIfQrCodeStillValid(scanData.code!);
+            final isValid =
+                await EventDocService().checkIfQrCodeStillValid(scanData.code!);
             if (isValid) {
               qrCodesScanned.add(scanData.code!);
               _showQrCodeResultDialog(

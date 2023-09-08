@@ -10,7 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/consts.dart';
+import '../../../services/date.service.dart';
 import '../../../widgets/save_event_button.dart';
 
 class EventCard extends StatefulWidget {
@@ -27,8 +27,8 @@ class _EventCardState extends State<EventCard> {
 
   @override
   void initState() {
-    _eventImageUrlFuture =
-        StorageService().getEventImageUrl(event: widget.event);
+    _eventImageUrlFuture = StorageService().getEventImageUrl(
+        eventId: widget.event.uid, hostId: widget.event.creatorId);
     super.initState();
   }
 
@@ -130,7 +130,8 @@ class _EventCardState extends State<EventCard> {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: _getDateText(),
+                                  text: DateService()
+                                      .getDateText(widget.event.startDate),
                                   style: const TextStyle(
                                       fontSize: 14, color: secondaryColor),
                                 ),
@@ -141,7 +142,9 @@ class _EventCardState extends State<EventCard> {
                                       fontSize: 18),
                                 ),
                                 TextSpan(
-                                  text: _getTimeText(),
+                                  text: DateService().getTimeText(
+                                      widget.event.startDate,
+                                      widget.event.endDate),
                                   style: const TextStyle(
                                       fontSize: 14, color: secondaryColor),
                                 ),
@@ -190,19 +193,6 @@ class _EventCardState extends State<EventCard> {
         ],
       ),
     );
-  }
-
-  String _getDateText() {
-    final date = widget.event.startDate;
-    return '${weekdayMap[date.weekday]} ${date.day} ${monthMap[date.month]}';
-  }
-
-  String _getTimeText() {
-    if (widget.event.endDate == null) {
-      return widget.event.startDate.toString().substring(11, 16);
-    } else {
-      return '${widget.event.startDate.toString().substring(11, 16)} - ${widget.event.endDate.toString().substring(11, 16)}';
-    }
   }
 
   Widget _getDistanceWidget() {

@@ -134,11 +134,10 @@ class UserDocService {
         .update({'mainLocation': geoFirePoint.data});
   }
 
-  Future<void> addUserTickets(List<TicketInfo> ticketInfos) async {
+  Future<void> addUserTickets(TicketInfo ticketInfo) async {
     final currentUser = StateService().currentUser!;
     await usersCollection.doc(currentUser.uid).update({
-      'allTickets':
-          FieldValue.arrayUnion(ticketInfos.map((e) => e.toJson()).toList())
+      'allTickets': FieldValue.arrayUnion([ticketInfo.toJson()])
     });
   }
 

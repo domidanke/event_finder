@@ -26,13 +26,8 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            end: Alignment.topRight,
-            begin: Alignment.bottomLeft,
-            colors: [primaryBackgroundColor, secondaryColor],
-            stops: [0.7, 1.0],
-          ),
+        decoration: BoxDecoration(
+          gradient: primaryGradient,
         ),
         child: SafeArea(
           child: Column(

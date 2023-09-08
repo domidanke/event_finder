@@ -59,20 +59,12 @@ final primaryThemeData = ThemeData(
           foregroundColor: MaterialStateProperty.all(secondaryColor))),
 );
 
-const primaryGradient = LinearGradient(
-  begin: Alignment.topLeft,
-  end: Alignment(0.8, 1),
-  colors: <Color>[
-    //Color(0xffa24ccd),
-    //Color(0xff9739c8),
-    //Color(0xff8013bd),
-    //Color(0xff8b26c3),
-    Color(0xff7400b8),
-    Color(0xff3a015c),
-    Color(0xff32004f),
-    Color(0xff11001C),
-    Color(0xff190028),
-    Color(0xff220135),
+var primaryGradient = LinearGradient(
+  end: Alignment.topLeft,
+  begin: Alignment.bottomRight,
+  colors: [
+    primaryBackgroundColor.withOpacity(0.1),
+    primaryColor,
+    primaryBackgroundColor.withOpacity(0.1),
   ],
-  tileMode: TileMode.mirror,
 );

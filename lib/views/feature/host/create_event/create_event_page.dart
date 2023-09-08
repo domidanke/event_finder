@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import '../../../../models/event.dart';
 import '../../../../services/alert.service.dart';
 import '../../../../services/firestore/event_doc.service.dart';
-import '../../../../services/firestore/event_ticket_doc.service.dart';
 import '../../../../services/storage/storage.service.dart';
 import 'ce_page_2.dart';
 import 'ce_page_3.dart';
@@ -162,7 +161,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
     final event = CreateEventService().newEvent.toEvent();
     final eventId = await EventDocService().addEventDocument(event);
     StateService().resetSelectedGenres();
-    await EventTicketDocService().addTicketDocument(eventId);
     await StorageService()
         .saveEventImageToStorage(
             eventId, CreateEventService().newEvent.selectedImageFile!)

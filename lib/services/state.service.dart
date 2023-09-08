@@ -181,8 +181,8 @@ class StateService extends ChangeNotifier {
         currentUser!.displayName.isNotEmpty;
   }
 
-  void addTickets(List<TicketInfo> ticketInfos) {
-    currentUser!.allTickets.addAll(ticketInfos);
+  void addTicket(TicketInfo ticketInfo) {
+    currentUser!.allTickets.add(ticketInfo);
     notifyListeners();
   }
 }
