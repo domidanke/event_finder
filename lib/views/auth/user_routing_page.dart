@@ -48,22 +48,27 @@ class _UserRoutingPageState extends State<UserRoutingPage> {
                   }
                   return Center(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text('Etwas ist schiefgelaufen.'),
                         const SizedBox(
-                          height: 8,
+                          height: 12,
                         ),
-                        KKButton(
-                            onPressed: () async {
-                              await AuthService().signOut().then((value) => {
-                                    StateService().resetCurrentUserSilent(),
-                                    Navigator.popUntil(
-                                        context,
-                                        (Route<dynamic> route) =>
-                                            route.settings.name == '/'),
-                                  });
-                            },
-                            buttonText: 'Neustarten')
+                        SizedBox(
+                          width: 150,
+                          child: KKButton(
+                              onPressed: () async {
+                                await AuthService().signOut().then((value) => {
+                                      StateService().resetCurrentUserSilent(),
+                                      Navigator.popUntil(
+                                          context,
+                                          (Route<dynamic> route) =>
+                                              route.settings.name == '/'),
+                                      Navigator.pushNamed(context, '/')
+                                    });
+                              },
+                              buttonText: 'Neustarten'),
+                        )
                       ],
                     ),
                   );

@@ -118,7 +118,7 @@ class _TicketsPageState extends State<TicketsPage>
                     ListView.builder(
                       itemCount: currentTickets.length,
                       prototypeItem: const SizedBox(
-                        height: 100,
+                        height: 110,
                       ),
                       itemBuilder: (context, index) {
                         return TicketTile(

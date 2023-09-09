@@ -68,3 +68,9 @@ var primaryGradient = LinearGradient(
     primaryBackgroundColor.withOpacity(0.1),
   ],
 );
+
+var secondaryGradient = const LinearGradient(
+  end: Alignment.topLeft,
+  begin: Alignment.bottomRight,
+  colors: [secondaryColor],
+);

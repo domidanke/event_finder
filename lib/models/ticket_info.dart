@@ -34,8 +34,10 @@ class TicketInfo {
           eventTitle: json['eventTitle']! as String,
           startDate: DateTime.parse(
               (json['startDate']! as Timestamp).toDate().toString()),
-          endDate: DateTime.parse(
-              (json['endDate']! as Timestamp).toDate().toString()),
+          endDate: json['endDate'] != null
+              ? DateTime.parse(
+                  (json['endDate']! as Timestamp).toDate().toString())
+              : null,
           ticketPrice: json['ticketPrice']! as int,
         );
 

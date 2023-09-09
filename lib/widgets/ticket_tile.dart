@@ -1,10 +1,9 @@
-import 'dart:math';
-
 import 'package:event_finder/models/ticket_info.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../services/date.service.dart';
+import '../services/semi_circle_clipper.dart';
 import '../services/state.service.dart';
 import '../services/storage/storage.service.dart';
 
@@ -31,42 +30,70 @@ class _TicketTileState extends State<TicketTile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GestureDetector(
         onTap: () {
           StateService().lastSelectedTicket = widget.ticketInfo;
           Navigator.pushNamed(context, 'ticket_details');
+          // showModalBottomSheet<String>(
+          //   context: context,
+          //   isScrollControlled: true,
+          //   builder: (BuildContext context) => const TicketDetailsPage(),
+          // );
         },
         child: Row(
           children: [
-            FutureBuilder(
-              future: imageUrl,
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                widget.ticketInfo.imageUrl = snapshot.data;
-                return ClipPath(
-                  clipper: SemiCircleClipper(),
-                  child: Container(
-                    width: 100,
-                    height: 100,
+            Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                FutureBuilder(
+                  future: imageUrl,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    widget.ticketInfo.imageUrl = snapshot.data;
+                    return ClipPath(
+                      clipper: SemiCircleClipper(),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          image: widget.ticketInfo.imageUrl != null
+                              ? DecorationImage(
+                                  image:
+                                      NetworkImage(widget.ticketInfo.imageUrl!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                        ),
+                        child:
+                            snapshot.connectionState == ConnectionState.waiting
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : null,
+                      ),
+                    );
+                  },
+                ),
+                if (widget.ticketInfo.ticketQrCodeIds.length > 1)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    width: 25,
+                    height: 25,
                     decoration: BoxDecoration(
-                      image: widget.ticketInfo.imageUrl != null
-                          ? DecorationImage(
-                              image: NetworkImage(widget.ticketInfo.imageUrl!),
-                              fit: BoxFit.cover,
-                            )
-                          : null,
+                      borderRadius: BorderRadius.circular(25),
+                      color: primaryWhite.withOpacity(0.8),
                     ),
-                    child: snapshot.connectionState == ConnectionState.waiting
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : null,
+                    child: Center(
+                        child: Text(
+                      '${widget.ticketInfo.ticketQrCodeIds.length}',
+                      style: const TextStyle(color: primaryBackgroundColor),
+                    )),
                   ),
-                );
-              },
+              ],
             ),
             const SizedBox(
               width: 18,
@@ -95,47 +122,4 @@ class _TicketTileState extends State<TicketTile> {
       ),
     );
   }
-}
-
-class SemiCircleClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    // Move to the top left corner
-    path.moveTo(0, 0);
-
-    // Draw a straight line to the top right corner
-    path.lineTo(size.width, 0);
-
-    // Draw a straight line to the bottom right corner
-    path.lineTo(size.width, size.height / 2);
-// Draw two small semi-circles to remove from both sides
-    const double radius = 12.0; // Adjust the radius as needed
-    final double centerY = size.height / 2;
-    // Right semi-circle (removal)
-    path.arcTo(
-      Rect.fromCircle(center: Offset(size.width, centerY), radius: radius),
-      -90 * pi / 180,
-      -3.14,
-      false,
-    );
-
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-    path.lineTo(0, size.height / 2);
-
-    path.arcTo(
-      Rect.fromCircle(center: Offset(0, centerY), radius: radius),
-      90 * pi / 180,
-      -3.14,
-      false,
-    );
-
-    path.close();
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
