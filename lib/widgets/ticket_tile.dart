@@ -6,6 +6,7 @@ import '../services/date.service.dart';
 import '../services/semi_circle_clipper.dart';
 import '../services/state.service.dart';
 import '../services/storage/storage.service.dart';
+import '../views/feature/base/ticket_details_page.dart';
 
 class TicketTile extends StatefulWidget {
   const TicketTile({super.key, required this.ticketInfo});
@@ -20,7 +21,6 @@ class _TicketTileState extends State<TicketTile> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     imageUrl = StorageService().getEventImageUrl(
         eventId: widget.ticketInfo.eventId,
@@ -34,12 +34,11 @@ class _TicketTileState extends State<TicketTile> {
       child: GestureDetector(
         onTap: () {
           StateService().lastSelectedTicket = widget.ticketInfo;
-          Navigator.pushNamed(context, 'ticket_details');
-          // showModalBottomSheet<String>(
-          //   context: context,
-          //   isScrollControlled: true,
-          //   builder: (BuildContext context) => const TicketDetailsPage(),
-          // );
+          showModalBottomSheet<String>(
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) => const TicketDetailsPage(),
+          );
         },
         child: Row(
           children: [

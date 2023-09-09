@@ -17,7 +17,7 @@ class ImageService {
     final cropped = await ImageCropper().cropImage(
       sourcePath: image.path,
       compressQuality: 10,
-      aspectRatio: const CropAspectRatio(ratioX: 3, ratioY: 3),
+      aspectRatio: const CropAspectRatio(ratioX: 5, ratioY: 3),
       uiSettings: [
         AndroidUiSettings(
             toolbarColor: secondaryColor,

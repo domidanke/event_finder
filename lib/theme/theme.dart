@@ -40,7 +40,6 @@ final primaryThemeData = ThemeData(
   canvasColor: primaryBackgroundColor,
   fontFamily: 'Quicksand',
   appBarTheme: const AppBarTheme(color: primaryColor),
-  hintColor: Colors.pinkAccent,
   indicatorColor: secondaryColor,
   dialogTheme: const DialogTheme(elevation: 0.1),
   dividerColor: primaryWhite,
@@ -69,8 +68,11 @@ var primaryGradient = LinearGradient(
   ],
 );
 
-var secondaryGradient = const LinearGradient(
-  end: Alignment.topLeft,
-  begin: Alignment.bottomRight,
-  colors: [secondaryColor],
+var secondaryGradient = LinearGradient(
+  end: Alignment.topCenter,
+  begin: Alignment.bottomCenter,
+  colors: [
+    secondaryColor.withOpacity(0.6),
+    primaryColor,
+  ],
 );

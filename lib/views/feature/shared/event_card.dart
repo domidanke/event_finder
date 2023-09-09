@@ -48,7 +48,7 @@ class _EventCardState extends State<EventCard> {
               color: primaryGrey.withOpacity(0.3),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
-                side: const BorderSide(color: primaryWhite, width: 0.2),
+                side: const BorderSide(color: primaryWhite, width: 0.5),
               ),
               clipBehavior: Clip.antiAliasWithSaveLayer,
               child: Stack(

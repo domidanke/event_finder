@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -63,7 +65,9 @@ class _SaveEventButtonState extends State<SaveEventButton>
               ),
               onPressed: () async {
                 if (StateService().currentUser!.type == UserType.guest) return;
-                HapticFeedback.mediumImpact();
+                Platform.isAndroid
+                    ? HapticFeedback.vibrate()
+                    : HapticFeedback.mediumImpact();
                 _animationController.forward(from: 0);
                 await UserDocService().saveEvent(widget.event.uid);
                 setState(() {

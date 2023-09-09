@@ -64,7 +64,7 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
         controller.pauseCamera();
         print(scanData.code);
         if (StateService().lastSelectedEvent!.uid !=
-            scanData.code!.split('_')[1]) {
+            scanData.code!.split('_')[3]) {
           _showQrCodeResultDialog(
               'Falsches Event',
               const Icon(

@@ -62,7 +62,7 @@ class EventDocService {
 
   Future<bool> checkIfQrCodeStillValid(String qrCodeId) async {
     // Extract event ID from qr code id
-    var eventId = qrCodeId.split('_')[1];
+    var eventId = qrCodeId.split('_')[3];
     var docSnapshot = await eventsCollection.doc(eventId).get();
     if (docSnapshot.exists) {
       Event event = docSnapshot.data()!;

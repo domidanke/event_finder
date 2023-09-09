@@ -15,7 +15,6 @@ import 'package:provider/provider.dart';
 
 import '../../../models/app_user.dart';
 import '../../../models/consts.dart';
-import '../../../services/firestore/event_ticket_doc.service.dart';
 
 class EventDetailsPage extends StatefulWidget {
   const EventDetailsPage({super.key});
@@ -241,21 +240,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 ),
                 if (event.creatorId == currentUser.uid)
                   Center(
-                    child: StreamBuilder(
-                        stream: EventTicketDocService()
-                            .eventTicketsCollection
-                            .doc(event.uid)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const Text('Verkaufte Tickets: -');
-                          } else {
-                            final x = snapshot.data!.data()!;
-                            return Text(
-                                'Verkaufte Tickets: ${x.allTickets.length} / ${event.maxTickets}');
-                          }
-                        }),
-                  ),
+                      child: Text(
+                          'Verkaufte Tickets: ${event.soldTickets.length} / ${event.maxTickets}')),
               ],
             ),
           ),
