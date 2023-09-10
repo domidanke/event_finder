@@ -6,7 +6,6 @@ import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:event_finder/widgets/ticket_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class TicketsPage extends StatefulWidget {
   const TicketsPage({super.key});
@@ -18,6 +17,7 @@ class TicketsPage extends StatefulWidget {
 class _TicketsPageState extends State<TicketsPage>
     with SingleTickerProviderStateMixin {
   List<TicketInfo> currentTickets = [];
+  List<TicketInfo> pastTickets = [];
   final List<Tab> myTabs = <Tab>[
     const Tab(text: 'Aktuell'),
     const Tab(text: 'Vergangen'),
@@ -38,23 +38,47 @@ class _TicketsPageState extends State<TicketsPage>
       length: 2,
       vsync: this,
     );
-    fillCurrentTickets();
+    _fillCurrentTickets();
+    _fillPastTickets();
   }
 
-  void fillCurrentTickets() {
+  void _fillCurrentTickets() {
     final AppUser currentUser = StateService().currentUser!;
     final now = DateTime.now();
     var startOfDay = DateTime(now.year, now.month, now.day);
     for (var ticketInfo in currentUser.allTickets) {
-      if (ticketInfo.startDate.isAfter(startOfDay)) {
-        currentTickets.add(ticketInfo);
+      if (ticketInfo.endDate != null) {
+        if (ticketInfo.endDate!.isAfter(now)) {
+          currentTickets.add(ticketInfo);
+        }
+      } else {
+        if (ticketInfo.startDate.isAfter(startOfDay)) {
+          currentTickets.add(ticketInfo);
+        }
       }
     }
   }
 
+  void _fillPastTickets() {
+    final AppUser currentUser = StateService().currentUser!;
+    pastTickets = currentUser.allTickets.where((element) {
+      if (element.endDate != null) {
+        return DateTime.now().isAfter(element.endDate!);
+      } else {
+        final now = DateTime.now();
+        late DateTime endDate;
+        if (now.hour >= 12) {
+          endDate = DateTime(now.year, now.month, now.day + 1, now.hour - 12);
+        } else {
+          endDate = DateTime(now.year, now.month, now.day, now.hour + 12);
+        }
+        return endDate.isAfter(element.startDate);
+      }
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -83,9 +107,12 @@ class _TicketsPageState extends State<TicketsPage>
                   IconButton(
                       onPressed: () async {
                         currentTickets = [];
-                        fillCurrentTickets();
+                        pastTickets = [];
                         StateService().currentUser =
                             await UserDocService().getCurrentUserData();
+                        _fillCurrentTickets();
+                        _fillPastTickets();
+                        setState(() {});
                       },
                       icon: const Icon(Icons.refresh))
                 ],
@@ -127,19 +154,13 @@ class _TicketsPageState extends State<TicketsPage>
                       },
                     ),
                   ListView.builder(
-                    itemCount: currentUser.usedTickets.length,
-                    prototypeItem: const ListTile(
-                      title: Text('Event Titel'),
+                    itemCount: pastTickets.length,
+                    prototypeItem: const SizedBox(
+                      height: 110,
                     ),
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () {
-                          // StateService().lastSelectedTicket = ticket;
-                          // Navigator.pushNamed(context, 'ticket_details');
-                        },
-                        title: const Text('xxx'),
-                        subtitle: const Text('yyy'),
-                        trailing: const Icon(Icons.keyboard_arrow_right),
+                      return TicketTile(
+                        ticketInfo: pastTickets[index],
                       );
                     },
                   ),

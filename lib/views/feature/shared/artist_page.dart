@@ -1,21 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
-import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
-import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:event_finder/widgets/genre_card.dart';
-import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../models/consts.dart';
 import '../../../models/event.dart';
-import 'event_card.dart';
+import '../../../widgets/custom_icon_button.dart';
+import '../../../widgets/event_tile.dart';
 
 class ArtistPage extends StatefulWidget {
   const ArtistPage({Key? key}) : super(key: key);
@@ -32,243 +29,200 @@ class _ArtistPageState extends State<ArtistPage> {
     Provider.of<StateService>(context).isLoadingFollow;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          Container(
-              height: 400,
-              width: 1000,
-              decoration: BoxDecoration(
-                image: artist.imageUrl != null
-                    ? DecorationImage(
-                        image: NetworkImage(
-                          artist.imageUrl!,
-                        ),
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topCenter,
-                      )
-                    : null,
-              ),
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomIconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(artist.displayName,
-                                  style: const TextStyle(
-                                    fontSize: 32,
-                                  )),
-                              StreamBuilder(
-                                  stream: UserDocService()
-                                      .usersCollection
-                                      .doc(artist.uid)
-                                      .snapshots(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return const Text(
-                                        '',
-                                      );
-                                    } else {
-                                      final x = snapshot.data!.data()!;
-                                      return Row(
-                                        children: [
-                                          Text(
-                                            '${x.follower.length} Follower',
-                                            style:
-                                                const TextStyle(fontSize: 14),
-                                          ),
-                                          if (StateService()
-                                              .currentUser!
-                                              .savedArtists
-                                              .contains(artist.uid))
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 8),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  _showUnfollowSheet();
-                                                },
-                                                child: Row(
-                                                  children: const [
-                                                    Icon(
-                                                      Icons
-                                                          .check_circle_outline,
-                                                      size: 18,
-                                                      color: secondaryColor,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 4,
-                                                    ),
-                                                    Text(
-                                                      'Following',
-                                                      style: TextStyle(
-                                                          color: secondaryColor,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            )
-                                        ],
-                                      );
-                                    }
-                                  }),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          CustomIconButton(
-                            color: Colors.blue,
-                            icon: const Icon(Icons.facebook),
-                            onPressed: () async {
-                              if (artist.externalLinks.facebook.isEmpty) return;
-                              final url =
-                                  Uri.parse(artist.externalLinks.facebook);
-                              await launchUrl(url);
-                            },
-                          ),
-                          CustomIconButton(
-                            color: Colors.orange,
-                            icon: const Icon(Icons.whatshot),
-                            onPressed: () async {
-                              if (artist.externalLinks.soundCloud.isEmpty) {
-                                return;
-                              }
-                              final url =
-                                  Uri.parse(artist.externalLinks.soundCloud);
-                              await launchUrl(url);
-                            },
-                          ),
-                          CustomIconButton(
-                            color: Colors.pinkAccent,
-                            icon: const Icon(Icons.camera_alt_outlined),
-                            onPressed: () async {
-                              if (artist.externalLinks.instagram.isEmpty) {
-                                return;
-                              }
-                              final url =
-                                  Uri.parse(artist.externalLinks.instagram);
-                              await launchUrl(url);
-                            },
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              )),
-          const SizedBox(
-            height: 4,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children:
-                artist.genres.map((genre) => GenreCard(text: genre)).toList(),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          if (!StateService().currentUser!.savedArtists.contains(artist.uid))
-            GestureDetector(
-              onTap: () async {
-                StateService().isLoadingFollow = true;
-                await UserDocService().toggleFollowArtist(artist);
-                StateService().isLoadingFollow = false;
-                setState(() {
-                  StateService().toggleSavedArtist(artist.uid);
-                });
-              },
-              child: SizedBox(
-                width: 100,
-                height: 50,
-                child: Card(
-                  color: Colors.transparent,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    side: const BorderSide(color: secondaryColor, width: 1),
-                  ),
-                  child: Center(
-                      child: StateService().isLoadingFollow
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                color: secondaryColor,
-                              ))
-                          : const Text(
-                              'Follow',
-                              style: TextStyle(color: secondaryColor),
-                            )),
-                ),
-              ),
-            ),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            width: 60,
-            height: 60,
-            child: Material(
-              color: secondaryColor,
-              shape: const CircleBorder(),
-              child: InkWell(
-                splashColor: primaryWhite.withOpacity(0.5),
-                customBorder: const CircleBorder(),
-                onTap: () {
-                  _showArtistEventsModal(artist);
-                },
-                child: const Center(
-                  child: Icon(
-                    Icons.event_available,
-                    size: 30,
-                    color: primaryBackgroundColor,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          if (StateService().currentUser!.type == UserType.host)
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 30),
-              child: KKButton(
-                  onPressed: () {
-                    debugPrint('');
-                  },
-                  buttonText: 'Anfrage schicken'),
-            )
-        ],
-      ),
-    );
-  }
-
-  void _showArtistEventsModal(AppUser artist) {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => Dialog(
-        insetPadding: dialogPadding,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
+      body: Container(
+        decoration: BoxDecoration(gradient: primaryGradient),
+        child: SafeArea(
           child: Column(
-            children: <Widget>[
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomIconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomIconButton(
+                          size: 2,
+                          color: primaryWhite,
+                          icon: const Icon(
+                            Icons.facebook,
+                            size: 16,
+                          ),
+                          onPressed: () async {
+                            if (artist.externalLinks.facebook.isEmpty) return;
+                            final url =
+                                Uri.parse(artist.externalLinks.facebook);
+                            await launchUrl(url);
+                          },
+                        ),
+                        CustomIconButton(
+                          size: 2,
+                          color: primaryWhite,
+                          icon: const Icon(Icons.whatshot, size: 16),
+                          onPressed: () async {
+                            if (artist.externalLinks.soundCloud.isEmpty) {
+                              return;
+                            }
+                            final url =
+                                Uri.parse(artist.externalLinks.soundCloud);
+                            await launchUrl(url);
+                          },
+                        ),
+                        CustomIconButton(
+                          size: 2,
+                          color: primaryWhite,
+                          icon: const Icon(Icons.camera_alt_outlined, size: 16),
+                          onPressed: () async {
+                            if (artist.externalLinks.instagram.isEmpty) {
+                              return;
+                            }
+                            final url =
+                                Uri.parse(artist.externalLinks.instagram);
+                            await launchUrl(url);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(
+                  artist.imageUrl!,
+                ),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                artist.displayName,
+                style: const TextStyle(fontSize: 22),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              if (!StateService()
+                  .currentUser!
+                  .savedArtists
+                  .contains(artist.uid))
+                GestureDetector(
+                  onTap: () async {
+                    StateService().isLoadingFollow = true;
+                    await UserDocService().toggleFollowArtist(artist);
+                    StateService().isLoadingFollow = false;
+                    setState(() {
+                      StateService().toggleSavedArtist(artist.uid);
+                    });
+                  },
+                  child: SizedBox(
+                    width: 100,
+                    height: 40,
+                    child: Card(
+                      color: secondaryColor,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: const BorderSide(color: secondaryColor, width: 1),
+                      ),
+                      child: Center(
+                          child: StateService().isLoadingFollow
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: primaryBackgroundColor,
+                                  ))
+                              : const Text(
+                                  'Follow',
+                                  style:
+                                      TextStyle(color: primaryBackgroundColor),
+                                )),
+                    ),
+                  ),
+                ),
+              if (StateService().currentUser!.savedArtists.contains(artist.uid))
+                GestureDetector(
+                  onTap: () {
+                    _showUnfollowSheet();
+                  },
+                  child: SizedBox(
+                    width: 100,
+                    height: 40,
+                    child: Card(
+                      color: Colors.transparent,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: const BorderSide(color: secondaryColor, width: 1),
+                      ),
+                      child: Center(
+                          child: StateService().isLoadingFollow
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: secondaryColor,
+                                  ))
+                              : const Text(
+                                  'Following',
+                                  style: TextStyle(color: secondaryColor),
+                                )),
+                    ),
+                  ),
+                ),
+              const SizedBox(
+                height: 8,
+              ),
+              StreamBuilder(
+                  stream: UserDocService()
+                      .usersCollection
+                      .doc(artist.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Text(
+                        '',
+                      );
+                    } else {
+                      final x = snapshot.data!.data()!;
+                      return Text(
+                        '${x.follower.length} Follower',
+                        style: const TextStyle(fontSize: 14),
+                      );
+                    }
+                  }),
+              const SizedBox(
+                height: 4,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: artist.genres
+                    .map((genre) => GenreCard(text: genre))
+                    .toList(),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 20),
+                child: const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Nächste Events',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
               Expanded(
                 child: FirestoreListView<Event>(
                   emptyBuilder: (context) {
@@ -278,17 +232,11 @@ class _ArtistPageState extends State<ArtistPage> {
                   },
                   query: _getArtistEventsQuery(artist),
                   itemBuilder: (context, snapshot) {
-                    return EventCard(event: snapshot.data());
+                    return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 8),
+                        child: EventTile(event: snapshot.data()));
                   },
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  'Schließen',
-                  style: TextStyle(fontSize: 18),
                 ),
               ),
             ],

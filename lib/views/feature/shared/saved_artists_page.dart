@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:event_finder/widgets/user_tile.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
@@ -21,43 +22,46 @@ class _SavedArtistsPageState extends State<SavedArtistsPage> {
     /// Doing this, so in case of unfollow of an artist, the list gets refetched
     final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  CustomIconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
+      body: Container(
+        decoration: BoxDecoration(gradient: primaryGradient),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    CustomIconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: FirestoreListView<AppUser>(
-                emptyBuilder: (context) {
-                  return const Center(
-                    child: Text('Keine Artists'),
-                  );
-                },
-                query: currentUser.savedArtists.isEmpty
-                    ? UserDocService()
-                        .usersCollection
-                        .where(FieldPath.documentId, whereIn: ['EMPTY'])
-                    : UserDocService().usersCollection.where(
-                        FieldPath.documentId,
-                        whereIn: currentUser.savedArtists),
-                itemBuilder: (context, snapshot) {
-                  return UserTile(
-                    user: snapshot.data(),
-                  );
-                },
+              Expanded(
+                child: FirestoreListView<AppUser>(
+                  emptyBuilder: (context) {
+                    return const Center(
+                      child: Text('Keine Artists'),
+                    );
+                  },
+                  query: currentUser.savedArtists.isEmpty
+                      ? UserDocService()
+                          .usersCollection
+                          .where(FieldPath.documentId, whereIn: ['EMPTY'])
+                      : UserDocService().usersCollection.where(
+                          FieldPath.documentId,
+                          whereIn: currentUser.savedArtists),
+                  itemBuilder: (context, snapshot) {
+                    return UserTile(
+                      user: snapshot.data(),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
