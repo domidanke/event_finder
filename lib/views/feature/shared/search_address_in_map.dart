@@ -42,10 +42,10 @@ class SearchAddressInMapState extends State<SearchAddressInMap> {
                 icon: const Icon(Icons.arrow_forward),
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
-                  if (SearchPageService().searchText.isEmpty) return;
+                  if (SearchService().searchText.isEmpty) return;
                   try {
-                    List<Location> locations = await locationFromAddress(
-                        SearchPageService().searchText);
+                    List<Location> locations =
+                        await locationFromAddress(SearchService().searchText);
                     await _pinAddress(locations[0]);
                   } on Exception catch (e) {
                     debugPrint(e.toString());

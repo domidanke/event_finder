@@ -26,7 +26,7 @@ class _TicketDetailsPageState extends State<TicketDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(gradient: secondaryGradient),
+        decoration: BoxDecoration(gradient: primaryGradient),
         child: Column(
           children: [
             Padding(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SearchPageService extends ChangeNotifier {
-  factory SearchPageService() {
+class SearchService extends ChangeNotifier {
+  factory SearchService() {
     return _singleton;
   }
-  SearchPageService._internal();
-  static final SearchPageService _singleton = SearchPageService._internal();
+  SearchService._internal();
+  static final SearchService _singleton = SearchService._internal();
 
   String _searchText = '';
   String get searchText => _searchText;

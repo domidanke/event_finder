@@ -3,7 +3,6 @@ import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
-import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:event_finder/widgets/event_list.dart';
 import 'package:flutter/material.dart';
 
@@ -15,39 +14,48 @@ class SavedEventsPage extends StatefulWidget {
 }
 
 class _SavedEventsPageState extends State<SavedEventsPage> {
-  @override
-  void initState() {
-    super.initState();
+  // Doing this so the modal sheet doesn't glitch weirdly
+  Future<int> fetchNumber() async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    return 1;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(gradient: primaryGradient),
-        child: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    CustomIconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: EventList(
-                  query: _getQuery(),
-                ),
-              ),
-            ],
+    return Container(
+      decoration: BoxDecoration(gradient: primaryGradient),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4.0, top: 42),
+            child: Row(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down,
+                      size: 32,
+                    )),
+              ],
+            ),
           ),
-        ),
+          FutureBuilder(
+            future: fetchNumber(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (!snapshot.hasData) {
+                return Container();
+              } else {
+                return Expanded(
+                  child: EventList(
+                    query: _getQuery(),
+                  ),
+                );
+              }
+            },
+          )
+        ],
       ),
     );
   }

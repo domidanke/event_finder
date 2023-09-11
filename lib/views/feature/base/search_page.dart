@@ -22,7 +22,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    Provider.of<SearchPageService>(context).searchText;
+    Provider.of<SearchService>(context).searchText;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -46,7 +46,7 @@ class _SearchPageState extends State<SearchPage> {
               const SizedBox(
                 height: 50,
               ),
-              if (SearchPageService().searchText.isEmpty)
+              if (SearchService().searchText.isEmpty)
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -56,7 +56,7 @@ class _SearchPageState extends State<SearchPage> {
                     }),
                   ),
                 ),
-              if (SearchPageService().searchText.isNotEmpty)
+              if (SearchService().searchText.isNotEmpty)
                 Expanded(
                   flex: 9,
                   child: FirestoreListView<AppUser>(
@@ -82,8 +82,8 @@ class _SearchPageState extends State<SearchPage> {
     return UserDocService()
         .usersCollection
         .where('displayName',
-            isGreaterThanOrEqualTo: SearchPageService().searchText)
-        .where('displayName', isLessThan: '${SearchPageService().searchText}z')
+            isGreaterThanOrEqualTo: SearchService().searchText)
+        .where('displayName', isLessThan: '${SearchService().searchText}z')
         .orderBy('displayName');
   }
 }

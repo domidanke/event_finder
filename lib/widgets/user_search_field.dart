@@ -36,14 +36,14 @@ class _UserSearchFieldState extends State<UserSearchField> {
 
   void _clearText() {
     _textEditingController.clear();
-    SearchPageService().searchText = '';
+    SearchService().searchText = '';
     // Hide the keyboard
     FocusScope.of(context).unfocus();
   }
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<SearchPageService>(context).searchText;
+    Provider.of<SearchService>(context).searchText;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
@@ -57,7 +57,7 @@ class _UserSearchFieldState extends State<UserSearchField> {
               controller: _textEditingController,
               focusNode: _focusNode,
               onChanged: (text) {
-                SearchPageService().searchText = text;
+                SearchService().searchText = text;
               },
               decoration: InputDecoration(
                 border: InputBorder.none,

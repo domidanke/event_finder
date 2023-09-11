@@ -1,6 +1,9 @@
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/views/feature/base/saved_events_page.dart';
+import 'package:event_finder/views/feature/shared/saved_artists_page.dart';
+import 'package:event_finder/views/feature/shared/saved_hosts_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +48,12 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                       if (currentUser.savedArtists.isEmpty) {
                         return;
                       }
-                      Navigator.pushNamed(context, 'saved_artists');
+                      showModalBottomSheet<String>(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) =>
+                            const SavedArtistsPage(),
+                      );
                     },
                   ),
                 ),
@@ -58,7 +66,12 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                       if (currentUser.savedHosts.isEmpty) {
                         return;
                       }
-                      Navigator.pushNamed(context, 'saved_hosts');
+                      showModalBottomSheet<String>(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) =>
+                            const SavedHostsPage(),
+                      );
                     },
                   ),
                 ),
@@ -66,12 +79,17 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                   opacity: currentUser.savedEvents.isEmpty ? 0.4 : 1,
                   child: ListTile(
                     leading: const Icon(Icons.event_available),
-                    title: const Text('Gespeicherte Veranstaltungen'),
+                    title: const Text('Gespeicherte Events'),
                     onTap: () {
                       if (currentUser.savedEvents.isEmpty) {
                         return;
                       }
-                      Navigator.pushNamed(context, 'saved_events');
+                      showModalBottomSheet<String>(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) =>
+                            const SavedEventsPage(),
+                      );
                     },
                   ),
                 ),

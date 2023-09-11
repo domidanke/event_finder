@@ -39,7 +39,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => AuthService()),
       ChangeNotifierProvider(create: (_) => StateService()),
       ChangeNotifierProvider(create: (_) => EventsPageService()),
-      ChangeNotifierProvider(create: (_) => SearchPageService()),
+      ChangeNotifierProvider(create: (_) => SearchService()),
       ChangeNotifierProvider(create: (_) => CreateEventService()),
     ],
     child: EventFinder(),

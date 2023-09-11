@@ -53,11 +53,14 @@ class _CePage4State extends State<CePage4> {
                         Text('${placeMark.postalCode} ${placeMark.locality}'),
                       ],
                     ),
-                    CustomButton(
-                        onPressed: () {
-                          _showLocationBottomSheet();
-                        },
-                        buttonText: 'Andere Location')
+                    SizedBox(
+                      width: 90,
+                      child: CustomButton(
+                          onPressed: () {
+                            _showLocationBottomSheet();
+                          },
+                          buttonText: 'Ändern'),
+                    )
                   ],
                 );
               }),
@@ -104,10 +107,9 @@ class _CePage4State extends State<CePage4> {
       isScrollControlled: true,
       builder: (BuildContext context) => Container(
           height: MediaQuery.of(context).size.height * 0.75,
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  topRight: Radius.circular(10.0))),
+          decoration: BoxDecoration(
+            gradient: primaryGradient,
+          ),
           child: Column(
             children: [
               Expanded(
@@ -122,9 +124,10 @@ class _CePage4State extends State<CePage4> {
                   }),
                 ),
               ),
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 120,
                   child: CustomButton(
                     onPressed: () {
                       if (newCoordinates == null) return;

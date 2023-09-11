@@ -27,32 +27,35 @@ class _HostHomePageState extends State<HostHomePage> {
         onWillPop: () async => !Navigator.of(context).userGestureInProgress,
         child: Column(
           children: [
-            FutureBuilder(
-                future: _imageUrl,
-                builder: (context, snapshot) {
-                  currentUser.imageUrl = snapshot.data;
-                  if (snapshot.hasData) {
-                    return CircleAvatar(
-                      radius: 100,
-                      backgroundImage: NetworkImage(
-                        currentUser.imageUrl!,
-                      ),
-                    );
-                  } else {
-                    return Container(
-                      height: 200,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        border: Border.all(
-                            color: primaryWhite.withOpacity(0.2), width: 0.2),
-                      ),
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-                }),
+            Container(
+              margin: const EdgeInsets.only(top: 8),
+              child: FutureBuilder(
+                  future: _imageUrl,
+                  builder: (context, snapshot) {
+                    currentUser.imageUrl = snapshot.data;
+                    if (snapshot.hasData) {
+                      return CircleAvatar(
+                        radius: 100,
+                        backgroundImage: NetworkImage(
+                          currentUser.imageUrl!,
+                        ),
+                      );
+                    } else {
+                      return Container(
+                        height: 200,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(
+                              color: primaryWhite.withOpacity(0.2), width: 0.2),
+                        ),
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                  }),
+            ),
             const SizedBox(
               height: 12,
             ),
@@ -154,7 +157,8 @@ class _HostHomePageState extends State<HostHomePage> {
                     ),
                   ],
                 )),
-            SizedBox(
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 8),
               width: 150,
               child: CustomButton(
                 onPressed: () {

@@ -24,89 +24,97 @@ class ArtistSearch extends StatefulWidget {
 class _ArtistSearchState extends State<ArtistSearch> {
   @override
   Widget build(BuildContext context) {
-    Provider.of<SearchPageService>(context).searchText;
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(gradient: primaryGradient),
-        child: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    CustomIconButton(
-                      onPressed: () {
-                        SearchPageService().searchText = '';
-                        StateService().selectedGenres.clear();
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
+    Provider.of<SearchService>(context).searchText;
+    return WillPopScope(
+      onWillPop: () async {
+        SearchService().searchText = '';
+        StateService().selectedGenres.clear();
+        return true;
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(gradient: primaryGradient),
+          child: SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      CustomIconButton(
+                        onPressed: () {
+                          SearchService().searchText = '';
+                          StateService().selectedGenres.clear();
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    const Expanded(
-                        child: UserSearchField(
-                      hintText: 'Künstler',
-                    )),
-                    IconButton(
-                      icon: Badge(
-                        isLabelVisible:
-                            StateService().selectedGenres.isNotEmpty,
-                        label: Text('${StateService().selectedGenres.length}'),
-                        child: const Icon(
-                          Icons.filter_alt,
-                          color: Colors.white,
+                const SizedBox(
+                  height: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                          child: UserSearchField(
+                        hintText: 'Künstler',
+                      )),
+                      IconButton(
+                        icon: Badge(
+                          isLabelVisible:
+                              StateService().selectedGenres.isNotEmpty,
+                          label:
+                              Text('${StateService().selectedGenres.length}'),
+                          child: const Icon(
+                            Icons.filter_alt,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () {
+                          _showFiltersSheet();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                if (SearchService().searchText.isEmpty &&
+                    StateService().selectedGenres.isEmpty)
+                  const Expanded(
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text(
+                          'Suche nach Namen oder Filter nach Genres',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 20),
                         ),
                       ),
-                      onPressed: () {
-                        _showFiltersSheet();
+                    ),
+                  ),
+                if (SearchService().searchText.isNotEmpty ||
+                    StateService().selectedGenres.isNotEmpty)
+                  Expanded(
+                    flex: 9,
+                    child: FirestoreListView<AppUser>(
+                      emptyBuilder: (context) {
+                        return const Center(
+                          child: Text('Keine Artists'),
+                        );
+                      },
+                      query: _getQuery(),
+                      itemBuilder: (context, snapshot) {
+                        return UserTile(user: snapshot.data());
                       },
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              if (SearchPageService().searchText.isEmpty &&
-                  StateService().selectedGenres.isEmpty)
-                const Expanded(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Text(
-                        'Suche nach Namen oder Filter nach Genres',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
                   ),
-                ),
-              if (SearchPageService().searchText.isNotEmpty ||
-                  StateService().selectedGenres.isNotEmpty)
-                Expanded(
-                  flex: 9,
-                  child: FirestoreListView<AppUser>(
-                    emptyBuilder: (context) {
-                      return const Center(
-                        child: Text('Keine Artists'),
-                      );
-                    },
-                    query: _getQuery(),
-                    itemBuilder: (context, snapshot) {
-                      return UserTile(user: snapshot.data());
-                    },
-                  ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -121,12 +129,11 @@ class _ArtistSearchState extends State<ArtistSearch> {
           isEqualTo: 'artist',
         )
         .orderBy('displayName');
-    if (SearchPageService().searchText.isNotEmpty) {
+    if (SearchService().searchText.isNotEmpty) {
       query = query
           .where('displayName',
-              isGreaterThanOrEqualTo: SearchPageService().searchText)
-          .where('displayName',
-              isLessThan: '${SearchPageService().searchText}z');
+              isGreaterThanOrEqualTo: SearchService().searchText)
+          .where('displayName', isLessThan: '${SearchService().searchText}z');
     }
 
     if (StateService().selectedGenres.isNotEmpty) {

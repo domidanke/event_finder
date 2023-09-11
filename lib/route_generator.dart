@@ -10,13 +10,11 @@ import 'package:event_finder/views/feature/artist/edit_artist_genres_page.dart';
 import 'package:event_finder/views/feature/base/base_home_page.dart';
 import 'package:event_finder/views/feature/base/buy_tickets_page.dart';
 import 'package:event_finder/views/feature/base/genre_search_result_page.dart';
-import 'package:event_finder/views/feature/base/saved_events_page.dart';
 import 'package:event_finder/views/feature/base/ticket_details_page.dart';
 import 'package:event_finder/views/feature/base/tickets_page.dart';
 import 'package:event_finder/views/feature/host/create_event/create_event_page.dart';
 import 'package:event_finder/views/feature/host/current_events_page.dart';
 import 'package:event_finder/views/feature/host/edit_event_artists_page.dart';
-import 'package:event_finder/views/feature/host/edit_event_details.dart';
 import 'package:event_finder/views/feature/host/host_events_page.dart';
 import 'package:event_finder/views/feature/host/host_home_page.dart';
 import 'package:event_finder/views/feature/host/scan_qr_code_page.dart';
@@ -32,8 +30,6 @@ import 'package:flutter/material.dart';
 
 import 'views/feature/base/base_edit_profile_page.dart';
 import 'views/feature/host/past_events_page.dart';
-import 'views/feature/shared/saved_artists_page.dart';
-import 'views/feature/shared/saved_hosts_page.dart';
 
 class RouteGenerator {
   Route<dynamic> generateRoute(RouteSettings settings) {
@@ -65,9 +61,6 @@ class RouteGenerator {
       case 'create_event_page':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const CreateEventPage());
-      case 'edit_event':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const EditEventDetails());
       case 'edit_event_artists':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const EditEventArtistsPage());
@@ -104,15 +97,6 @@ class RouteGenerator {
       case 'host_events_page':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const HostEventsPage());
-      case 'saved_events':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const SavedEventsPage());
-      case 'saved_artists':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const SavedArtistsPage());
-      case 'saved_hosts':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const SavedHostsPage());
       case 'tickets':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const TicketsPage());

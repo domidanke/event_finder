@@ -35,7 +35,7 @@ class _SetMainLocationPageState extends State<SetMainLocationPage> {
                   children: [
                     CustomIconButton(
                       onPressed: () {
-                        SearchPageService().searchText = '';
+                        SearchService().searchText = '';
                         Navigator.pop(context);
                       },
                     ),
@@ -76,7 +76,7 @@ class _SetMainLocationPageState extends State<SetMainLocationPage> {
                         ScaffoldMessenger.of(context).showSnackBar(
                             PopupService()
                                 .getCustomSnackBar('Location geändert'));
-                        SearchPageService().searchText = '';
+                        SearchService().searchText = '';
                         Navigator.pop(context);
                       }
                     },
