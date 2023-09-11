@@ -3,10 +3,8 @@ import 'package:event_finder/views/auth/auth_startup_page.dart';
 import 'package:event_finder/views/auth/login_page.dart';
 import 'package:event_finder/views/auth/register_page.dart';
 import 'package:event_finder/views/auth/verify_email_page.dart';
-import 'package:event_finder/views/feature/artist/artist_edit_profile_page.dart';
 import 'package:event_finder/views/feature/artist/artist_events_page.dart';
 import 'package:event_finder/views/feature/artist/artist_home_page.dart';
-import 'package:event_finder/views/feature/artist/edit_artist_genres_page.dart';
 import 'package:event_finder/views/feature/base/base_home_page.dart';
 import 'package:event_finder/views/feature/base/buy_tickets_page.dart';
 import 'package:event_finder/views/feature/base/genre_search_result_page.dart';
@@ -64,18 +62,12 @@ class RouteGenerator {
       case 'edit_event_artists':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const EditEventArtistsPage());
-      case 'artist_edit_profile':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const ArtistEditProfilePage());
       case 'base_edit_profile':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const BaseEditProfilePage());
       case 'edit_display_name':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const EditDisplayNamePage());
-      case 'edit_artist_genres':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const EditArtistGenresPage());
       case 'genre_search_result':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const GenreSearchResultPage());
@@ -102,7 +94,7 @@ class RouteGenerator {
             settings: settings, builder: (_) => const TicketsPage());
       case 'ticket_details':
         return MaterialPageRoute(
-            settings: settings, builder: (_) => TicketDetailsPage());
+            settings: settings, builder: (_) => const TicketDetailsPage());
       case 'current_events':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const CurrentEventsPage());
