@@ -35,33 +35,41 @@ class _GuestHomePageState extends State<GuestHomePage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => !Navigator.of(context).userGestureInProgress,
-      child: Scaffold(
-        body: SafeArea(
+      child: Column(children: [
+        Expanded(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Opacity(opacity: 0.2, child: Icon(Icons.map)),
-              label: 'Karte',
-            ),
-            BottomNavigationBarItem(
-              icon: Opacity(opacity: 0.2, child: Icon(Icons.search)),
-              label: 'Suche',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.event),
-              label: 'Events',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profil',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ),
-      ),
+        Theme(
+          data: Theme.of(context).copyWith(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.transparent,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Opacity(opacity: 0.2, child: Icon(Icons.map)),
+                label: 'Karte',
+              ),
+              BottomNavigationBarItem(
+                icon: Opacity(opacity: 0.2, child: Icon(Icons.search)),
+                label: 'Suche',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.event),
+                label: 'Events',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profil',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+          ),
+        )
+      ]),
     );
   }
 }

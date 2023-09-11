@@ -260,7 +260,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         ),
                       ],
                     ),
-                    if (event.artists.isNotEmpty)
+                    if (event.artists.isNotEmpty &&
+                        currentUser.type != UserType.guest)
                       Row(
                         children: [
                           Container(
@@ -364,16 +365,22 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   margin: const EdgeInsets.symmetric(vertical: 20),
                   child: Column(
                     children: [
-                      const Text(
-                          'Du willst Tickets kaufen? Dann registriere Dich'),
+                      const Text('Du willst Tickets kaufen?'),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      const Text('Dann registriere Dich jetzt'),
                       const SizedBox(
                         height: 10,
                       ),
-                      CustomButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, 'activate_account');
-                        },
-                        buttonText: 'Aktiviere Account',
+                      SizedBox(
+                        width: 180,
+                        child: CustomButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, 'activate_account');
+                          },
+                          buttonText: 'Aktiviere Account',
+                        ),
                       ),
                     ],
                   ),

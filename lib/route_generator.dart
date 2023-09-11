@@ -26,7 +26,6 @@ import 'package:event_finder/views/feature/shared/host_page.dart';
 import 'package:event_finder/views/feature/shared/support_page.dart';
 import 'package:flutter/material.dart';
 
-import 'views/feature/base/base_edit_profile_page.dart';
 import 'views/feature/host/past_events_page.dart';
 
 class RouteGenerator {
@@ -62,9 +61,6 @@ class RouteGenerator {
       case 'edit_event_artists':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const EditEventArtistsPage());
-      case 'base_edit_profile':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const BaseEditProfilePage());
       case 'edit_display_name':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const EditDisplayNamePage());
