@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../services/image.service.dart';
-import '../../../widgets/custom_icon_button.dart';
+import '../../../services/popup.service.dart';
+import '../../../theme/theme.dart';
 
 class HostEditProfilePage extends StatefulWidget {
   const HostEditProfilePage({Key? key}) : super(key: key);
@@ -21,44 +22,50 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
     final bool isUploadingImage =
         Provider.of<StateService>(context).isUploadingImage;
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            if (isUploadingImage)
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text('Profilbild wird aktualisiert'),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    CircularProgressIndicator()
-                  ],
+      body: Container(
+        decoration: BoxDecoration(gradient: primaryGradient),
+        child: SafeArea(
+          child: Stack(
+            children: [
+              if (isUploadingImage)
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text('Profilbild wird aktualisiert'),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      CircularProgressIndicator()
+                    ],
+                  ),
                 ),
-              ),
-            Opacity(
-              opacity: isUploadingImage ? 0.2 : 1,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        CustomIconButton(
-                          onPressed: () {
-                            if (isUploadingImage) return;
-                            Navigator.pop(context);
-                          },
+              Opacity(
+                opacity: isUploadingImage ? 0.2 : 1,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4.0, top: 42),
+                        child: Row(
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 32,
+                                )),
+                          ],
                         ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Expanded(
-                      child: ListView(
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Column(
                         children: [
                           ListTile(
                             leading: const Icon(Icons.person),
@@ -76,7 +83,7 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
                           ),
                           ListTile(
                             leading: const Icon(Icons.password),
-                            title: const Text('Anderes Passwort'),
+                            title: const Text('Anderes Passwort (TODO)'),
                             onTap: () {
                               debugPrint('Change Password');
                             },
@@ -85,8 +92,8 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
                             leading: const Icon(Icons.image),
                             title: const Text('Anderes Profilbild'),
                             onTap: () async {
-                              final cropped =
-                                  await ImageService().selectImage();
+                              final cropped = await ImageService()
+                                  .selectImage(ratioX: 1, ratioY: 1);
                               if (cropped == null) return;
                               StateService().isUploadingImage = true;
                               await StorageService().saveProfileImageToStorage(
@@ -97,20 +104,19 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
                               if (mounted) {
                                 StateService().isUploadingImage = false;
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Profilbild geändert')),
-                                );
+                                    PopupService().getCustomSnackBar(
+                                        'Profilbild geändert'));
                               }
                             },
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

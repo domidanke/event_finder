@@ -6,8 +6,8 @@ import 'package:event_finder/services/location.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/theme/theme.dart';
+import 'package:event_finder/widgets/custom_button.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
-import 'package:event_finder/widgets/kk_button.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -249,7 +249,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               event.startDate.isAfter(DateTime.now()))
             Container(
               margin: const EdgeInsets.all(20),
-              child: KKButton(
+              child: CustomButton(
                 onPressed: () {
                   Navigator.pushNamed(context, 'buy_tickets');
                 },
@@ -265,7 +265,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  KKButton(
+                  CustomButton(
                     onPressed: () {
                       Navigator.pushNamed(context, 'activate_account');
                     },
@@ -278,7 +278,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               event.startDate.isAfter(DateTime.now()))
             Container(
               margin: const EdgeInsets.all(20),
-              child: KKButton(
+              child: CustomButton(
                 onPressed: () {
                   Navigator.pushNamed(context, 'edit_event');
                 },

@@ -1,4 +1,4 @@
-import 'package:event_finder/widgets/kk_button.dart';
+import 'package:event_finder/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../../services/auth.service.dart';
@@ -24,7 +24,7 @@ class _GuestProfilePageState extends State<GuestProfilePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    KKButton(
+                    CustomButton(
                         onPressed: () {
                           Navigator.pushNamed(context, 'activate_account');
                         },

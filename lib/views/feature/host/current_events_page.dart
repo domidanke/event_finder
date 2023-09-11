@@ -6,6 +6,7 @@ import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../../theme/theme.dart';
 import '../../../widgets/custom_icon_button.dart';
 
 class CurrentEventsPage extends StatefulWidget {
@@ -24,40 +25,43 @@ class _CurrentEventsPageState extends State<CurrentEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomIconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
+      body: Container(
+        decoration: BoxDecoration(gradient: primaryGradient),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomIconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: FirestoreListView<Event>(
-                emptyBuilder: (context) {
-                  return const Center(
-                    child: Text('Keine Events'),
-                  );
-                },
-                query: _getQuery(),
-                itemBuilder: (context, snapshot) {
-                  Event event = snapshot.data();
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: EventCard(event: event),
-                  );
-                },
+              Expanded(
+                child: FirestoreListView<Event>(
+                  emptyBuilder: (context) {
+                    return const Center(
+                      child: Text('Keine Events'),
+                    );
+                  },
+                  query: _getQuery(),
+                  itemBuilder: (context, snapshot) {
+                    Event event = snapshot.data();
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: EventCard(event: event),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

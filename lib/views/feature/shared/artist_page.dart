@@ -257,7 +257,8 @@ class _ArtistPageState extends State<ArtistPage> {
     final AppUser artist = StateService().lastSelectedArtist!;
     showModalBottomSheet<String>(
       context: context,
-      builder: (BuildContext context) => SizedBox(
+      builder: (BuildContext context) => Container(
+        decoration: BoxDecoration(gradient: primaryGradient),
         height: 100,
         child: ListTile(
           leading: const Icon(Icons.cancel_outlined),

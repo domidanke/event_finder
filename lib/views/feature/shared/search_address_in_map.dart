@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/services/alert.service.dart';
-import 'package:event_finder/theme/theme.dart';
+import 'package:event_finder/services/search_page.service.dart';
+import 'package:event_finder/widgets/user_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import '../../../widgets/custom_icon_button.dart';
 
 class SearchAddressInMap extends StatefulWidget {
   const SearchAddressInMap({Key? key, required this.onAddressSelected})
@@ -26,67 +25,61 @@ class SearchAddressInMapState extends State<SearchAddressInMap> {
       Completer<GoogleMapController>();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
-  final _addressController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(12),
           child: Row(
             children: [
-              Expanded(
-                  flex: 4,
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: TextField(
-                      controller: _addressController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Adresse',
-                      ),
-                    ),
-                  )),
-              Expanded(
-                  child: CustomIconButton(
-                icon: const Icon(Icons.search),
-                color: secondaryColor,
+              const Expanded(
+                child: UserSearchField(
+                  hintText: 'Adresse',
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_forward),
                 onPressed: () async {
-                  if (_addressController.text.isEmpty) return;
                   FocusScope.of(context).unfocus();
+                  if (SearchPageService().searchText.isEmpty) return;
                   try {
-                    List<Location> locations =
-                        await locationFromAddress(_addressController.text);
+                    List<Location> locations = await locationFromAddress(
+                        SearchPageService().searchText);
                     await _pinAddress(locations[0]);
                   } on Exception catch (e) {
                     debugPrint(e.toString());
                     AlertService().showAlert('Fehler', 'not_found', context);
                   }
                 },
-              )),
+              ),
             ],
           ),
         ),
         if (markers[const MarkerId('address')] != null)
-          Expanded(
-              child: GoogleMap(
-            myLocationButtonEnabled: false,
-            mapType: MapType.normal,
-            initialCameraPosition: CameraPosition(
-              target: LatLng(
-                  markers[const MarkerId('address')]!.position.latitude,
-                  markers[const MarkerId('address')]!.position.longitude),
-              zoom: 15,
+          Container(
+            margin: const EdgeInsets.all(12),
+            height: 350,
+            decoration: BoxDecoration(
+                border: Border.all(width: 0.2, color: Colors.white)),
+            child: GoogleMap(
+              myLocationButtonEnabled: false,
+              mapType: MapType.normal,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                    markers[const MarkerId('address')]!.position.latitude,
+                    markers[const MarkerId('address')]!.position.longitude),
+                zoom: 15,
+              ),
+              markers: markers.values.toSet(),
+              onMapCreated: (GoogleMapController controller) async {
+                final String json = await rootBundle
+                    .loadString('assets/json_data/map_style.json');
+                controller.setMapStyle(json);
+                _controller.complete(controller);
+              },
             ),
-            markers: markers.values.toSet(),
-            onMapCreated: (GoogleMapController controller) async {
-              final String json = await rootBundle
-                  .loadString('assets/json_data/map_style.json');
-              controller.setMapStyle(json);
-              _controller.complete(controller);
-            },
-          )),
+          ),
       ],
     );
   }
@@ -112,7 +105,6 @@ class SearchAddressInMapState extends State<SearchAddressInMap> {
 
     final GeoFirePoint geoFirePoint =
         GeoFirePoint(GeoPoint(coordinates.latitude, coordinates.longitude));
-    print(geoFirePoint.data);
     widget.onAddressSelected(geoFirePoint);
   }
 }

@@ -1,5 +1,5 @@
+import 'package:event_finder/widgets/custom_button_async.dart';
 import 'package:event_finder/widgets/google_activate_button.dart';
-import 'package:event_finder/widgets/kk_button_async.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -97,7 +97,7 @@ class _ActivateAccountPageState extends State<ActivateAccountPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  KKButtonAsync(
+                  CustomButtonAsync(
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
                           if (passwordController.text !=

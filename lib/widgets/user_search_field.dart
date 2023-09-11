@@ -5,7 +5,8 @@ import 'package:provider/provider.dart';
 import '../services/search_page.service.dart';
 
 class UserSearchField extends StatefulWidget {
-  const UserSearchField({super.key});
+  const UserSearchField({super.key, required this.hintText});
+  final String hintText;
 
   @override
   State<UserSearchField> createState() => _UserSearchFieldState();
@@ -65,7 +66,7 @@ class _UserSearchFieldState extends State<UserSearchField> {
                     states.contains(MaterialState.focused)
                         ? primaryWhite.withOpacity(0.9)
                         : primaryWhite.withOpacity(0.4)),
-                hintText: 'Künstler oder Hosts',
+                hintText: widget.hintText,
                 hintStyle: TextStyle(
                   color: _isFocused
                       ? primaryWhite.withOpacity(0.9)

@@ -18,11 +18,6 @@ class _TicketsPageState extends State<TicketsPage>
     with SingleTickerProviderStateMixin {
   List<TicketInfo> currentTickets = [];
   List<TicketInfo> pastTickets = [];
-  final List<Tab> myTabs = <Tab>[
-    const Tab(text: 'Aktuell'),
-    const Tab(text: 'Vergangen'),
-  ];
-
   late TabController _tabController;
 
   @override

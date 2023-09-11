@@ -17,10 +17,8 @@ import 'package:event_finder/views/feature/host/create_event/create_event_page.d
 import 'package:event_finder/views/feature/host/current_events_page.dart';
 import 'package:event_finder/views/feature/host/edit_event_artists_page.dart';
 import 'package:event_finder/views/feature/host/edit_event_details.dart';
-import 'package:event_finder/views/feature/host/host_edit_profile_page.dart';
 import 'package:event_finder/views/feature/host/host_events_page.dart';
 import 'package:event_finder/views/feature/host/host_home_page.dart';
-import 'package:event_finder/views/feature/host/host_profile_page.dart';
 import 'package:event_finder/views/feature/host/scan_qr_code_page.dart';
 import 'package:event_finder/views/feature/host/set_main_location_page.dart';
 import 'package:event_finder/views/feature/shared/artist_page.dart';
@@ -61,9 +59,6 @@ class RouteGenerator {
       case 'host_home':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const HostHomePage());
-      case 'host_profile':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const HostProfilePage());
       case 'artist_home':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const ArtistHomePage());
@@ -76,9 +71,6 @@ class RouteGenerator {
       case 'edit_event_artists':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const EditEventArtistsPage());
-      case 'host_edit_profile':
-        return MaterialPageRoute(
-            settings: settings, builder: (_) => const HostEditProfilePage());
       case 'artist_edit_profile':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const ArtistEditProfilePage());

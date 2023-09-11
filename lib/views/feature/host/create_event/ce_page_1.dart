@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:event_finder/services/date.service.dart';
-import 'package:event_finder/views/feature/shared/genre_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -103,10 +102,6 @@ class _CePage1State extends State<CePage1> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          const GenrePicker(),
         ],
       ),
     );
@@ -167,9 +162,9 @@ class _CePage1State extends State<CePage1> {
                   androidStartTimeController.text =
                       '${selectedTime!.hour}:${selectedTime.minute.toString().length == 1 ? '0${selectedTime.minute}' : selectedTime.minute} Uhr';
                   newEvent.startDate = DateTime(
-                      newEvent.startDate.year,
-                      newEvent.startDate.month,
-                      newEvent.startDate.day,
+                      newEvent.startDate!.year,
+                      newEvent.startDate!.month,
+                      newEvent.startDate!.day,
                       selectedTime.hour,
                       selectedTime.minute);
                 });
@@ -190,13 +185,22 @@ class _CePage1State extends State<CePage1> {
               onTap: () async {
                 final selectedTime =
                     await DateService().showAndroidTimePicker(context);
+                var endDate = DateTime(
+                    newEvent.startDate!.year,
+                    newEvent.startDate!.month,
+                    newEvent.startDate!.day,
+                    selectedTime!.hour,
+                    selectedTime.minute);
+                if (selectedTime.hour < newEvent.startDate!.hour) {
+                  endDate = endDate.add(const Duration(days: 1));
+                }
                 setState(() {
                   androidEndTimeController.text =
-                      '${selectedTime!.hour}:${selectedTime.minute.toString().length == 1 ? '0${selectedTime.minute}' : selectedTime.minute} Uhr';
+                      '${selectedTime.hour}:${selectedTime.minute.toString().length == 1 ? '0${selectedTime.minute}' : selectedTime.minute} Uhr';
                   newEvent.endDate = DateTime(
-                      newEvent.startDate.year,
-                      newEvent.startDate.month,
-                      newEvent.startDate.day,
+                      newEvent.startDate!.year,
+                      newEvent.startDate!.month,
+                      newEvent.startDate!.day,
                       selectedTime.hour,
                       selectedTime.minute);
                 });
@@ -238,6 +242,7 @@ class _CePage1State extends State<CePage1> {
           ),
           Expanded(
             child: TextFormField(
+              enabled: newEvent.startDate != null,
               readOnly: true,
               controller: iosEndTimeController,
               decoration: const InputDecoration(
@@ -247,10 +252,19 @@ class _CePage1State extends State<CePage1> {
               onTap: () async {
                 final selectedTime =
                     await DateService().showIosTimePicker(context);
+                var endDate = DateTime(
+                    newEvent.startDate!.year,
+                    newEvent.startDate!.month,
+                    newEvent.startDate!.day,
+                    selectedTime.hour,
+                    selectedTime.minute);
+                if (selectedTime.hour < newEvent.startDate!.hour) {
+                  endDate = endDate.add(const Duration(days: 1));
+                }
                 setState(() {
                   iosEndTimeController.text =
                       '${selectedTime.hour}:${selectedTime.minute.toString().length == 1 ? '0${selectedTime.minute}' : selectedTime.minute}';
-                  newEvent.endDate = selectedTime;
+                  newEvent.endDate = endDate;
                 });
               },
             ),

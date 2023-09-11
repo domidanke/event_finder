@@ -1,5 +1,5 @@
 import 'package:event_finder/theme/theme.dart';
-import 'package:event_finder/widgets/kk_button.dart';
+import 'package:event_finder/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/consts.dart';
@@ -36,41 +36,44 @@ class _OnboardingPageState extends State<OnboardingPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-          child: Column(
-            children: [
-              AnimatedBuilder(
-                animation: _controller,
-                builder: (BuildContext context, Widget? child) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: LinearProgressIndicator(
-                        color: secondaryColor,
-                        backgroundColor: primaryColorTransparent,
-                        minHeight: 8,
-                        value: _controller.value),
-                  );
-                },
-              ),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (idx) {
-                    setState(() {
-                      _currentPage = idx;
-                      _controller.animateTo(
-                          (_currentPage + 1) / onboardingPageModels.length);
-                    });
+      body: Container(
+        decoration: BoxDecoration(gradient: primaryGradient),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+            child: Column(
+              children: [
+                AnimatedBuilder(
+                  animation: _controller,
+                  builder: (BuildContext context, Widget? child) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: LinearProgressIndicator(
+                          color: secondaryColor,
+                          backgroundColor: primaryColorTransparent,
+                          minHeight: 8,
+                          value: _controller.value),
+                    );
                   },
-                  children: _getPageModelWidgets(),
                 ),
-              ),
-              _getButtonView()
-            ],
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (idx) {
+                      setState(() {
+                        _currentPage = idx;
+                        _controller.animateTo(
+                            (_currentPage + 1) / onboardingPageModels.length);
+                      });
+                    },
+                    children: _getPageModelWidgets(),
+                  ),
+                ),
+                _getButtonView()
+              ],
+            ),
           ),
         ),
       ),
@@ -134,7 +137,7 @@ class _OnboardingPageState extends State<OnboardingPage>
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
-                child: KKButton(
+                child: CustomButton(
                     onPressed: () {
                       Navigator.pushNamed(context, 'login');
                     },
@@ -144,7 +147,7 @@ class _OnboardingPageState extends State<OnboardingPage>
                 width: 30,
               ),
               Expanded(
-                child: KKButton(
+                child: CustomButton(
                     onPressed: () {
                       Navigator.pushNamed(context, 'register');
                     },
@@ -158,7 +161,7 @@ class _OnboardingPageState extends State<OnboardingPage>
       return Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          KKButton(
+          CustomButton(
               onPressed: () {
                 _pageController.animateToPage(onboardingPageModels.length - 1,
                     duration: const Duration(milliseconds: 500),

@@ -23,7 +23,7 @@ class _SupportPageState extends State<SupportPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(gradient: secondaryGradient),
+        decoration: BoxDecoration(gradient: primaryGradient),
         child: SafeArea(
           child: Column(
             children: [
@@ -63,7 +63,7 @@ class _SupportPageState extends State<SupportPage> {
       },
       children: _supportItems.map<ExpansionPanel>((SupportItem item) {
         return ExpansionPanel(
-          backgroundColor: primaryColor.withOpacity(0.25),
+          backgroundColor: primaryBackgroundColor.withOpacity(0.25),
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
               title: Text(item.headerValue),

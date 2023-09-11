@@ -36,7 +36,10 @@ class _SearchPageState extends State<SearchPage> {
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
                 child: Row(
                   children: const [
-                    Expanded(child: UserSearchField()),
+                    Expanded(
+                        child: UserSearchField(
+                      hintText: 'Künstler oder Hosts',
+                    )),
                   ],
                 ),
               ),

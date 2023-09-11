@@ -36,32 +36,40 @@ class _BaseHomePageState extends State<BaseHomePage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => !Navigator.of(context).userGestureInProgress,
-      child: Scaffold(
-        body: SafeArea(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              label: 'Entdecke',
+      child: Column(
+        children: [
+          Expanded(child: _widgetOptions.elementAt(_selectedIndex)),
+          Theme(
+            data: Theme.of(context).copyWith(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Suche',
+            child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.transparent,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.map),
+                  label: 'Entdecke',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  label: 'Suche',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.event),
+                  label: 'Events',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profil',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.event),
-              label: 'Events',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profil',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ),
+          ),
+        ],
       ),
     );
   }

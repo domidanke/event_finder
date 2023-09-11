@@ -4,7 +4,7 @@ import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
-import 'package:event_finder/widgets/kk_button_async.dart';
+import 'package:event_finder/widgets/custom_button_async.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -283,7 +283,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
               margin: const EdgeInsets.all(20),
               child: Opacity(
                 opacity: selectedPaymentMethod == null ? 0.4 : 1,
-                child: KKButtonAsync(
+                child: CustomButtonAsync(
                   loading: _isLoading,
                   onPressed: () async {
                     if (selectedPaymentMethod == null) return;

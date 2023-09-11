@@ -31,13 +31,11 @@ final primaryThemeData = ThemeData(
       inactiveTickMarkColor: Colors.transparent),
   progressIndicatorTheme: ProgressIndicatorThemeData(
       color: primaryWhite, linearTrackColor: primaryWhite.withOpacity(0.8)),
-  drawerTheme: const DrawerThemeData(shadowColor: primaryColor),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      elevation: 0.1,
+      elevation: 0,
       selectedItemColor: secondaryColor,
       unselectedItemColor: primaryWhite),
   cardTheme: const CardTheme(color: Colors.transparent, elevation: 0),
-  canvasColor: primaryBackgroundColor,
   fontFamily: 'Quicksand',
   appBarTheme: const AppBarTheme(color: primaryColor),
   indicatorColor: secondaryColor,
@@ -47,8 +45,6 @@ final primaryThemeData = ThemeData(
     checkColor: MaterialStateProperty.all(primaryWhite),
     fillColor: MaterialStateProperty.all(secondaryColor),
   ),
-  focusColor: Colors.redAccent,
-  hoverColor: Colors.orange,
   shadowColor: primaryWhite,
   splashColor: primaryColor,
   dialogBackgroundColor: primaryBackgroundColor,
@@ -58,13 +54,14 @@ final primaryThemeData = ThemeData(
           foregroundColor: MaterialStateProperty.all(secondaryColor))),
 );
 
-var primaryGradient = LinearGradient(
+var primaryGradient = const LinearGradient(
   end: Alignment.topLeft,
   begin: Alignment.bottomRight,
   colors: [
-    primaryBackgroundColor.withOpacity(0.1),
-    primaryColor,
-    primaryBackgroundColor.withOpacity(0.1),
+    primaryBackgroundColor,
+    Color(0xff0f0c29),
+    Color(0xff302b63),
+    Color(0xff24243e),
   ],
 );
 

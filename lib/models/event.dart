@@ -97,7 +97,7 @@ class NewEvent {
   List<String> genres = [];
   int ticketPrice = 0;
   int maxTickets = 0;
-  DateTime startDate = DateTime.now();
+  DateTime? startDate;
   DateTime? endDate;
   File? selectedImageFile;
   List<String> enlistedArtists = [];
@@ -107,7 +107,7 @@ class NewEvent {
     return Event(
         title: title,
         details: details,
-        startDate: startDate,
+        startDate: startDate!,
         endDate: endDate,
         genres: genres,
         creatorId: StateService().currentUser!.uid,

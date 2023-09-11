@@ -77,18 +77,23 @@ class _UserTileState extends State<UserTile> {
                       );
                     }),
                 title: Text(widget.user.displayName),
-                subtitle: Row(children: [
-                  ...widget.user.genres
-                      .map((e) => Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: Opacity(opacity: 0.5, child: Text(e)),
-                          ))
-                      .take(3)
-                      .toList(),
-                  if (widget.user.genres.length > 3)
-                    GenreCard(
-                        text: '+${(widget.user.genres.length - 3).toString()}')
-                ]),
+                subtitle: widget.user.type == UserType.artist
+                    ? Row(children: [
+                        ...widget.user.genres
+                            .map((e) => Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: Opacity(opacity: 0.5, child: Text(e)),
+                                ))
+                            .take(3)
+                            .toList(),
+                        if (widget.user.genres.length > 3)
+                          GenreCard(
+                              text:
+                                  '+${(widget.user.genres.length - 3).toString()}')
+                      ])
+                    : Opacity(
+                        opacity: 0.5,
+                        child: Text('${widget.user.follower.length} Follower')),
                 trailing: Container(
                   margin: const EdgeInsets.only(top: 16),
                   child: const Icon(

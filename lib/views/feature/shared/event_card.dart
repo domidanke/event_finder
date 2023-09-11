@@ -48,7 +48,6 @@ class _EventCardState extends State<EventCard> {
               color: primaryGrey.withOpacity(0.3),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
-                side: const BorderSide(color: primaryWhite, width: 0.5),
               ),
               clipBehavior: Clip.antiAliasWithSaveLayer,
               child: Stack(
@@ -80,20 +79,21 @@ class _EventCardState extends State<EventCard> {
                               : null,
                         );
                       }),
-                  StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                    return Opacity(
-                        opacity:
-                            StateService().currentUser!.type == UserType.guest
-                                ? 0.2
-                                : 1,
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: SaveEventButton(
-                            event: widget.event,
-                          ),
-                        ));
-                  }),
+                  if (StateService().currentUser!.type != UserType.host)
+                    StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
+                      return Opacity(
+                          opacity:
+                              StateService().currentUser!.type == UserType.guest
+                                  ? 0.2
+                                  : 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: SaveEventButton(
+                              event: widget.event,
+                            ),
+                          ));
+                    }),
                 ],
               ),
             ),

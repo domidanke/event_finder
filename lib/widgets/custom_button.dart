@@ -1,8 +1,8 @@
 import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class KKButton extends StatelessWidget {
-  const KKButton({
+class CustomButton extends StatelessWidget {
+  const CustomButton({
     Key? key,
     required this.onPressed,
     required this.buttonText,
