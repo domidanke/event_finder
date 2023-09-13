@@ -150,8 +150,10 @@ class _HostHomePageState extends State<HostHomePage> {
                       onTap: () async {
                         await AuthService().signOut().then((value) => {
                               StateService().resetCurrentUserSilent(),
-                              Navigator.pushNamedAndRemoveUntil(context, '/',
-                                  (Route<dynamic> route) => false),
+                              Navigator.popUntil(
+                                  context,
+                                  (Route<dynamic> route) =>
+                                      route.settings.name == '/'),
                             });
                       },
                     ),

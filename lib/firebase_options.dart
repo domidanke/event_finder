@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAdYiP7DGTJ4hU07c0D1mcRvstlhbK3m3E',
-    appId: '1:575649252184:android:66fa561c9692f081e99b2d',
-    messagingSenderId: '575649252184',
-    projectId: 'event-finder-7b8d2',
-    storageBucket: 'event-finder-7b8d2.appspot.com',
+    apiKey: 'AIzaSyClA_53FF_f7CKthgUJLhvseB8SrR6MyFQ',
+    appId: '1:224880394177:android:381910e8ff9c7fe591b940',
+    messagingSenderId: '224880394177',
+    projectId: 'nocstar-prod',
+    storageBucket: 'nocstar-prod.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDelGZE1mC-eXZrnY4fsks-aGCyCqFmLSw',
-    appId: '1:575649252184:ios:0bdd0a4b6bc84474e99b2d',
-    messagingSenderId: '575649252184',
-    projectId: 'event-finder-7b8d2',
-    storageBucket: 'event-finder-7b8d2.appspot.com',
-    iosClientId: '575649252184-mob76p8gjij6g1f6ll68uu6a072bas4t.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAvFsR5Sq6CV8a6C0vsaUAENZ2BLEKNkNo',
+    appId: '1:224880394177:ios:b9baeed21e0ecc9291b940',
+    messagingSenderId: '224880394177',
+    projectId: 'nocstar-prod',
+    storageBucket: 'nocstar-prod.appspot.com',
+    iosClientId: '224880394177-0h609d35stbhdv1cho66jm16vq5htqcr.apps.googleusercontent.com',
     iosBundleId: 'com.dominik.tajak.eventFinder',
   );
 }

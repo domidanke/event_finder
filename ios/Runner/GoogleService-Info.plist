@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>575649252184-mob76p8gjij6g1f6ll68uu6a072bas4t.apps.googleusercontent.com</string>
+	<string>224880394177-refqa1hbh5ukpf5eslsd5fs8f0bsks3d.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.575649252184-mob76p8gjij6g1f6ll68uu6a072bas4t</string>
+	<string>com.googleusercontent.apps.224880394177-refqa1hbh5ukpf5eslsd5fs8f0bsks3d</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDelGZE1mC-eXZrnY4fsks-aGCyCqFmLSw</string>
+	<string>AIzaSyAvFsR5Sq6CV8a6C0vsaUAENZ2BLEKNkNo</string>
 	<key>GCM_SENDER_ID</key>
-	<string>575649252184</string>
+	<string>224880394177</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.dominik.tajak.eventFinder</string>
+	<string>com.nocstar.prod</string>
 	<key>PROJECT_ID</key>
-	<string>event-finder-7b8d2</string>
+	<string>nocstar-prod</string>
 	<key>STORAGE_BUCKET</key>
-	<string>event-finder-7b8d2.appspot.com</string>
+	<string>nocstar-prod.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:575649252184:ios:0bdd0a4b6bc84474e99b2d</string>
+	<string>1:224880394177:ios:cd1a4f8d677e341691b940</string>
 </dict>
 </plist>

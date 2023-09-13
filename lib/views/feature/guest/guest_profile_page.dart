@@ -81,8 +81,10 @@ class _GuestProfilePageState extends State<GuestProfilePage> {
                         onTap: () async {
                           await AuthService().signOut().then((value) => {
                                 StateService().resetCurrentUserSilent(),
-                                Navigator.pushNamedAndRemoveUntil(context, '/',
-                                    (Route<dynamic> route) => false),
+                                Navigator.popUntil(
+                                    context,
+                                    (Route<dynamic> route) =>
+                                        route.settings.name == '/'),
                               });
                         },
                       ),
