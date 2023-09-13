@@ -63,7 +63,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                 Icons.mail,
                 size: 100,
               ),
-              const Text('Bestaetigungsemail geschickt an:'),
+              const Text('Bestätigungsemail geschickt an:'),
               Text(
                 '${AuthService().getCurrentFirebaseUser()!.email}',
                 style: const TextStyle(fontSize: 24),
@@ -72,7 +72,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
               Container(
                   margin: const EdgeInsets.symmetric(horizontal: 80),
                   child: const LinearProgressIndicator(
-                    color: primaryColor,
+                    color: secondaryColor,
                     backgroundColor: primaryWhite,
                   ))
             ],

@@ -34,12 +34,20 @@ class _HostHomePageState extends State<HostHomePage> {
                   builder: (context, snapshot) {
                     currentUser.imageUrl = snapshot.data;
                     if (snapshot.hasData) {
-                      return CircleAvatar(
-                        radius: 100,
-                        backgroundImage: NetworkImage(
-                          currentUser.imageUrl!,
-                        ),
-                      );
+                      if (snapshot.data == '') {
+                        return const CircleAvatar(
+                          radius: 100,
+                          backgroundImage: AssetImage(
+                              'assets/images/profile_placeholder.png'),
+                        );
+                      } else {
+                        return CircleAvatar(
+                          radius: 100,
+                          backgroundImage: NetworkImage(
+                            currentUser.imageUrl!,
+                          ),
+                        );
+                      }
                     } else {
                       return Container(
                         height: 200,
@@ -127,7 +135,8 @@ class _HostHomePageState extends State<HostHomePage> {
                     ),
                     ListTile(
                       leading: const Icon(Icons.edit),
-                      title: const Text('Profil bearbeiten'),
+                      title: Text(
+                          'Profil ${!StateService().isProfileComplete() ? 'vervollständigen' : 'bearbeiten'}'),
                       onTap: () {
                         showModalBottomSheet<String>(
                           context: context,

@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     const Text(
-                      'Event Finder',
+                      'Nocstar',
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 28, fontWeight: FontWeight.bold),

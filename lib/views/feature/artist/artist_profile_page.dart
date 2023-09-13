@@ -40,12 +40,20 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
               builder: (context, snapshot) {
                 currentUser.imageUrl = snapshot.data;
                 if (snapshot.hasData) {
-                  return CircleAvatar(
-                    radius: 100,
-                    backgroundImage: NetworkImage(
-                      currentUser.imageUrl!,
-                    ),
-                  );
+                  if (snapshot.data == '') {
+                    return const CircleAvatar(
+                      radius: 100,
+                      backgroundImage:
+                          AssetImage('assets/images/profile_placeholder.png'),
+                    );
+                  } else {
+                    return CircleAvatar(
+                      radius: 100,
+                      backgroundImage: NetworkImage(
+                        currentUser.imageUrl!,
+                      ),
+                    );
+                  }
                 } else {
                   return Container(
                     height: 200,

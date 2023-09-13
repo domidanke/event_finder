@@ -51,11 +51,19 @@ class StorageService {
     await Future.delayed(const Duration(milliseconds: 1500));
     final ref = storage.ref().child(
         '${AuthService().getCurrentFirebaseUser()!.uid}/profile_pic.jpeg');
-    return await ref.getDownloadURL();
+    try {
+      return await ref.getDownloadURL();
+    } catch (ex) {
+      return '';
+    }
   }
 
   Future<String> getUserImageUrl(String uid) async {
     final ref = storage.ref().child('$uid/profile_pic.jpeg');
-    return await ref.getDownloadURL();
+    try {
+      return await ref.getDownloadURL();
+    } catch (ex) {
+      return '';
+    }
   }
 }

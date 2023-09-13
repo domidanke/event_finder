@@ -178,7 +178,8 @@ class StateService extends ChangeNotifier {
   /// TODO: Move to separate User State service class
   bool isProfileComplete() {
     return currentUser!.mainLocation.geoHash.isNotEmpty &&
-        currentUser!.displayName.isNotEmpty;
+        currentUser!.displayName.isNotEmpty &&
+        (currentUser!.imageUrl != null && currentUser!.imageUrl!.isNotEmpty);
   }
 
   void addTicket(TicketInfo ticketInfo) {
