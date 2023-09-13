@@ -1,4 +1,3 @@
-import 'package:event_finder/models/consts.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/location.service.dart';
@@ -10,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../../../services/date.service.dart';
+import '../../../widgets/save_event_button.dart';
 
 class EventCard extends StatefulWidget {
   final Event event;
@@ -25,8 +27,8 @@ class _EventCardState extends State<EventCard> {
 
   @override
   void initState() {
-    _eventImageUrlFuture =
-        StorageService().getEventImageUrl(event: widget.event);
+    _eventImageUrlFuture = StorageService().getEventImageUrl(
+        eventId: widget.event.uid, hostId: widget.event.creatorId);
     super.initState();
   }
 
@@ -38,131 +40,159 @@ class _EventCardState extends State<EventCard> {
         StateService().lastSelectedEvent = widget.event;
         Navigator.pushNamed(context, 'event_details');
       },
-      child: AspectRatio(
-        aspectRatio: 3 / 3,
-        child: Card(
-          color: primaryGrey.withOpacity(0.3),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: const BorderSide(color: primaryWhite, width: 0.2),
+      child: Column(
+        children: [
+          AspectRatio(
+            aspectRatio: 5 / 3,
+            child: Card(
+              color: primaryGrey.withOpacity(0.3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  FutureBuilder(
+                      future: _eventImageUrlFuture,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        widget.event.imageUrl = snapshot.data;
+                        return Container(
+                          decoration: BoxDecoration(
+                            image: widget.event.imageUrl != null
+                                ? DecorationImage(
+                                    image: NetworkImage(
+                                        widget.event.imageUrl ?? ''),
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
+                          ),
+                          child: snapshot.connectionState ==
+                                  ConnectionState.waiting
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : null,
+                        );
+                      }),
+                  if (StateService().currentUser!.type != UserType.host)
+                    StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
+                      return Opacity(
+                          opacity:
+                              StateService().currentUser!.type == UserType.guest
+                                  ? 0.2
+                                  : 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: SaveEventButton(
+                              event: widget.event,
+                            ),
+                          ));
+                    }),
+                ],
+              ),
+            ),
           ),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Stack(
-            children: [
-              FutureBuilder(
-                  future: _eventImageUrlFuture,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    widget.event.imageUrl = snapshot.data;
-                    return Container(
-                      decoration: BoxDecoration(
-                        image: widget.event.imageUrl != null
-                            ? DecorationImage(
-                                image:
-                                    NetworkImage(widget.event.imageUrl ?? ''),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                      ),
-                      child: snapshot.connectionState == ConnectionState.waiting
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : null,
-                    );
-                  }),
-              Padding(
-                padding: const EdgeInsets.all(6),
-                child: Column(
+          Padding(
+            padding: const EdgeInsets.all(6),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: 75,
-                      height: 75,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          side:
-                              const BorderSide(color: secondaryColor, width: 1),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.event.startDate.day.toString(),
-                              style: const TextStyle(
-                                  fontSize: 24, color: secondaryColor),
-                            ),
-                            Text(
-                              monthMap[
-                                  widget.event.startDate.month.toString()]!,
-                              style: const TextStyle(
-                                  fontSize: 18, color: secondaryColor),
-                            ),
-                          ],
+                    FittedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          widget.event.title,
+                          style: const TextStyle(
+                              fontSize: 20, color: primaryWhite),
                         ),
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FittedBox(
-                          child: Row(
-                            children: widget.event.genres
-                                .map(
-                                  (genre) => GenreCard(text: genre),
-                                )
-                                .toList(),
-                          ),
-                        ),
-                        FittedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              widget.event.title,
-                              style: const TextStyle(
-                                  fontSize: 32, color: secondaryColor),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: DateService()
+                                      .getDateText(widget.event.startDate),
+                                  style: const TextStyle(
+                                      fontSize: 14, color: secondaryColor),
+                                ),
+                                const TextSpan(
+                                  text: ' | ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w100,
+                                      fontSize: 18),
+                                ),
+                                TextSpan(
+                                  text: DateService().getTimeText(
+                                      widget.event.startDate,
+                                      widget.event.endDate),
+                                  style: const TextStyle(
+                                      fontSize: 14, color: secondaryColor),
+                                ),
+                                const TextSpan(
+                                  text: ' | ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w100,
+                                      fontSize: 18),
+                                ),
+                                TextSpan(
+                                  text:
+                                      '${widget.event.ticketPrice.toString()}€',
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _getTimeText(),
-                                style: const TextStyle(
-                                    fontSize: 16, color: secondaryColor),
-                              ),
-                              _getDistanceWidget()
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        )
-                      ],
-                    )
+                          _getDistanceWidget()
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    FittedBox(
+                      child: Row(
+                        children: [
+                          ...widget.event.genres
+                              .map(
+                                (genre) => GenreCard(text: genre),
+                              )
+                              .take(3)
+                              .toList(),
+                          if (widget.event.genres.length > 3)
+                            GenreCard(
+                                text:
+                                    '+${(widget.event.genres.length - 3).toString()}')
+                        ],
+                      ),
+                    ),
                   ],
-                ),
-              ),
-            ],
+                )
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
-  }
-
-  String _getTimeText() {
-    if (widget.event.endDate == null) {
-      return '${widget.event.startDate.toString().substring(11, 16)} Uhr';
-    } else {
-      return '${widget.event.startDate.toString().substring(11, 16)} - ${widget.event.endDate.toString().substring(11, 16)} Uhr';
-    }
   }
 
   Widget _getDistanceWidget() {
@@ -174,9 +204,9 @@ class _EventCardState extends State<EventCard> {
     final Position? currentPosition =
         Provider.of<StateService>(context).currentUserLocation;
     if (currentPosition == null) {
-      return const Text(
+      return Text(
         'kein GPS',
-        style: TextStyle(color: secondaryColor),
+        style: TextStyle(color: primaryWhite.withOpacity(0.6)),
       );
     }
     var currentLatLng =
@@ -185,7 +215,7 @@ class _EventCardState extends State<EventCard> {
         widget.event.location.geoPoint.longitude);
     return Text(
       '${LocationService().getDistanceFromLatLonInKm(currentLatLng, eventLatLng)}km',
-      style: const TextStyle(fontSize: 16, color: secondaryColor),
+      style: TextStyle(fontSize: 16, color: primaryWhite.withOpacity(0.6)),
     );
   }
 }

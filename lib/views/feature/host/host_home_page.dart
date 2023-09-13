@@ -1,8 +1,15 @@
 import 'package:event_finder/theme/theme.dart';
+import 'package:event_finder/views/feature/host/host_edit_profile_page.dart';
+import 'package:event_finder/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../models/app_user.dart';
 import '../../../services/alert.service.dart';
+import '../../../services/auth.service.dart';
+import '../../../services/firestore/user_doc.service.dart';
 import '../../../services/state.service.dart';
+import '../../../services/storage/storage.service.dart';
 
 class HostHomePage extends StatefulWidget {
   const HostHomePage({super.key});
@@ -11,198 +18,161 @@ class HostHomePage extends StatefulWidget {
 }
 
 class _HostHomePageState extends State<HostHomePage> {
+  late Future<String> _imageUrl;
   @override
   Widget build(BuildContext context) {
+    final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
+    _imageUrl = StorageService().getProfileImageUrl();
     return WillPopScope(
-      onWillPop: () async => !Navigator.of(context).userGestureInProgress,
-      child: Scaffold(
-        body: SafeArea(
-            child: Column(
+        onWillPop: () async => !Navigator.of(context).userGestureInProgress,
+        child: Column(
           children: [
-            Expanded(
-              flex: 2,
-              child: CustomScrollView(
-                primary: false,
-                slivers: <Widget>[
-                  SliverPadding(
-                    padding: const EdgeInsets.all(20),
-                    sliver: SliverGrid.count(
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      childAspectRatio: 1.25,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, 'current_events');
-                          },
-                          child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                                side: const BorderSide(
-                                    color: primaryWhite, width: 1),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Aktuelle Events',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: const [
-                                      Icon(Icons.event),
-                                      Icon(Icons.arrow_forward_ios),
-                                    ],
-                                  )
-                                ],
-                              )),
+            Container(
+              margin: const EdgeInsets.only(top: 8),
+              child: FutureBuilder(
+                  future: _imageUrl,
+                  builder: (context, snapshot) {
+                    currentUser.imageUrl = snapshot.data;
+                    if (snapshot.hasData) {
+                      return CircleAvatar(
+                        radius: 100,
+                        backgroundImage: NetworkImage(
+                          currentUser.imageUrl!,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, 'artist_search');
-                          },
-                          child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                                side: const BorderSide(
-                                    color: primaryWhite, width: 1),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Künstlersuche',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: const [
-                                      Icon(Icons.people),
-                                      Icon(Icons.arrow_forward_ios),
-                                    ],
-                                  )
-                                ],
-                              )),
+                      );
+                    } else {
+                      return Container(
+                        height: 200,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(
+                              color: primaryWhite.withOpacity(0.2), width: 0.2),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, 'past_events');
-                          },
-                          child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                                side: const BorderSide(
-                                    color: primaryWhite, width: 1),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Alte Events',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: const [
-                                      Icon(Icons.event),
-                                      Icon(Icons.arrow_forward_ios),
-                                    ],
-                                  )
-                                ],
-                              )),
+                        child: const Center(
+                          child: CircularProgressIndicator(),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, 'host_profile');
-                          },
-                          child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                                side: const BorderSide(
-                                    color: primaryWhite, width: 1),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Mein Profil',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: const [
-                                      Icon(Icons.person),
-                                      Icon(Icons.arrow_forward_ios),
-                                    ],
-                                  )
-                                ],
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                      );
+                    }
+                  }),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Text(
+              currentUser.displayName,
+              style: const TextStyle(fontSize: 22),
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            StreamBuilder(
+                stream: UserDocService()
+                    .usersCollection
+                    .doc(currentUser.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Text(
+                      '',
+                    );
+                  } else {
+                    final x = snapshot.data!.data()!;
+                    return Text(
+                      '${x.follower.length} Follower',
+                      style: const TextStyle(fontSize: 14),
+                    );
+                  }
+                }),
+            const SizedBox(
+              height: 12,
             ),
             Expanded(
-              child: Center(
-                child: Ink(
-                  height: 50,
-                  width: 200,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        for (double i = 0; i < 2; i++)
-                          BoxShadow(
-                              color: secondaryColor,
-                              blurRadius: 4 * i,
-                              blurStyle: BlurStyle.outer),
-                      ]),
-                  child: InkWell(
-                    splashColor: primaryWhite.withOpacity(0.4),
-                    customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                flex: 8,
+                child: ListView(
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.local_fire_department_outlined),
+                      title: const Text('Aktuelle Events'),
+                      onTap: () {
+                        Navigator.pushNamed(context, 'current_events');
+                      },
                     ),
-                    onTap: () {
-                      if (!StateService().isProfileComplete()) {
-                        AlertService().showAlert('Noch nicht möglich',
-                            'profile_incomplete', context);
-                      } else {
-                        Navigator.pushNamed(context, 'create_event_page');
-                      }
-                    },
-                    child: Center(
-                        child: Text(
-                      'Event erstellen',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: primaryBackgroundColor.withOpacity(0.75)),
-                    )),
-                  ),
-                ),
+                    ListTile(
+                      leading: const Icon(Icons.access_time_outlined),
+                      title: const Text('Vergangene Events'),
+                      onTap: () {
+                        Navigator.pushNamed(context, 'past_events');
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.search),
+                      title: const Text('Künstlersuche'),
+                      onTap: () {
+                        Navigator.pushNamed(context, 'artist_search');
+                      },
+                    ),
+                    Opacity(
+                      opacity: currentUser.savedArtists.isEmpty ? 0.4 : 1,
+                      child: ListTile(
+                        leading: const Icon(Icons.people),
+                        title: const Text('Meine Künstler'),
+                        onTap: () {
+                          if (currentUser.savedArtists.isEmpty) {
+                            return;
+                          }
+                          Navigator.pushNamed(context, 'saved_artists');
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.edit),
+                      title: const Text('Profil bearbeiten'),
+                      onTap: () {
+                        showModalBottomSheet<String>(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (BuildContext context) =>
+                              const HostEditProfilePage(),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.question_mark),
+                      title: const Text('Support'),
+                      onTap: () {
+                        Navigator.pushNamed(context, 'support_page');
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.logout),
+                      title: const Text('Logout'),
+                      onTap: () async {
+                        await AuthService().signOut().then((value) => {
+                              StateService().resetCurrentUserSilent(),
+                              Navigator.pushNamedAndRemoveUntil(context, '/',
+                                  (Route<dynamic> route) => false),
+                            });
+                      },
+                    ),
+                  ],
+                )),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              width: 150,
+              child: CustomButton(
+                onPressed: () {
+                  if (!StateService().isProfileComplete()) {
+                    AlertService().showAlert(
+                        'Noch nicht möglich', 'profile_incomplete', context);
+                  } else {
+                    Navigator.pushNamed(context, 'create_event_page');
+                  }
+                },
+                buttonText: 'Event erstellen',
               ),
             ),
           ],
-        )),
-      ),
-    );
+        ));
   }
 }

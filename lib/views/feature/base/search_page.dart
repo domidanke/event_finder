@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
+import 'package:event_finder/services/search_page.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/widgets/top_genres.dart';
+import 'package:event_finder/widgets/user_search_field.dart';
 import 'package:event_finder/widgets/user_tile.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../theme/theme.dart';
 
@@ -17,71 +20,59 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final _searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    Provider.of<SearchService>(context).searchText;
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      onEditingComplete: () {
-                        FocusScope.of(context).unfocus();
-                      },
-                      onChanged: (text) {
-                        setState(() {});
-                      },
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                          suffixIconColor: MaterialStateColor.resolveWith(
-                              (states) => states.contains(MaterialState.focused)
-                                  ? primaryWhite
-                                  : Colors.grey),
-                          border: const OutlineInputBorder(),
-                          labelText: 'Suche Künstler oder Hosts',
-                          suffixIcon: const Icon(
-                            Icons.search,
-                          )),
-                    ),
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: primaryGradient,
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
+                child: Row(
+                  children: const [
+                    Expanded(
+                        child: UserSearchField(
+                      hintText: 'Künstler oder Hosts',
+                    )),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              if (SearchService().searchText.isEmpty)
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TopGenres(onGenreSelected: (String genre) {
+                      StateService().lastSelectedGenre = genre;
+                      Navigator.pushNamed(context, 'genre_search_result');
+                    }),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            if (_searchController.text.isEmpty)
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TopGenres(onGenreSelected: (String genre) {
-                    StateService().lastSelectedGenre = genre;
-                    Navigator.pushNamed(context, 'genre_search_result');
-                  }),
                 ),
-              ),
-            if (_searchController.text.isNotEmpty)
-              Expanded(
-                flex: 9,
-                child: FirestoreListView<AppUser>(
-                  emptyBuilder: (context) {
-                    return const Center(
-                      child: Text('Keine Artists'),
-                    );
-                  },
-                  query: _getQuery(),
-                  itemBuilder: (context, snapshot) {
-                    return UserTile(user: snapshot.data());
-                  },
+              if (SearchService().searchText.isNotEmpty)
+                Expanded(
+                  flex: 9,
+                  child: FirestoreListView<AppUser>(
+                    emptyBuilder: (context) {
+                      return const Center(
+                        child: Text('Keine Artists'),
+                      );
+                    },
+                    query: _getQuery(),
+                    itemBuilder: (context, snapshot) {
+                      return UserTile(user: snapshot.data());
+                    },
+                  ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -90,8 +81,9 @@ class _SearchPageState extends State<SearchPage> {
   Query<AppUser> _getQuery() {
     return UserDocService()
         .usersCollection
-        .where('displayName', isGreaterThanOrEqualTo: _searchController.text)
-        .where('displayName', isLessThan: '${_searchController.text}z')
+        .where('displayName',
+            isGreaterThanOrEqualTo: SearchService().searchText)
+        .where('displayName', isLessThan: '${SearchService().searchText}z')
         .orderBy('displayName');
   }
 }

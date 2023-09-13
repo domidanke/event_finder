@@ -8,7 +8,8 @@ import 'package:event_finder/views/feature/host/host_home_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth.service.dart';
-import '../../widgets/kk_button.dart';
+import '../../theme/theme.dart';
+import '../../widgets/custom_button.dart';
 import '../feature/base/base_home_page.dart';
 
 class UserRoutingPage extends StatefulWidget {
@@ -30,44 +31,55 @@ class _UserRoutingPageState extends State<UserRoutingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: StateService().currentUser != null
-            ? _getUserRoute()
-            : FutureBuilder(
-                future: _user,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+      body: Container(
+        decoration: BoxDecoration(gradient: primaryGradient),
+        child: SafeArea(
+          child: StateService().currentUser != null
+              ? _getUserRoute()
+              : FutureBuilder(
+                  future: _user,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
 
-                  if (snapshot.hasData) {
-                    StateService().setCurrentUserSilent = snapshot.data!;
-                    return _getUserRoute();
-                  }
-                  return Center(
-                    child: Column(
-                      children: [
-                        const Text('Etwas ist schiefgelaufen.'),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        KKButton(
-                            onPressed: () async {
-                              await AuthService().signOut().then((value) => {
-                                    StateService().resetCurrentUserSilent(),
-                                    Navigator.popUntil(
-                                        context,
-                                        (Route<dynamic> route) =>
-                                            route.settings.name == '/'),
-                                  });
-                            },
-                            buttonText: 'Neustarten')
-                      ],
-                    ),
-                  );
-                }),
+                    if (snapshot.hasData) {
+                      StateService().setCurrentUserSilent = snapshot.data!;
+                      return _getUserRoute();
+                    }
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Etwas ist schiefgelaufen.'),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          SizedBox(
+                            width: 150,
+                            child: CustomButton(
+                                onPressed: () async {
+                                  await AuthService()
+                                      .signOut()
+                                      .then((value) => {
+                                            StateService()
+                                                .resetCurrentUserSilent(),
+                                            Navigator.popUntil(
+                                                context,
+                                                (Route<dynamic> route) =>
+                                                    route.settings.name == '/'),
+                                            Navigator.pushNamed(context, '/')
+                                          });
+                                },
+                                buttonText: 'Neustarten'),
+                          )
+                        ],
+                      ),
+                    );
+                  }),
+        ),
       ),
     );
   }

@@ -4,8 +4,8 @@ import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
+import 'package:event_finder/widgets/ticket_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class TicketsPage extends StatefulWidget {
   const TicketsPage({super.key});
@@ -14,39 +14,72 @@ class TicketsPage extends StatefulWidget {
   State<TicketsPage> createState() => _TicketsPageState();
 }
 
-class _TicketsPageState extends State<TicketsPage> {
-  List<TicketInfo> unusedTickets = [];
+class _TicketsPageState extends State<TicketsPage>
+    with SingleTickerProviderStateMixin {
+  List<TicketInfo> currentTickets = [];
+  List<TicketInfo> pastTickets = [];
+  late TabController _tabController;
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
-    fillUnusedTickets();
     super.initState();
+    _tabController = TabController(
+      length: 2,
+      vsync: this,
+    );
+    _fillCurrentTickets();
+    _fillPastTickets();
   }
 
-  void fillUnusedTickets() {
+  void _fillCurrentTickets() {
     final AppUser currentUser = StateService().currentUser!;
-    for (var ticket in currentUser.allTickets) {
-      if (!currentUser.usedTickets.contains(ticket.id) &&
-          ticket.eventDate.isAfter(DateTime.now())) {
-        unusedTickets.add(ticket);
+    final now = DateTime.now();
+    var startOfDay = DateTime(now.year, now.month, now.day);
+    for (var ticketInfo in currentUser.allTickets) {
+      if (ticketInfo.endDate != null) {
+        if (ticketInfo.endDate!.isAfter(now)) {
+          currentTickets.add(ticketInfo);
+        }
+      } else {
+        if (ticketInfo.startDate.isAfter(startOfDay)) {
+          currentTickets.add(ticketInfo);
+        }
       }
     }
   }
 
+  void _fillPastTickets() {
+    final AppUser currentUser = StateService().currentUser!;
+    pastTickets = currentUser.allTickets.where((element) {
+      if (element.endDate != null) {
+        return DateTime.now().isAfter(element.endDate!);
+      } else {
+        final now = DateTime.now();
+        late DateTime endDate;
+        if (now.hour >= 12) {
+          endDate = DateTime(now.year, now.month, now.day + 1, now.hour - 12);
+        } else {
+          endDate = DateTime(now.year, now.month, now.day, now.hour + 12);
+        }
+        return endDate.isAfter(element.startDate);
+      }
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
-    return RefreshIndicator(
-      color: primaryColor,
-      backgroundColor: primaryWhite,
-      onRefresh: () async {
-        unusedTickets = [];
-        fillUnusedTickets();
-        StateService().currentUser =
-            await UserDocService().getCurrentUserData();
-      },
-      child: Scaffold(
-        body: SafeArea(
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: primaryGradient,
+        ),
+        child: SafeArea(
             child: Column(
           children: [
             Padding(
@@ -58,87 +91,75 @@ class _TicketsPageState extends State<TicketsPage> {
                       Navigator.pop(context);
                     },
                   ),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  const Text(
+                    'Meine Tickets',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () async {
+                        currentTickets = [];
+                        pastTickets = [];
+                        StateService().currentUser =
+                            await UserDocService().getCurrentUserData();
+                        _fillCurrentTickets();
+                        _fillPastTickets();
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.refresh))
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: const [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Aktuelle Tickets',
-                      style: TextStyle(fontSize: 18, color: secondaryColor),
-                    ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: TabBar(
+                controller: _tabController,
+                tabs: const [
+                  Tab(
+                    text: 'Aktuell',
                   ),
-                  Divider(),
+                  Tab(text: 'Vergangen'),
                 ],
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: unusedTickets.length,
-                prototypeItem: ListTile(
-                  title: Text(unusedTickets.first.eventTitle),
-                ),
-                itemBuilder: (context, index) {
-                  var ticketNumber = unusedTickets[index].id.split('_')[3];
-                  return ListTile(
-                    onTap: () {
-                      StateService().lastSelectedTicket = unusedTickets[index];
-                      Navigator.pushNamed(context, 'ticket_details');
-                    },
-                    title: Text(
-                        '${unusedTickets[index].eventTitle} ($ticketNumber)'),
-                    subtitle: Text(unusedTickets[index]
-                        .eventDate
-                        .toString()
-                        .substring(0, 16)),
-                    trailing: const Icon(Icons.keyboard_arrow_right),
-                  );
-                },
               ),
             ),
             const SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: const [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Bereits eingescannt',
-                      style: TextStyle(fontSize: 18, color: secondaryColor),
-                    ),
-                  ),
-                  Divider(),
-                ],
-              ),
+              height: 18,
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: currentUser.usedTickets.length,
-                prototypeItem: ListTile(
-                  title: Text(currentUser.allTickets.first.eventTitle),
-                ),
-                itemBuilder: (context, index) {
-                  var ticket = currentUser.allTickets.singleWhere((element) =>
-                      element.id == currentUser.usedTickets[index]);
-                  var ticketNumber = ticket.id.split('_')[3];
-                  return ListTile(
-                    onTap: () {
-                      StateService().lastSelectedTicket = ticket;
-                      Navigator.pushNamed(context, 'ticket_details');
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  if (currentTickets.isEmpty)
+                    const Center(
+                      child: Text('Keine Tickets'),
+                    ),
+                  if (currentTickets.isNotEmpty)
+                    ListView.builder(
+                      itemCount: currentTickets.length,
+                      prototypeItem: const SizedBox(
+                        height: 110,
+                      ),
+                      itemBuilder: (context, index) {
+                        return TicketTile(
+                          ticketInfo: currentTickets[index],
+                        );
+                      },
+                    ),
+                  ListView.builder(
+                    itemCount: pastTickets.length,
+                    prototypeItem: const SizedBox(
+                      height: 110,
+                    ),
+                    itemBuilder: (context, index) {
+                      return TicketTile(
+                        ticketInfo: pastTickets[index],
+                      );
                     },
-                    title: Text('${ticket.eventTitle} ($ticketNumber)'),
-                    subtitle:
-                        Text(ticket.eventDate.toString().substring(0, 16)),
-                    trailing: const Icon(Icons.keyboard_arrow_right),
-                  );
-                },
+                  ),
+                ],
               ),
             ),
           ],

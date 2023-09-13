@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/event.dart';
+import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 
 class EventDocService {
@@ -50,5 +51,30 @@ class EventDocService {
     await eventsCollection
         .doc(StateService().lastSelectedEvent!.uid)
         .update({'artists': artistIds});
+  }
+
+  Future<void> addSoldTicketsToEvent(
+      List<String> ticketQrCodeIds, String eventId) async {
+    await eventsCollection
+        .doc(eventId)
+        .update({'soldTickets': FieldValue.arrayUnion(ticketQrCodeIds)});
+  }
+
+  Future<bool> checkIfQrCodeStillValid(String qrCodeId) async {
+    // Extract event ID from qr code id
+    var eventId = qrCodeId.split('_')[3];
+    var docSnapshot = await eventsCollection.doc(eventId).get();
+    if (docSnapshot.exists) {
+      Event event = docSnapshot.data()!;
+      // For whatever reason, the ticket ID was not mapped properly to the event
+      if (!event.soldTickets.contains(qrCodeId)) return false;
+      if (event.scannedTickets.contains(qrCodeId)) return false;
+      await eventsCollection.doc(eventId).update({
+        'scannedTickets': FieldValue.arrayUnion([qrCodeId])
+      });
+      await UserDocService().redeemUserTickets(qrCodeId);
+      return true;
+    }
+    return false;
   }
 }

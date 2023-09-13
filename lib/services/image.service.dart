@@ -10,14 +10,15 @@ class ImageService {
   ImageService._internal();
   static final ImageService _singleton = ImageService._internal();
 
-  Future<CroppedFile?> selectImage() async {
+  Future<CroppedFile?> selectImage(
+      {double ratioX = 5, double ratioY = 3}) async {
     final XFile? image =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image == null) return null;
     final cropped = await ImageCropper().cropImage(
       sourcePath: image.path,
       compressQuality: 10,
-      aspectRatio: const CropAspectRatio(ratioX: 3, ratioY: 3),
+      aspectRatio: CropAspectRatio(ratioX: ratioX, ratioY: ratioY),
       uiSettings: [
         AndroidUiSettings(
             toolbarColor: secondaryColor,

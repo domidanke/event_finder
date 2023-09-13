@@ -6,13 +6,14 @@ import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
-import 'package:event_finder/views/feature/shared/event_card.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../../../widgets/event_tile.dart';
 
 class EventsMapPage extends StatefulWidget {
   const EventsMapPage({super.key});
@@ -201,21 +202,32 @@ class EventsMapPageState extends State<EventsMapPage> {
             ),
             if (_events.isNotEmpty)
               Positioned(
-                bottom: 30,
-                left: 10,
-                right: 10,
-                child: SizedBox(
-                    height: 220,
+                bottom: 10,
+                left: 0,
+                right: 0,
+                child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    height: 120,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        prototypeItem: EventCard(
-                          event: _events.first,
+                        prototypeItem: SizedBox(
+                          width: 350,
+                          child: EventTile(
+                            event: _events.first,
+                          ),
                         ),
                         itemBuilder: (BuildContext context, int index) {
                           if (_events.length == index) return null;
                           return Container(
-                              margin: const EdgeInsets.only(right: 8),
-                              child: EventCard(event: _events[index]));
+                            decoration: BoxDecoration(
+                                color: primaryBackgroundColor,
+                                borderRadius: BorderRadius.circular(8)),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            child: EventTile(
+                              event: _events[index],
+                            ),
+                          );
                         })),
               ),
           ],

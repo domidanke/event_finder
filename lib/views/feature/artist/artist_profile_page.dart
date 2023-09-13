@@ -2,6 +2,8 @@ import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/theme/theme.dart';
+import 'package:event_finder/views/feature/artist/artist_edit_profile_page.dart';
+import 'package:event_finder/views/feature/shared/saved_hosts_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,162 +31,143 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   Widget build(BuildContext context) {
     final AppUser currentUser = Provider.of<StateService>(context).currentUser!;
     _imageUrl = StorageService().getProfileImageUrl();
-    return Scaffold(
-      body: Column(
-        children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: FutureBuilder(
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 8),
+          child: FutureBuilder(
               future: _imageUrl,
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              builder: (context, snapshot) {
                 currentUser.imageUrl = snapshot.data;
                 if (snapshot.hasData) {
-                  return AspectRatio(
-                    aspectRatio: 1,
-                    child: Container(
-                        decoration: BoxDecoration(
-                          image: currentUser.imageUrl != null
-                              ? DecorationImage(
-                                  image: NetworkImage(
-                                    currentUser.imageUrl!,
-                                  ),
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.topCenter,
-                                )
-                              : null,
-                        ),
-                        child: SafeArea(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(currentUser.displayName,
-                                            style: const TextStyle(
-                                                fontSize: 32,
-                                                color: secondaryColor)),
-                                        StreamBuilder(
-                                            stream: UserDocService()
-                                                .usersCollection
-                                                .doc(currentUser.uid)
-                                                .snapshots(),
-                                            builder: (context, snapshot) {
-                                              if (!snapshot.hasData) {
-                                                return const Text(
-                                                  '',
-                                                );
-                                              } else {
-                                                final x =
-                                                    snapshot.data!.data()!;
-                                                return Row(
-                                                  children: [
-                                                    Text(
-                                                      '${x.follower.length} Follower',
-                                                      style: const TextStyle(
-                                                          fontSize: 14,
-                                                          color:
-                                                              secondaryColor),
-                                                    ),
-                                                  ],
-                                                );
-                                              }
-                                            }),
-                                        const SizedBox(
-                                          height: 4,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        )),
+                  return CircleAvatar(
+                    radius: 100,
+                    backgroundImage: NetworkImage(
+                      currentUser.imageUrl!,
+                    ),
                   );
                 } else {
-                  return const SizedBox(
-                    height: 400,
-                    width: 1000,
-                    child: Center(child: CircularProgressIndicator()),
+                  return Container(
+                    height: 200,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(
+                          color: primaryWhite.withOpacity(0.2), width: 0.2),
+                    ),
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   );
                 }
+              }),
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        Text(
+          currentUser.displayName,
+          style: const TextStyle(fontSize: 22),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        StreamBuilder(
+            stream: UserDocService()
+                .usersCollection
+                .doc(currentUser.uid)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Text(
+                  '',
+                );
+              } else {
+                final x = snapshot.data!.data()!;
+                return Text(
+                  '${x.follower.length} Follower',
+                  style: const TextStyle(fontSize: 14),
+                );
+              }
+            }),
+        const SizedBox(
+          height: 12,
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Wrap(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          children: currentUser.genres
+              .map((genre) => GenreCard(text: genre))
+              .toList(),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Expanded(
+            child: ListView(
+          children: [
+            Opacity(
+              opacity: currentUser.savedHosts.isEmpty ? 0.4 : 1,
+              child: ListTile(
+                leading: const Icon(Icons.house),
+                title: const Text('Meine Hosts'),
+                onTap: () {
+                  if (currentUser.savedHosts.isEmpty) {
+                    return;
+                  }
+                  showModalBottomSheet<String>(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) => const SavedHostsPage(),
+                  );
+                },
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.event_available),
+              title: const Text('Meine Events'),
+              onTap: () {
+                Navigator.pushNamed(context, 'artist_events_page');
               },
             ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Wrap(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: currentUser.genres
-                .map((genre) => GenreCard(text: genre))
-                .toList(),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Expanded(
-              child: ListView(
-            children: [
-              Opacity(
-                opacity: currentUser.savedHosts.isEmpty ? 0.4 : 1,
-                child: ListTile(
-                  leading: const Icon(Icons.house),
-                  title: const Text('Meine Hosts'),
-                  onTap: () {
-                    if (currentUser.savedHosts.isEmpty) {
-                      return;
-                    }
-                    Navigator.pushNamed(context, 'saved_hosts');
-                  },
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.event_available),
-                title: const Text('Meine Events'),
-                onTap: () {
-                  Navigator.pushNamed(context, 'artist_events_page');
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.edit),
-                title: const Text('Profil bearbeiten'),
-                onTap: () {
-                  Navigator.pushNamed(context, 'artist_edit_profile');
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.question_mark),
-                title: const Text('Support'),
-                onTap: () {
-                  Navigator.pushNamed(context, 'support_page');
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: () async {
-                  await AuthService().signOut().then((value) => {
-                        StateService().resetCurrentUserSilent(),
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/', (Route<dynamic> route) => false),
-                      });
-                },
-              ),
-            ],
-          )),
-          const SizedBox(
-            height: 20,
-          )
-        ],
-      ),
+            ListTile(
+              leading: const Icon(Icons.edit),
+              title: const Text('Profil bearbeiten'),
+              onTap: () {
+                showModalBottomSheet<String>(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (BuildContext context) =>
+                      const ArtistEditProfilePage(),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.question_mark),
+              title: const Text('Support'),
+              onTap: () {
+                Navigator.pushNamed(context, 'support_page');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () async {
+                await AuthService().signOut().then((value) => {
+                      StateService().resetCurrentUserSilent(),
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/', (Route<dynamic> route) => false),
+                    });
+              },
+            ),
+          ],
+        )),
+        const SizedBox(
+          height: 20,
+        )
+      ],
     );
   }
 }

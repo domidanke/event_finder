@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -20,13 +19,13 @@ class StorageService {
         .putFile(file, metadata);
   }
 
-  Future<String> getEventImageUrl({required Event event}) async {
+  Future<String> getEventImageUrl(
+      {required String eventId, required String hostId}) async {
     int numOfRetries = 0;
     if (numOfRetries == 5) {
       throw Exception('File does not exist');
     }
-    final ref =
-        storage.ref().child('${event.creatorId}/events/${event.uid}.jpeg');
+    final ref = storage.ref().child('$hostId/events/$eventId.jpeg');
     return await ref.getDownloadURL().then((downloadUrl) async {
       return downloadUrl;
     }, onError: (error, _) async {
@@ -37,7 +36,7 @@ class StorageService {
       // the 'error' and wait until the image file has been stored
       await Future.delayed(const Duration(milliseconds: 500));
       numOfRetries++;
-      return await getEventImageUrl(event: event);
+      return await getEventImageUrl(eventId: eventId, hostId: hostId);
     });
   }
 

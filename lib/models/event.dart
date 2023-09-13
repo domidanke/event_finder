@@ -18,6 +18,8 @@ class Event {
       required this.creatorId,
       required this.creatorName,
       this.artists = const [],
+      this.soldTickets = const [],
+      this.scannedTickets = const [],
       this.location = const LocationData()});
 
   Event.fromJson(Map<String, Object?> json, String uid)
@@ -42,6 +44,12 @@ class Event {
           artists: json['artists'] != null
               ? List.from(json['artists'] as List<dynamic>)
               : [],
+          soldTickets: json['soldTickets'] != null
+              ? List.from(json['soldTickets'] as List<dynamic>)
+              : [],
+          scannedTickets: json['scannedTickets'] != null
+              ? List.from(json['scannedTickets'] as List<dynamic>)
+              : [],
           location: json['location'] != null
               ? LocationData.fromJson(json['location'] as Map<String, dynamic>)
               : const LocationData(),
@@ -59,6 +67,8 @@ class Event {
   final String creatorName;
   final LocationData location;
   late List<String> artists = [];
+  late List<String> soldTickets = [];
+  late List<String> scannedTickets = [];
   String? imageUrl;
 
   Map<String, Object?> toJson() {
@@ -70,6 +80,8 @@ class Event {
       'creatorId': creatorId,
       'creatorName': creatorName,
       'artists': artists,
+      'soldTickets': soldTickets,
+      'scannedTickets': scannedTickets,
       'genres': genres,
       'ticketPrice': ticketPrice,
       'maxTickets': maxTickets,
@@ -85,7 +97,7 @@ class NewEvent {
   List<String> genres = [];
   int ticketPrice = 0;
   int maxTickets = 0;
-  DateTime startDate = DateTime.now();
+  DateTime? startDate;
   DateTime? endDate;
   File? selectedImageFile;
   List<String> enlistedArtists = [];
@@ -95,7 +107,7 @@ class NewEvent {
     return Event(
         title: title,
         details: details,
-        startDate: startDate,
+        startDate: startDate!,
         endDate: endDate,
         genres: genres,
         creatorId: StateService().currentUser!.uid,

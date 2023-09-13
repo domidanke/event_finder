@@ -4,6 +4,8 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:event_finder/route_generator.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/create_event.service.dart';
+import 'package:event_finder/services/events_page.service.dart';
+import 'package:event_finder/services/search_page.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/auth/auth_startup_page.dart';
@@ -36,6 +38,8 @@ Future<void> main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => AuthService()),
       ChangeNotifierProvider(create: (_) => StateService()),
+      ChangeNotifierProvider(create: (_) => EventsPageService()),
+      ChangeNotifierProvider(create: (_) => SearchService()),
       ChangeNotifierProvider(create: (_) => CreateEventService()),
     ],
     child: EventFinder(),

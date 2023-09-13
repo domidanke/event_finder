@@ -1,13 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_finder/services/firestore/user_doc.service.dart';
-import 'package:event_finder/services/state.service.dart';
-import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-import '../../../../models/app_user.dart';
+import 'package:event_finder/services/state.service.dart';
+import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
+
 import '../../../../services/create_event.service.dart';
-import '../../../../services/storage/storage.service.dart';
+import '../../../../services/image.service.dart';
 import '../../../../theme/theme.dart';
+import '../../../../widgets/custom_button.dart';
+import '../../shared/search_address_in_map.dart';
 
 class CePage4 extends StatefulWidget {
   const CePage4({Key? key}) : super(key: key);
@@ -17,8 +19,15 @@ class CePage4 extends StatefulWidget {
 }
 
 class _CePage4State extends State<CePage4> {
-  late Future<String> _imageUrl;
-  final _artistSearchController = TextEditingController();
+  late Future<List<Placemark>> _getPlaceMarkers;
+
+  @override
+  void initState() {
+    final mainLocation = StateService().currentUser!.mainLocation;
+    _getPlaceMarkers = placemarkFromCoordinates(
+        mainLocation.geoPoint.latitude, mainLocation.geoPoint.longitude);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,154 +35,125 @@ class _CePage4State extends State<CePage4> {
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Column(
         children: [
-          const SizedBox(
-            height: 6,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  controller: _artistSearchController,
-                  decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: 'Suche',
-                      suffixIconColor: MaterialStateColor.resolveWith(
-                          (states) => states.contains(MaterialState.focused)
-                              ? secondaryColor
-                              : Colors.grey),
-                      suffixIcon: const Icon(Icons.search)),
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: FirestoreListView<AppUser>(
-              emptyBuilder: (context) {
-                return const Center(
-                  child: Text('Keine Artists'),
-                );
-              },
-              query: _getQuery(),
-              itemBuilder: (context, snapshot) {
-                final artist = snapshot.data();
-                _imageUrl = StorageService().getUserImageUrl(artist.uid);
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 4),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: StatefulBuilder(
-                          builder: (BuildContext context,
-                              void Function(void Function()) setState) {
-                            return Transform.scale(
-                              scale: 1.2,
-                              child: Checkbox(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  checkColor: primaryBackgroundColor,
-                                  value: CreateEventService()
-                                      .newEvent
-                                      .enlistedArtists
-                                      .contains(artist.uid),
-                                  onChanged: (v) {
-                                    setState(() {
-                                      CreateEventService()
-                                              .newEvent
-                                              .enlistedArtists
-                                              .contains(artist.uid)
-                                          ? CreateEventService()
-                                              .newEvent
-                                              .enlistedArtists
-                                              .remove(artist.uid)
-                                          : CreateEventService()
-                                              .newEvent
-                                              .enlistedArtists
-                                              .add(artist.uid);
-                                    });
-                                  }),
-                            );
+          FutureBuilder(
+              future: _getPlaceMarkers,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                final placeMark = snapshot.data!.first;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(Icons.location_on),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('${placeMark.street}'),
+                        Text('${placeMark.postalCode} ${placeMark.locality}'),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 90,
+                      child: CustomButton(
+                          onPressed: () {
+                            _showLocationBottomSheet();
                           },
-                        ),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: GestureDetector(
-                          onTap: () {
-                            StateService().lastSelectedArtist = artist;
-                            Navigator.pushNamed(context, 'artist_page');
-                          },
-                          child: ListTile(
-                            visualDensity: const VisualDensity(vertical: 4),
-                            leading: FutureBuilder(
-                                future: _imageUrl,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasError) {
-                                    return CircleAvatar(
-                                      radius: 30,
-                                      backgroundImage: Image.asset(
-                                              'assets/images/profile_placeholder.png')
-                                          .image,
-                                    );
-                                  }
-                                  artist.imageUrl = snapshot.data;
-                                  return CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage: snapshot.connectionState ==
-                                            ConnectionState.waiting
-                                        ? null
-                                        : artist.imageUrl != null
-                                            ? NetworkImage(artist.imageUrl!)
-                                            : Image.asset(
-                                                    'assets/images/profile_placeholder.png')
-                                                .image,
-                                    child: snapshot.connectionState ==
-                                            ConnectionState.waiting
-                                        ? const SizedBox(
-                                            height: 18,
-                                            width: 18,
-                                            child: CircularProgressIndicator(),
-                                          )
-                                        : null,
-                                  );
-                                }),
-                            title: Text(artist.displayName),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 15,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                          buttonText: 'Ändern'),
+                    )
+                  ],
                 );
-              },
+              }),
+          const Divider(
+            height: 50,
+          ),
+          if (CreateEventService().newEvent.selectedImageFile == null)
+            SizedBox(
+              width: 150,
+              child: CustomButton(
+                  onPressed: _selectImage, buttonText: 'Bild hochladen'),
             ),
-          ),
+          if (CreateEventService().newEvent.selectedImageFile != null)
+            Column(
+              children: [
+                SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    child: Image.file(
+                        CreateEventService().newEvent.selectedImageFile!)),
+                const SizedBox(
+                  height: 20,
+                ),
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        CreateEventService().newEvent.selectedImageFile = null;
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.remove_circle,
+                      color: secondaryColor,
+                    ))
+              ],
+            ),
         ],
       ),
     );
   }
 
-  Query<AppUser> _getQuery() {
-    var query = UserDocService()
-        .usersCollection
-        .where(
-          'type',
-          isEqualTo: 'artist',
-        )
-        .orderBy('displayName');
-    if (_artistSearchController.text.isNotEmpty) {
-      query = query
-          .where('displayName',
-              isGreaterThanOrEqualTo: _artistSearchController.text)
-          .where('displayName', isLessThan: '${_artistSearchController.text}z');
-    }
-    return query;
+  void _showLocationBottomSheet() {
+    GeoFirePoint? newCoordinates;
+    showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) => Container(
+          height: MediaQuery.of(context).size.height * 0.75,
+          decoration: BoxDecoration(
+            gradient: primaryGradient,
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(8),
+                  height: 300,
+                  clipBehavior: Clip.hardEdge,
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                  child: SearchAddressInMap(onAddressSelected: (coordinates) {
+                    newCoordinates = coordinates;
+                  }),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 120,
+                  child: CustomButton(
+                    onPressed: () {
+                      if (newCoordinates == null) return;
+                      setState(() {
+                        _getPlaceMarkers = placemarkFromCoordinates(
+                            newCoordinates!.latitude,
+                            newCoordinates!.longitude);
+                        CreateEventService().newEvent.locationCoordinates =
+                            newCoordinates;
+                      });
+                      Navigator.pop(context);
+                    },
+                    buttonText: 'Anwenden',
+                  ),
+                ),
+              )
+            ],
+          )),
+    );
+  }
+
+  void _selectImage() async {
+    final cropped = await ImageService().selectImage();
+    if (cropped == null) return;
+    setState(() {
+      CreateEventService().newEvent.selectedImageFile = File(cropped.path);
+    });
   }
 }

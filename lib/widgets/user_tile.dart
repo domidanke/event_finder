@@ -5,6 +5,8 @@ import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 
+import 'genre_card.dart';
+
 class UserTile extends StatefulWidget {
   const UserTile({Key? key, required this.user}) : super(key: key);
   final AppUser user;
@@ -35,11 +37,11 @@ class _UserTileState extends State<UserTile> {
         }
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         child: Column(
           children: [
             Card(
-              color: primaryBackgroundColor.withOpacity(0.7),
+              color: primaryBackgroundColor.withOpacity(0.5),
               child: ListTile(
                 visualDensity: const VisualDensity(vertical: 4),
                 leading: FutureBuilder(
@@ -75,14 +77,23 @@ class _UserTileState extends State<UserTile> {
                       );
                     }),
                 title: Text(widget.user.displayName),
-                subtitle: Row(
-                  children: widget.user.genres
-                      .map((e) => Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: Opacity(opacity: 0.5, child: Text(e)),
-                          ))
-                      .toList(),
-                ),
+                subtitle: widget.user.type == UserType.artist
+                    ? Row(children: [
+                        ...widget.user.genres
+                            .map((e) => Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: Opacity(opacity: 0.5, child: Text(e)),
+                                ))
+                            .take(3)
+                            .toList(),
+                        if (widget.user.genres.length > 3)
+                          GenreCard(
+                              text:
+                                  '+${(widget.user.genres.length - 3).toString()}')
+                      ])
+                    : Opacity(
+                        opacity: 0.5,
+                        child: Text('${widget.user.follower.length} Follower')),
                 trailing: Container(
                   margin: const EdgeInsets.only(top: 16),
                   child: const Icon(

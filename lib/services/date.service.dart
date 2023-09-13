@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../models/consts.dart';
+
 class DateService {
   factory DateService() {
     return _singleton;
@@ -71,5 +73,17 @@ class DateService {
       initialTime: TimeOfDay.now(),
       context: context,
     );
+  }
+
+  String getDateText(DateTime startDate) {
+    return '${weekdayMap[startDate.weekday]} ${startDate.day} ${monthMap[startDate.month]}';
+  }
+
+  String getTimeText(DateTime startDate, DateTime? endDate) {
+    if (endDate == null) {
+      return startDate.toString().substring(11, 16);
+    } else {
+      return '${startDate.toString().substring(11, 16)} - ${endDate.toString().substring(11, 16)}';
+    }
   }
 }

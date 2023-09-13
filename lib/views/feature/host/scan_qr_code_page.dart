@@ -1,5 +1,6 @@
-import 'package:event_finder/services/firestore/event_ticket_doc.service.dart';
+import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -20,35 +21,38 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  CustomIconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
+      body: Container(
+        decoration: BoxDecoration(gradient: primaryGradient),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    CustomIconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              flex: 5,
-              child: QRView(
-                key: qrKey,
-                onQRViewCreated: _onQRViewCreated,
+              Expanded(
+                flex: 5,
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                ),
               ),
-            ),
-            const Expanded(
-              flex: 1,
-              child: Center(
-                child: Text('Scan a code'),
-              ),
-            )
-          ],
+              const Expanded(
+                flex: 1,
+                child: Center(
+                  child: Text('Scan a code'),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -64,7 +68,7 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
         controller.pauseCamera();
         print(scanData.code);
         if (StateService().lastSelectedEvent!.uid !=
-            scanData.code!.split('_')[1]) {
+            scanData.code!.split('_')[3]) {
           _showQrCodeResultDialog(
               'Falsches Event',
               const Icon(
@@ -80,8 +84,8 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
                   color: Colors.red,
                 ));
           } else {
-            final isValid = await EventTicketDocService()
-                .checkIfQrCodeStillValid(scanData.code!);
+            final isValid =
+                await EventDocService().checkIfQrCodeStillValid(scanData.code!);
             if (isValid) {
               qrCodesScanned.add(scanData.code!);
               _showQrCodeResultDialog(

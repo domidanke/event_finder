@@ -9,16 +9,18 @@ class CustomIconButton extends StatelessWidget {
       color: primaryWhite,
     ),
     this.color = primaryWhite,
+    this.size = 1,
     this.onPressed,
   }) : super(key: key);
   final Icon icon;
   final Color color;
+  final int size;
   final Function()? onPressed;
 
   @override
   Widget build(BuildContext context) => SizedBox(
-        width: 60,
-        height: 60,
+        width: size == 1 ? 60 : 40,
+        height: size == 1 ? 60 : 40,
         child: Card(
           color: Colors.transparent,
           elevation: 0,
@@ -32,7 +34,7 @@ class CustomIconButton extends StatelessWidget {
                   icon: icon,
                   color: color,
                   onPressed: onPressed,
-                  splashRadius: 31,
+                  splashRadius: size == 1 ? 31 : 17,
                   splashColor: Colors.white.withOpacity(0.5),
                 ),
         ),

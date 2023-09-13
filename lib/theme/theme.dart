@@ -31,16 +31,13 @@ final primaryThemeData = ThemeData(
       inactiveTickMarkColor: Colors.transparent),
   progressIndicatorTheme: ProgressIndicatorThemeData(
       color: primaryWhite, linearTrackColor: primaryWhite.withOpacity(0.8)),
-  drawerTheme: const DrawerThemeData(shadowColor: primaryColor),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      elevation: 0.1,
+      elevation: 0,
       selectedItemColor: secondaryColor,
       unselectedItemColor: primaryWhite),
   cardTheme: const CardTheme(color: Colors.transparent, elevation: 0),
-  canvasColor: primaryBackgroundColor,
   fontFamily: 'Quicksand',
   appBarTheme: const AppBarTheme(color: primaryColor),
-  hintColor: Colors.pinkAccent,
   indicatorColor: secondaryColor,
   dialogTheme: const DialogTheme(elevation: 0.1),
   dividerColor: primaryWhite,
@@ -48,17 +45,6 @@ final primaryThemeData = ThemeData(
     checkColor: MaterialStateProperty.all(primaryWhite),
     fillColor: MaterialStateProperty.all(secondaryColor),
   ),
-  inputDecorationTheme: const InputDecorationTheme(
-    labelStyle: TextStyle(color: Colors.white),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white, width: 0),
-    ),
-  ),
-  focusColor: Colors.redAccent,
-  hoverColor: Colors.orange,
   shadowColor: primaryWhite,
   splashColor: primaryColor,
   dialogBackgroundColor: primaryBackgroundColor,
@@ -68,20 +54,22 @@ final primaryThemeData = ThemeData(
           foregroundColor: MaterialStateProperty.all(secondaryColor))),
 );
 
-const primaryGradient = LinearGradient(
-  begin: Alignment.topLeft,
-  end: Alignment(0.8, 1),
-  colors: <Color>[
-    //Color(0xffa24ccd),
-    //Color(0xff9739c8),
-    //Color(0xff8013bd),
-    //Color(0xff8b26c3),
-    Color(0xff7400b8),
-    Color(0xff3a015c),
-    Color(0xff32004f),
-    Color(0xff11001C),
-    Color(0xff190028),
-    Color(0xff220135),
+var primaryGradient = const LinearGradient(
+  end: Alignment.topLeft,
+  begin: Alignment.bottomRight,
+  colors: [
+    primaryBackgroundColor,
+    Color(0xff0f0c29),
+    Color(0xff302b63),
+    Color(0xff24243e),
   ],
-  tileMode: TileMode.mirror,
+);
+
+var secondaryGradient = LinearGradient(
+  end: Alignment.topCenter,
+  begin: Alignment.bottomCenter,
+  colors: [
+    secondaryColor.withOpacity(0.6),
+    primaryColor,
+  ],
 );

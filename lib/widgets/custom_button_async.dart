@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../theme/theme.dart';
 
-class KKButtonAsync extends StatefulWidget {
-  const KKButtonAsync({
+class CustomButtonAsync extends StatefulWidget {
+  const CustomButtonAsync({
     Key? key,
     required this.onPressed,
     required this.loading,
@@ -14,10 +14,10 @@ class KKButtonAsync extends StatefulWidget {
   final String buttonText;
 
   @override
-  State<KKButtonAsync> createState() => _KKButtonAsyncState();
+  State<CustomButtonAsync> createState() => _CustomButtonAsyncState();
 }
 
-class _KKButtonAsyncState extends State<KKButtonAsync> {
+class _CustomButtonAsyncState extends State<CustomButtonAsync> {
   @override
   Widget build(BuildContext context) => ElevatedButton(
         style: ButtonStyle(

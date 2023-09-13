@@ -1,23 +1,57 @@
-class TicketInfo {
-  final String id;
-  final String eventTitle;
-  final DateTime eventDate;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  TicketInfo(
-      {required this.id, required this.eventTitle, required this.eventDate});
+class TicketInfo {
+  final List<String> ticketQrCodeIds;
+  final String userId;
+  final String eventId;
+  final String creatorId;
+  final String creatorName;
+  final String eventTitle;
+  final DateTime startDate;
+  final DateTime? endDate;
+  final int ticketPrice;
+  String? imageUrl;
+
+  TicketInfo({
+    required this.ticketQrCodeIds,
+    required this.userId,
+    required this.eventId,
+    required this.creatorId,
+    required this.creatorName,
+    required this.eventTitle,
+    required this.startDate,
+    required this.endDate,
+    required this.ticketPrice,
+  });
 
   TicketInfo.fromJson(Map<String, Object?> json)
       : this(
-          id: json['id']! as String,
+          ticketQrCodeIds: List.from(json['ticketQrCodeIds']! as List<dynamic>),
+          userId: json['userId']! as String,
+          eventId: json['eventId']! as String,
+          creatorId: json['creatorId']! as String,
+          creatorName: json['creatorName']! as String,
           eventTitle: json['eventTitle']! as String,
-          eventDate: DateTime.parse(json['eventDate']! as String),
+          startDate: DateTime.parse(
+              (json['startDate']! as Timestamp).toDate().toString()),
+          endDate: json['endDate'] != null
+              ? DateTime.parse(
+                  (json['endDate']! as Timestamp).toDate().toString())
+              : null,
+          ticketPrice: json['ticketPrice']! as int,
         );
 
   Map<String, Object?> toJson() {
     return {
-      'id': id,
+      'ticketQrCodeIds': ticketQrCodeIds,
+      'userId': userId,
+      'eventId': eventId,
+      'creatorId': creatorId,
+      'creatorName': creatorName,
       'eventTitle': eventTitle,
-      'eventDate': eventDate.toString(),
+      'startDate': startDate,
+      'endDate': endDate,
+      'ticketPrice': ticketPrice
     };
   }
 }

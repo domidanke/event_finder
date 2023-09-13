@@ -1,13 +1,14 @@
 import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/theme/theme.dart';
-import 'package:event_finder/widgets/qr_code.dart';
+import 'package:event_finder/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
 
-import '../../../models/event.dart';
+import '../../../services/date.service.dart';
 import '../../../services/location.service.dart';
-import '../../../widgets/custom_icon_button.dart';
+import '../../../services/semi_circle_clipper.dart';
+import '../../../widgets/qr_code.dart';
 
 class TicketDetailsPage extends StatefulWidget {
   const TicketDetailsPage({Key? key}) : super(key: key);
@@ -18,129 +19,198 @@ class TicketDetailsPage extends StatefulWidget {
 
 class _TicketDetailsPageState extends State<TicketDetailsPage> {
   final ticketInfo = StateService().lastSelectedTicket!;
-  late Future<Event?> _eventFuture;
-  late Future<List<Placemark>> _placeMarks;
-
-  @override
-  void initState() {
-    _eventFuture =
-        EventDocService().getEventDocument(ticketInfo.id.split('_')[1]);
-    super.initState();
-  }
+  final PageController pageViewController = PageController();
+  final ValueNotifier<int> currentPageNotifier = ValueNotifier<int>(0);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: Container(
+        decoration: BoxDecoration(gradient: primaryGradient),
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(left: 12.0, top: 42, right: 12),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CustomIconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                  Expanded(
+                    flex: 1,
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.keyboard_arrow_down,
+                          size: 32,
+                        )),
+                  ),
+                  Expanded(
+                    flex: 6,
+                    child: Center(
+                      child: ValueListenableBuilder<int>(
+                        valueListenable: currentPageNotifier,
+                        builder: (context, currentPage, _) {
+                          return Text(
+                            'Ticket ${(currentPage + 1)} von ${ticketInfo.ticketQrCodeIds.length}',
+                            style: const TextStyle(fontSize: 20),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
                   ),
                 ],
               ),
             ),
-            FutureBuilder(
-              future: _eventFuture,
-              builder: (BuildContext context, AsyncSnapshot<Event?> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Expanded(
-                      child: Center(child: CircularProgressIndicator()));
-                }
-                if (snapshot.hasData) {
-                  final event = snapshot.data!;
-                  _placeMarks = placemarkFromCoordinates(
-                      event.location.geoPoint.latitude,
-                      event.location.geoPoint.longitude);
-                  return Expanded(
-                    child: Column(
+            const SizedBox(
+              height: 8,
+            ),
+            ClipPath(
+              clipper: SemiCircleClipper(),
+              child: Container(
+                height: 400,
+                width: 300,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 125,
+                      decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(8)),
+                          image: DecorationImage(
+                            image: NetworkImage(ticketInfo.imageUrl!),
+                            fit: BoxFit.cover,
+                          )),
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Column(
                       children: [
                         Text(
-                          '${ticketInfo.eventTitle} (${ticketInfo.id.split('_')[3]})',
+                          ticketInfo.eventTitle,
                           style: const TextStyle(
-                              fontSize: 28, color: secondaryColor),
+                              fontSize: 20, color: primaryBackgroundColor),
                         ),
-                        const SizedBox(
-                          height: 8,
+                        Container(
+                          margin: const EdgeInsets.only(left: 75),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.date_range,
+                                color: secondaryColor,
+                              ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              Text(
+                                DateService().getDateText(ticketInfo.startDate),
+                                style: const TextStyle(color: secondaryColor),
+                              ),
+                            ],
+                          ),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              event.startDate.toString().substring(0, 10),
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  event.startDate.toString().substring(11, 16),
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                if (event.endDate != null)
-                                  Text(
-                                    '-${event.endDate.toString().substring(11, 16)}Uhr',
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                              ],
-                            ),
-                          ],
+                        Container(
+                          margin: const EdgeInsets.only(left: 75),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.watch_later_outlined,
+                                color: secondaryColor,
+                              ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              Text(
+                                DateService().getTimeText(
+                                    ticketInfo.startDate, ticketInfo.endDate),
+                                style: const TextStyle(color: secondaryColor),
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          event.creatorName,
-                          style: const TextStyle(
-                              fontStyle: FontStyle.italic, fontSize: 18),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        FutureBuilder(
-                          future: _placeMarks,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Placemark>> snapshot) {
-                            if (snapshot.hasData) {
-                              final placeMark = snapshot.data![0];
-                              return TextButton(
-                                onPressed: () async {
-                                  await LocationService().openEventInMap(event);
-                                },
-                                child: Text(
-                                  '${placeMark.street}, ${placeMark.postalCode}, ${placeMark.locality}',
-                                ),
-                              );
-                            }
-                            return const Text('');
-                          },
-                        ),
-                        const Spacer(),
-                        QrCode(
-                          size: 250,
-                          data: ticketInfo.id,
-                        ),
-                        const Spacer()
                       ],
                     ),
-                  );
-                } else {
-                  return Expanded(child: Container());
-                }
-              },
+                    SizedBox(
+                      height: 180,
+                      child: PageView(
+                        onPageChanged: (int page) {
+                          currentPageNotifier.value = page;
+                        },
+                        controller: pageViewController,
+                        children: [..._getQrCodeWidgets()],
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
+            const SizedBox(
+              height: 18,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    CustomIconButton(
+                      icon: const Icon(Icons.event),
+                      onPressed: () async {
+                        final event = await EventDocService()
+                            .getEventDocument(ticketInfo.eventId);
+                        event!.imageUrl = await StorageService()
+                            .getEventImageUrl(
+                                eventId: event.uid, hostId: event.creatorId);
+                        StateService().lastSelectedEvent = event;
+                        if (mounted) {
+                          Navigator.pushNamed(context, 'event_details');
+                        }
+                      },
+                    ),
+                    const Text('Zum Event'),
+                  ],
+                ),
+                Column(
+                  children: [
+                    CustomIconButton(
+                        onPressed: () async {
+                          final event = await EventDocService()
+                              .getEventDocument(ticketInfo.eventId);
+                          await LocationService().openEventInMap(event!);
+                        },
+                        icon: const Icon(
+                          Icons.alt_route,
+                          size: 40,
+                        )),
+                    const Text('Route'),
+                  ],
+                ),
+              ],
+            )
           ],
         ),
       ),
     );
+  }
+
+  List<Widget> _getQrCodeWidgets() {
+    List<Widget> qrCodeWidgets = [];
+    for (var i = 0; i < ticketInfo.ticketQrCodeIds.length; i++) {
+      qrCodeWidgets.add(Center(
+        child: QrCode(
+          size: 180,
+          data: ticketInfo.ticketQrCodeIds[i],
+        ),
+      ));
+    }
+    return qrCodeWidgets;
   }
 }
