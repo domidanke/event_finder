@@ -69,14 +69,14 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
                         children: [
                           ListTile(
                             leading: const Icon(Icons.person),
-                            title: const Text('Anderer Name'),
+                            title: const Text('Namen setzen'),
                             onTap: () {
                               Navigator.pushNamed(context, 'edit_display_name');
                             },
                           ),
                           ListTile(
                             leading: const Icon(Icons.location_on),
-                            title: const Text('Andere Location'),
+                            title: const Text('Location setzen'),
                             onTap: () {
                               Navigator.pushNamed(context, 'set_main_location');
                             },
@@ -90,7 +90,7 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
                           ),
                           ListTile(
                             leading: const Icon(Icons.image),
-                            title: const Text('Anderes Profilbild'),
+                            title: const Text('Profilbild setzen'),
                             onTap: () async {
                               final cropped = await ImageService()
                                   .selectImage(ratioX: 1, ratioY: 1);

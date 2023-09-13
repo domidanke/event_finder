@@ -113,10 +113,8 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                   onTap: () async {
                     await AuthService().signOut().then((value) => {
                           StateService().resetCurrentUserSilent(),
-                          Navigator.popUntil(
-                              context,
-                              (Route<dynamic> route) =>
-                                  route.settings.name == '/'),
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/', (Route<dynamic> route) => false),
                         });
                   },
                 ),

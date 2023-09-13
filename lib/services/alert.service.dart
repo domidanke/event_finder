@@ -13,7 +13,7 @@ Map<String, String> kAlertMap = const {
   'operation-not-allowed': 'Something went wrong on the Server',
   'internal-error': 'Etwas ist schiefgelaufen',
   'not_found': 'Keine Adresse gefunden',
-  'profile_incomplete': 'Bitte vervollstaendigen Sie zuerst Ihr Profil'
+  'profile_incomplete': 'Bitte vervollständigen Sie zuerst Ihr Profil'
 };
 
 class AlertService {

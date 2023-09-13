@@ -114,7 +114,8 @@ class _HostPageState extends State<HostPage>
                   ),
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: host.imageUrl != null
+                    backgroundImage: host.imageUrl != null &&
+                            host.imageUrl!.isNotEmpty
                         ? NetworkImage(host.imageUrl!)
                         : Image.asset('assets/images/profile_placeholder.png')
                             .image,

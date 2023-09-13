@@ -47,34 +47,40 @@ class _UserTileState extends State<UserTile> {
                 leading: FutureBuilder(
                     future: _imageUrl,
                     builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return CircleAvatar(
-                          radius: 30,
-                          backgroundImage: Image.asset(
-                                  'assets/images/profile_placeholder.png')
-                              .image,
+                      widget.user.imageUrl = snapshot.data;
+                      if (snapshot.hasData) {
+                        if (snapshot.data == '') {
+                          return const CircleAvatar(
+                            radius: 30,
+                            backgroundImage: AssetImage(
+                                'assets/images/profile_placeholder.png'),
+                          );
+                        } else {
+                          return CircleAvatar(
+                            radius: 30,
+                            backgroundImage: NetworkImage(
+                              widget.user.imageUrl!,
+                            ),
+                          );
+                        }
+                      } else {
+                        return Container(
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(
+                                color: primaryWhite.withOpacity(0.2),
+                                width: 0.2),
+                          ),
+                          child: const Center(
+                            child: SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator()),
+                          ),
                         );
                       }
-                      widget.user.imageUrl = snapshot.data;
-                      return CircleAvatar(
-                        radius: 30,
-                        backgroundImage: snapshot.connectionState ==
-                                ConnectionState.waiting
-                            ? null
-                            : widget.user.imageUrl != null
-                                ? NetworkImage(widget.user.imageUrl!)
-                                : Image.asset(
-                                        'assets/images/profile_placeholder.png')
-                                    .image,
-                        child:
-                            snapshot.connectionState == ConnectionState.waiting
-                                ? const SizedBox(
-                                    height: 18,
-                                    width: 18,
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : null,
-                      );
                     }),
                 title: Text(widget.user.displayName),
                 subtitle: widget.user.type == UserType.artist

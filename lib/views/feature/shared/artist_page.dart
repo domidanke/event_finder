@@ -94,9 +94,11 @@ class _ArtistPageState extends State<ArtistPage> {
               ),
               CircleAvatar(
                 radius: 50,
-                backgroundImage: NetworkImage(
-                  artist.imageUrl!,
-                ),
+                backgroundImage:
+                    artist.imageUrl != null && artist.imageUrl!.isNotEmpty
+                        ? NetworkImage(artist.imageUrl!)
+                        : Image.asset('assets/images/profile_placeholder.png')
+                            .image,
               ),
               const SizedBox(
                 height: 4,
