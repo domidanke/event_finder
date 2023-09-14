@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/event.dart';
 import 'package:event_finder/services/date.service.dart';
+import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/location.service.dart';
 import 'package:event_finder/services/state.service.dart';
@@ -350,15 +351,42 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               ),
               if (currentUser.type == UserType.base &&
                   event.startDate.isAfter(DateTime.now()))
-                Container(
-                  margin: EdgeInsets.only(bottom: 4),
-                  width: 180,
-                  child: CustomButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'buy_tickets');
-                    },
-                    buttonText: 'Tickets hier kaufen',
-                  ),
+                StreamBuilder(
+                  stream: EventDocService()
+                      .eventsCollection
+                      .doc(event.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container();
+                    } else {
+                      final event = snapshot.data!.data()!;
+                      if (event.soldTickets.length < event.maxTickets) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 4),
+                          width: 180,
+                          child: CustomButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, 'buy_tickets');
+                            },
+                            buttonText: 'Tickets hier kaufen',
+                          ),
+                        );
+                      } else {
+                        return Opacity(
+                          opacity: 0.4,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 4),
+                            width: 180,
+                            child: CustomButton(
+                              onPressed: () {},
+                              buttonText: 'Ausverkauft',
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
                 ),
               if (currentUser.type == UserType.guest)
                 Container(

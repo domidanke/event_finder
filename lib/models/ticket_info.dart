@@ -9,6 +9,7 @@ class TicketInfo {
   final String eventTitle;
   final DateTime startDate;
   final DateTime? endDate;
+  final DateTime purchasedOn;
   final int ticketPrice;
   String? imageUrl;
 
@@ -21,6 +22,7 @@ class TicketInfo {
     required this.eventTitle,
     required this.startDate,
     required this.endDate,
+    required this.purchasedOn,
     required this.ticketPrice,
   });
 
@@ -38,6 +40,10 @@ class TicketInfo {
               ? DateTime.parse(
                   (json['endDate']! as Timestamp).toDate().toString())
               : null,
+          purchasedOn: json['purchasedOn'] != null
+              ? DateTime.parse(
+                  (json['purchasedOn']! as Timestamp).toDate().toString())
+              : DateTime.now(),
           ticketPrice: json['ticketPrice']! as int,
         );
 
@@ -51,6 +57,7 @@ class TicketInfo {
       'eventTitle': eventTitle,
       'startDate': startDate,
       'endDate': endDate,
+      'purchasedOn': purchasedOn,
       'ticketPrice': ticketPrice
     };
   }

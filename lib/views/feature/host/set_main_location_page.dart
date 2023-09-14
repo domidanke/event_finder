@@ -1,6 +1,6 @@
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/popup.service.dart';
-import 'package:event_finder/services/search_page.service.dart';
+import 'package:event_finder/services/search.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/shared/search_address_in_map.dart';

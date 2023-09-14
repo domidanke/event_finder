@@ -1,8 +1,8 @@
 import 'package:event_finder/models/event.dart';
-import 'package:event_finder/models/ticket_info.dart';
 import 'package:event_finder/services/firestore/event_doc.service.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/services/ticket.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/custom_button_async.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +20,36 @@ class BuyTicketsPage extends StatefulWidget {
 
 class _BuyTicketsPageState extends State<BuyTicketsPage> {
   String? selectedPaymentMethod;
-  int numberOfTickets = 1;
   bool _isLoading = false;
+  List<TicketNumberCard> numberCards = [];
+
+  void _fillNumberCards() {
+    int remainingTickets = StateService().lastSelectedEvent!.maxTickets -
+        StateService().lastSelectedEvent!.soldTickets.length;
+    int ticketsToSell = remainingTickets > 5 ? 5 : remainingTickets;
+    for (var i = 1; i <= ticketsToSell; i++) {
+      numberCards.add(
+        TicketNumberCard(
+          onTap: () {
+            setState(() {
+              TicketService().numberOfTicketsToBuy = i;
+            });
+          },
+          ticketNumber: i,
+        ),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fillNumberCards();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Event event = Provider.of<StateService>(context).lastSelectedEvent!;
+    final Event event = StateService().lastSelectedEvent!;
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(gradient: primaryGradient),
@@ -124,53 +148,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                             height: 6,
                           ),
                           Row(
-                            children: [
-                              TicketNumberCard(
-                                onTap: () {
-                                  setState(() {
-                                    numberOfTickets = 1;
-                                  });
-                                },
-                                ticketNumber: 1,
-                                numberOfTickets: numberOfTickets,
-                              ),
-                              TicketNumberCard(
-                                onTap: () {
-                                  setState(() {
-                                    numberOfTickets = 2;
-                                  });
-                                },
-                                ticketNumber: 2,
-                                numberOfTickets: numberOfTickets,
-                              ),
-                              TicketNumberCard(
-                                onTap: () {
-                                  setState(() {
-                                    numberOfTickets = 3;
-                                  });
-                                },
-                                ticketNumber: 3,
-                                numberOfTickets: numberOfTickets,
-                              ),
-                              TicketNumberCard(
-                                onTap: () {
-                                  setState(() {
-                                    numberOfTickets = 4;
-                                  });
-                                },
-                                ticketNumber: 4,
-                                numberOfTickets: numberOfTickets,
-                              ),
-                              TicketNumberCard(
-                                onTap: () {
-                                  setState(() {
-                                    numberOfTickets = 5;
-                                  });
-                                },
-                                ticketNumber: 5,
-                                numberOfTickets: numberOfTickets,
-                              ),
-                            ],
+                            children: numberCards,
                           )
                         ],
                       ),
@@ -330,7 +308,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
 
                       /// TODO: Add Payment
                       await Future.delayed(const Duration(seconds: 1));
-                      final ticketInfo = createTicketInfo();
+                      final ticketInfo = TicketService().createTicketInfo();
                       await UserDocService().addUserTickets(ticketInfo);
                       StateService().addTicket(ticketInfo);
                       await EventDocService().addSoldTicketsToEvent(
@@ -343,7 +321,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                       }
                     },
                     buttonText:
-                        'Tickets jetzt kaufen ${event.ticketPrice * numberOfTickets}€',
+                        'Tickets jetzt kaufen ${event.ticketPrice * TicketService().numberOfTicketsToBuy}€',
                   ),
                 ),
               )
@@ -399,7 +377,7 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text('Tickets: '),
-                          Text(numberOfTickets.toString()),
+                          Text(TicketService().numberOfTicketsToBuy.toString()),
                         ],
                       ),
                     ),
@@ -409,7 +387,8 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text('Preis: '),
-                          Text('${numberOfTickets * event.ticketPrice}€'),
+                          Text(
+                              '${TicketService().numberOfTicketsToBuy * event.ticketPrice}€'),
                         ],
                       ),
                     )
@@ -449,37 +428,15 @@ class _BuyTicketsPageState extends State<BuyTicketsPage> {
       return '${event.startDate.toString().substring(11, 16)} - ${event.endDate.toString().substring(11, 16)} Uhr';
     }
   }
-
-  TicketInfo createTicketInfo() {
-    var dateAndTime = DateTime.now().toString().substring(0, 19);
-    var event = StateService().lastSelectedEvent!;
-    final ticketInfo = TicketInfo(
-        ticketQrCodeIds: [],
-        userId: StateService().currentUser!.uid,
-        eventId: event.uid,
-        creatorId: event.creatorId,
-        creatorName: event.creatorName,
-        eventTitle: event.title,
-        startDate: event.startDate,
-        endDate: event.endDate,
-        ticketPrice: event.ticketPrice);
-    for (var i = 0; i < numberOfTickets; i++) {
-      ticketInfo.ticketQrCodeIds.add(
-          '${StateService().currentUser!.uid}_${event.creatorId}_${event.creatorName}_${event.uid}_${dateAndTime}_${i + 1}/$numberOfTickets');
-    }
-    return ticketInfo;
-  }
 }
 
 class TicketNumberCard extends StatefulWidget {
-  const TicketNumberCard(
-      {Key? key,
-      required this.onTap,
-      required this.ticketNumber,
-      required this.numberOfTickets})
-      : super(key: key);
+  const TicketNumberCard({
+    Key? key,
+    required this.onTap,
+    required this.ticketNumber,
+  }) : super(key: key);
   final int ticketNumber;
-  final int numberOfTickets;
   final Function() onTap;
 
   @override
@@ -489,12 +446,13 @@ class TicketNumberCard extends StatefulWidget {
 class _TicketNumberCardState extends State<TicketNumberCard> {
   @override
   Widget build(BuildContext context) {
+    Provider.of<TicketService>(context).numberOfTicketsToBuy;
     return GestureDetector(
         onTap: widget.onTap,
         child: Card(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          color: widget.numberOfTickets == widget.ticketNumber
+          color: TicketService().numberOfTicketsToBuy == widget.ticketNumber
               ? secondaryColor
               : null,
           child: Container(
@@ -505,7 +463,8 @@ class _TicketNumberCardState extends State<TicketNumberCard> {
                 '${widget.ticketNumber}',
                 style: TextStyle(
                     fontSize: 24,
-                    color: widget.numberOfTickets == widget.ticketNumber
+                    color: TicketService().numberOfTicketsToBuy ==
+                            widget.ticketNumber
                         ? primaryBackgroundColor
                         : null),
               )),

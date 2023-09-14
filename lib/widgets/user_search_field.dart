@@ -2,7 +2,7 @@ import 'package:event_finder/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../services/search_page.service.dart';
+import '../services/search.service.dart';
 
 class UserSearchField extends StatefulWidget {
   const UserSearchField({super.key, required this.hintText});

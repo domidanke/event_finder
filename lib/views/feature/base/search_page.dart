@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
-import 'package:event_finder/services/search_page.service.dart';
+import 'package:event_finder/services/search.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/widgets/top_genres.dart';
 import 'package:event_finder/widgets/user_search_field.dart';
