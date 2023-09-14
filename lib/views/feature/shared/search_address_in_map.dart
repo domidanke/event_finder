@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/services/alert.service.dart';
-import 'package:event_finder/services/search_page.service.dart';
+import 'package:event_finder/services/search.service.dart';
 import 'package:event_finder/widgets/user_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

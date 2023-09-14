@@ -11,7 +11,7 @@ import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../services/search_page.service.dart';
+import '../../../services/search.service.dart';
 import '../../../widgets/user_search_field.dart';
 
 class ArtistSearch extends StatefulWidget {

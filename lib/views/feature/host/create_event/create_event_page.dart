@@ -1,5 +1,5 @@
 import 'package:event_finder/services/create_event.service.dart';
-import 'package:event_finder/services/search_page.service.dart';
+import 'package:event_finder/services/search.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/feature/host/create_event/ce_page_1.dart';

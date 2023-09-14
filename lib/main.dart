@@ -5,8 +5,9 @@ import 'package:event_finder/route_generator.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/create_event.service.dart';
 import 'package:event_finder/services/events_page.service.dart';
-import 'package:event_finder/services/search_page.service.dart';
+import 'package:event_finder/services/search.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/services/ticket.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/views/auth/auth_startup_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,6 +41,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => StateService()),
       ChangeNotifierProvider(create: (_) => EventsPageService()),
       ChangeNotifierProvider(create: (_) => SearchService()),
+      ChangeNotifierProvider(create: (_) => TicketService()),
       ChangeNotifierProvider(create: (_) => CreateEventService()),
     ],
     child: EventFinder(),
