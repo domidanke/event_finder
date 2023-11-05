@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/location_data.dart';
+import 'package:event_finder/models/rating_data.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
@@ -17,6 +18,7 @@ class Event {
       required this.maxTickets,
       required this.creatorId,
       required this.creatorName,
+      this.ratingData,
       this.artists = const [],
       this.soldTickets = const [],
       this.scannedTickets = const [],
@@ -53,6 +55,9 @@ class Event {
           location: json['location'] != null
               ? LocationData.fromJson(json['location'] as Map<String, dynamic>)
               : const LocationData(),
+          ratingData: json['ratingData'] != null
+              ? RatingData.fromJson(json['ratingData'] as Map<String, dynamic>)
+              : null,
         );
 
   final String uid;
@@ -66,6 +71,7 @@ class Event {
   final String creatorId;
   final String creatorName;
   final LocationData location;
+  final RatingData? ratingData;
   late List<String> artists = [];
   late List<String> soldTickets = [];
   late List<String> scannedTickets = [];

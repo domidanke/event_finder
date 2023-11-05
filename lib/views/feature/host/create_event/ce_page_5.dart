@@ -32,8 +32,8 @@ class _CePage5State extends State<CePage5> {
           const SizedBox(
             height: 6,
           ),
-          Row(
-            children: const [
+          const Row(
+            children: [
               Expanded(
                   child: UserSearchField(
                 hintText: 'Künstler',
@@ -67,6 +67,13 @@ class _CePage5State extends State<CePage5> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
+                                    fillColor: MaterialStateProperty.all(
+                                        !CreateEventService()
+                                                .newEvent
+                                                .enlistedArtists
+                                                .contains(artist.uid)
+                                            ? Colors.transparent
+                                            : secondaryColor),
                                     checkColor: primaryBackgroundColor,
                                     value: CreateEventService()
                                         .newEvent

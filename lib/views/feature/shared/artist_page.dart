@@ -5,6 +5,7 @@ import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/genre_card.dart';
+import 'package:event_finder/widgets/rating_indicator.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -182,24 +183,33 @@ class _ArtistPageState extends State<ArtistPage> {
               const SizedBox(
                 height: 8,
               ),
-              StreamBuilder(
-                  stream: UserDocService()
-                      .usersCollection
-                      .doc(artist.uid)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Text(
-                        '',
-                      );
-                    } else {
-                      final x = snapshot.data!.data()!;
-                      return Text(
-                        '${x.follower.length} Follower',
-                        style: const TextStyle(fontSize: 14),
-                      );
-                    }
-                  }),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  StreamBuilder(
+                      stream: UserDocService()
+                          .usersCollection
+                          .doc(artist.uid)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Text(
+                            '',
+                          );
+                        } else {
+                          final x = snapshot.data!.data()!;
+                          return Text(
+                            '${x.follower.length} Follower',
+                            style: const TextStyle(fontSize: 14),
+                          );
+                        }
+                      }),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  RatingIndicator(ratingData: artist.ratingData)
+                ],
+              ),
               const SizedBox(
                 height: 4,
               ),
@@ -251,8 +261,9 @@ class _ArtistPageState extends State<ArtistPage> {
   Query<Event> _getArtistEventsQuery(AppUser artist) {
     return EventDocService()
         .eventsCollection
+        .orderBy('startDate')
         .where('artists', arrayContains: artist.uid)
-        .orderBy('startDate');
+        .where('startDate', isGreaterThan: DateTime.now());
   }
 
   void _showUnfollowSheet() {

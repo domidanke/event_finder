@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/event.dart';
+import 'package:event_finder/models/rating_data.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
 
@@ -76,5 +77,21 @@ class EventDocService {
       return true;
     }
     return false;
+  }
+
+  Future<void> rateEvent(Event event, int eventRating) async {
+    if (event.ratingData == null) {
+      await eventsCollection.doc(event.uid).update({
+        'ratingData':
+            RatingData(totalRating: eventRating, numOfRatings: 1).toJson()
+      });
+    } else {
+      await eventsCollection.doc(event.uid).update({
+        'ratingData': RatingData(
+                totalRating: event.ratingData!.totalRating + eventRating,
+                numOfRatings: event.ratingData!.numOfRatings + 1)
+            .toJson()
+      });
+    }
   }
 }

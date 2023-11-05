@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/location_data.dart';
+import 'package:event_finder/models/rating_data.dart';
 import 'package:event_finder/models/ticket_info.dart';
 
 import 'external_links.dart';
@@ -16,7 +17,9 @@ class AppUser {
     this.follower = const [],
     this.allTickets = const [],
     this.usedTickets = const [],
+    this.eventsToBeRated = const [],
     this.genres = const [],
+    this.ratingData,
     this.externalLinks = const ExternalLinks(),
     this.mainLocation = const LocationData(),
     this.termsAcceptedDate,
@@ -31,8 +34,10 @@ class AppUser {
   late List<String> savedHosts = [];
   late List<TicketInfo> allTickets = [];
   late List<String> usedTickets = [];
+  late List<String> eventsToBeRated = [];
   late List<String> follower = [];
   late List<String> genres = [];
+  RatingData? ratingData;
   late LocationData mainLocation;
   String? imageUrl;
   DateTime? termsAcceptedDate;
@@ -48,6 +53,9 @@ class AppUser {
                 : [],
             savedHosts: json['savedHosts'] != null
                 ? List.from(json['savedHosts'] as List<dynamic>)
+                : [],
+            eventsToBeRated: json['eventsToBeRated'] != null
+                ? List.from(json['eventsToBeRated'] as List<dynamic>)
                 : [],
             follower: json['follower'] != null
                 ? List.from(json['follower'] as List<dynamic>)
@@ -65,6 +73,10 @@ class AppUser {
             type: json['type'] != null
                 ? UserType.fromString(json['type'] as String)
                 : UserType.base,
+            ratingData: json['ratingData'] != null
+                ? RatingData.fromJson(
+                    json['ratingData'] as Map<String, dynamic>)
+                : null,
             externalLinks: json['externalLinks'] != null
                 ? ExternalLinks.fromJson(
                     json['externalLinks'] as Map<String, dynamic>)
@@ -76,10 +88,8 @@ class AppUser {
             displayName: json['displayName'] != null
                 ? json['displayName'] as String
                 : '',
-            termsAcceptedDate: json['termsAcceptedDate'] != null
-                ? DateTime.parse(
-                    (json['termsAcceptedDate'] as Timestamp).toDate().toString())
-                : null);
+            termsAcceptedDate:
+                json['termsAcceptedDate'] != null ? DateTime.parse((json['termsAcceptedDate'] as Timestamp).toDate().toString()) : null);
 
   Map<String, Object?> toJson() {
     return {
