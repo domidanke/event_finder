@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../../../services/image.service.dart';
 import '../../../services/popup.service.dart';
 import '../../../theme/theme.dart';
-import '../../../widgets/change_password_tile.dart';
 
 class HostEditProfilePage extends StatefulWidget {
   const HostEditProfilePage({Key? key}) : super(key: key);
@@ -29,10 +28,10 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
           child: Stack(
             children: [
               if (isUploadingImage)
-                Center(
+                const Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text('Profilbild wird aktualisiert'),
                       SizedBox(
                         height: 16,

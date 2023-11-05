@@ -15,7 +15,8 @@ class RatingIndicator extends StatelessWidget {
       return Row(
         children: [
           Text(
-            '${ratingData!.totalRating / ratingData!.numOfRatings}',
+            (ratingData!.totalRating / ratingData!.numOfRatings)
+                .toStringAsFixed(2),
             style:
                 TextStyle(color: secondaryColor, fontSize: isSmall ? 12 : 24),
           ),
@@ -26,6 +27,14 @@ class RatingIndicator extends StatelessWidget {
             Icons.star,
             size: isSmall ? 14 : 32,
             color: secondaryColor,
+          ),
+          const SizedBox(
+            width: 2,
+          ),
+          Text(
+            '(${ratingData!.numOfRatings})',
+            style:
+                TextStyle(color: secondaryColor, fontSize: isSmall ? 12 : 24),
           )
         ],
       );
