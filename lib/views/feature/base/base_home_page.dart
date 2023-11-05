@@ -32,6 +32,9 @@ class _BaseHomePageState extends State<BaseHomePage> {
               'missing-location-permission', context);
         }
         return;
+      } else {
+        StateService().currentUserLocation =
+            await Geolocator.getCurrentPosition();
       }
     }
     setState(() {
