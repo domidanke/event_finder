@@ -93,13 +93,7 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                     },
                   ),
                 ),
-                ListTile(
-                  leading: const Icon(Icons.password),
-                  title: const Text('Passwort ändern (TODO)'),
-                  onTap: () {
-                    print('edit password');
-                  },
-                ),
+                //const ChangePasswordTile(),
                 ListTile(
                   leading: const Icon(Icons.question_mark),
                   title: const Text('Support'),

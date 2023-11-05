@@ -160,4 +160,11 @@ class UserDocService {
         .doc(StateService().currentUser!.uid)
         .update({'genres': StateService().selectedGenres});
   }
+
+  Future<void> acceptTerms() async {
+    await usersCollection
+        .doc(StateService().currentUser!.uid)
+        .update({'termsAcceptedDate': DateTime.now()});
+    StateService().currentUser = null;
+  }
 }

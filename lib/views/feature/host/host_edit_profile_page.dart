@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../services/image.service.dart';
 import '../../../services/popup.service.dart';
 import '../../../theme/theme.dart';
+import '../../../widgets/change_password_tile.dart';
 
 class HostEditProfilePage extends StatefulWidget {
   const HostEditProfilePage({Key? key}) : super(key: key);
@@ -81,13 +82,7 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
                               Navigator.pushNamed(context, 'set_main_location');
                             },
                           ),
-                          ListTile(
-                            leading: const Icon(Icons.password),
-                            title: const Text('Anderes Passwort (TODO)'),
-                            onTap: () {
-                              debugPrint('Change Password');
-                            },
-                          ),
+                          //const ChangePasswordTile(),
                           ListTile(
                             leading: const Icon(Icons.image),
                             title: const Text('Profilbild setzen'),

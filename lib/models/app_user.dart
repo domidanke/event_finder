@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/models/location_data.dart';
 import 'package:event_finder/models/ticket_info.dart';
@@ -18,6 +19,7 @@ class AppUser {
     this.genres = const [],
     this.externalLinks = const ExternalLinks(),
     this.mainLocation = const LocationData(),
+    this.termsAcceptedDate,
   });
 
   final String uid;
@@ -33,6 +35,7 @@ class AppUser {
   late List<String> genres = [];
   late LocationData mainLocation;
   String? imageUrl;
+  DateTime? termsAcceptedDate;
 
   AppUser.fromJson(Map<String, Object?> json, String uid)
       : this(
@@ -72,7 +75,11 @@ class AppUser {
                 : const LocationData(),
             displayName: json['displayName'] != null
                 ? json['displayName'] as String
-                : '');
+                : '',
+            termsAcceptedDate: json['termsAcceptedDate'] != null
+                ? DateTime.parse(
+                    (json['termsAcceptedDate'] as Timestamp).toDate().toString())
+                : null);
 
   Map<String, Object?> toJson() {
     return {

@@ -2,6 +2,7 @@ import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/models/enums.dart';
 import 'package:event_finder/services/firestore/user_doc.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/views/auth/terms_page.dart';
 import 'package:event_finder/views/feature/artist/artist_home_page.dart';
 import 'package:event_finder/views/feature/guest/guest_home_page.dart';
 import 'package:event_finder/views/feature/host/host_home_page.dart';
@@ -85,15 +86,19 @@ class _UserRoutingPageState extends State<UserRoutingPage> {
   }
 
   Widget _getUserRoute() {
-    switch (StateService().currentUser!.type) {
-      case UserType.guest:
-        return const GuestHomePage();
-      case UserType.base:
-        return const BaseHomePage();
-      case UserType.artist:
-        return const ArtistHomePage();
-      case UserType.host:
-        return const HostHomePage();
+    if (StateService().currentUser!.termsAcceptedDate == null) {
+      return const TermsPage();
+    } else {
+      switch (StateService().currentUser!.type) {
+        case UserType.guest:
+          return const GuestHomePage();
+        case UserType.base:
+          return const BaseHomePage();
+        case UserType.artist:
+          return const ArtistHomePage();
+        case UserType.host:
+          return const HostHomePage();
+      }
     }
   }
 }
