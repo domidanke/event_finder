@@ -106,4 +106,8 @@ class AuthService extends ChangeNotifier {
   Future<void> sendEmailVerificationEmail() async {
     await _firebaseAuth.currentUser!.sendEmailVerification();
   }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
 }
