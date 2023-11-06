@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            ///TODO: forgot password screen
+                            _showForgotPasswordModal(context);
                           },
                           child: const Text(
                             'Passwort vergessen',
@@ -169,5 +169,69 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ));
+  }
+
+  void _showForgotPasswordModal(BuildContext context) {
+    final passwordResetFormKey = GlobalKey<FormState>();
+    TextEditingController passwordResetEmailController =
+        TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Email angeben'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Form(
+                key: passwordResetFormKey,
+                child: TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Bitte geben Sie eine Email ein';
+                    }
+                    return null;
+                  },
+                  controller: passwordResetEmailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Abbrechen'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Senden'),
+              onPressed: () async {
+                if (passwordResetFormKey.currentState!.validate()) {
+                  String email = passwordResetEmailController.text;
+                  try {
+                    await AuthService().sendPasswordResetEmail(email);
+                    if (mounted) {
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Email gesendet')));
+                    }
+                  } on FirebaseAuthException catch (e) {
+                    if (mounted) {
+                      AlertService()
+                          .showAlert('Fehlgeschlagen', e.code, context);
+                    }
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

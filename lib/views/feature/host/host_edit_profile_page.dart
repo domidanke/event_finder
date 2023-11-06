@@ -28,10 +28,10 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
           child: Stack(
             children: [
               if (isUploadingImage)
-                Center(
+                const Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text('Profilbild wird aktualisiert'),
                       SizedBox(
                         height: 16,
@@ -81,13 +81,7 @@ class _HostEditProfilePageState extends State<HostEditProfilePage> {
                               Navigator.pushNamed(context, 'set_main_location');
                             },
                           ),
-                          ListTile(
-                            leading: const Icon(Icons.password),
-                            title: const Text('Anderes Passwort (TODO)'),
-                            onTap: () {
-                              debugPrint('Change Password');
-                            },
-                          ),
+                          //const ChangePasswordTile(),
                           ListTile(
                             leading: const Icon(Icons.image),
                             title: const Text('Profilbild setzen'),

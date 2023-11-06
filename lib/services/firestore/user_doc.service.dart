@@ -9,6 +9,8 @@ import 'package:event_finder/services/state.service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
+import '../../models/rating_data.dart';
+
 class UserDocService {
   factory UserDocService() {
     return _singleton;
@@ -144,8 +146,12 @@ class UserDocService {
   Future<void> redeemUserTickets(String qrCodeId) async {
     // Extract user ID from qr code id
     var userId = qrCodeId.split('_')[0];
+    var eventId = qrCodeId.split('_')[3];
     await usersCollection.doc(userId).update({
       'usedTickets': FieldValue.arrayUnion([qrCodeId])
+    });
+    await usersCollection.doc(userId).update({
+      'eventsToBeRated': FieldValue.arrayUnion([eventId])
     });
   }
 
@@ -159,5 +165,40 @@ class UserDocService {
     await usersCollection
         .doc(StateService().currentUser!.uid)
         .update({'genres': StateService().selectedGenres});
+  }
+
+  Future<void> acceptTerms() async {
+    await usersCollection
+        .doc(StateService().currentUser!.uid)
+        .update({'termsAcceptedDate': DateTime.now()});
+    StateService().currentUser = null;
+  }
+
+  Future<void> rateArtists(Map<String, int> artistRatings) async {
+    for (var rating in artistRatings.entries) {
+      final snapshot = await usersCollection.doc(rating.key).get();
+      final artist = snapshot.data()!;
+      if (artist.ratingData == null) {
+        await usersCollection.doc(rating.key).update({
+          'ratingData':
+              RatingData(totalRating: rating.value, numOfRatings: 1).toJson()
+        });
+      } else {
+        await usersCollection.doc(rating.key).update({
+          'ratingData': RatingData(
+                  totalRating: artist.ratingData!.totalRating + rating.value,
+                  numOfRatings: artist.ratingData!.numOfRatings + 1)
+              .toJson()
+        });
+      }
+    }
+  }
+
+  Future<void> finishRatingForUser(String eventId) async {
+    final currentUser = StateService().currentUser!;
+    await usersCollection.doc(currentUser.uid).update({
+      'eventsToBeRated': FieldValue.arrayRemove([eventId])
+    });
+    StateService().currentUser = await getUserData(currentUser.uid);
   }
 }

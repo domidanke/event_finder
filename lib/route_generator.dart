@@ -7,6 +7,7 @@ import 'package:event_finder/views/feature/artist/artist_events_page.dart';
 import 'package:event_finder/views/feature/artist/artist_home_page.dart';
 import 'package:event_finder/views/feature/base/base_home_page.dart';
 import 'package:event_finder/views/feature/base/buy_tickets_page.dart';
+import 'package:event_finder/views/feature/base/event_rating_page.dart';
 import 'package:event_finder/views/feature/base/genre_search_result_page.dart';
 import 'package:event_finder/views/feature/base/ticket_details_page.dart';
 import 'package:event_finder/views/feature/base/tickets_page.dart';
@@ -88,6 +89,9 @@ class RouteGenerator {
       case 'tickets':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const TicketsPage());
+      case 'event_rating':
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const EventRatingPage());
       case 'ticket_details':
         return MaterialPageRoute(
             settings: settings, builder: (_) => const TicketDetailsPage());

@@ -10,6 +10,7 @@ import 'package:event_finder/services/storage/storage.service.dart';
 import 'package:event_finder/theme/theme.dart';
 import 'package:event_finder/widgets/custom_button.dart';
 import 'package:event_finder/widgets/custom_icon_button.dart';
+import 'package:event_finder/widgets/rating_indicator.dart';
 import 'package:event_finder/widgets/user_tile.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,13 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         Navigator.pop(context);
                       },
                     ),
+                    if (event.startDate.isBefore(DateTime.now()))
+                      Container(
+                          margin: const EdgeInsets.only(left: 12),
+                          child: RatingIndicator(
+                            ratingData: event.ratingData,
+                            isSmall: false,
+                          )),
                     if (currentUser.type == UserType.base)
                       SaveEventButton(
                         event: event,
@@ -193,8 +201,8 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       children: [
                         Container(
                           margin: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Row(
-                            children: const [
+                          child: const Row(
+                            children: [
                               CustomIconButton(
                                 size: 0,
                                 icon: Icon(
@@ -245,10 +253,17 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                                         await LocationService()
                                             .openEventInMap(event);
                                       },
-                                      child: Text(
-                                        '${placeMark.street} ${placeMark.postalCode} ${placeMark.locality}',
-                                        style: const TextStyle(
-                                          decoration: TextDecoration.underline,
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.7,
+                                        child: Text(
+                                          '${placeMark.street} ${placeMark.postalCode} ${placeMark.locality}',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
                                         ),
                                       ),
                                     );

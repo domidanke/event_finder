@@ -1,9 +1,12 @@
+import 'package:event_finder/services/alert.service.dart';
 import 'package:event_finder/services/location.service.dart';
+import 'package:event_finder/services/state.service.dart';
 import 'package:event_finder/views/feature/base/base_profile_page.dart';
 import 'package:event_finder/views/feature/base/events_page.dart';
 import 'package:event_finder/views/feature/base/search_page.dart';
 import 'package:event_finder/views/feature/shared/events_map_page.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class BaseHomePage extends StatefulWidget {
   const BaseHomePage({super.key});
@@ -20,7 +23,20 @@ class _BaseHomePageState extends State<BaseHomePage> {
     BaseProfilePage()
   ];
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
+    if (index == 0 && StateService().currentUserLocation == null) {
+      var permission = await Geolocator.checkPermission();
+      if (permission.name == 'deniedForever') {
+        if (mounted) {
+          AlertService().showAlert('Zugriff auf Location benötigt.',
+              'missing-location-permission', context);
+        }
+        return;
+      } else {
+        StateService().currentUserLocation =
+            await Geolocator.getCurrentPosition();
+      }
+    }
     setState(() {
       _selectedIndex = index;
     });

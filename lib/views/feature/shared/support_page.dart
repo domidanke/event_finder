@@ -58,7 +58,7 @@ class _SupportPageState extends State<SupportPage> {
       dividerColor: primaryWhite.withOpacity(0.25),
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
-          _supportItems[index].isExpanded = !isExpanded;
+          _supportItems[index].isExpanded = isExpanded;
         });
       },
       children: _supportItems.map<ExpansionPanel>((SupportItem item) {

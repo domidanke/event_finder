@@ -1,6 +1,7 @@
 import 'package:event_finder/models/app_user.dart';
 import 'package:event_finder/services/auth.service.dart';
 import 'package:event_finder/services/state.service.dart';
+import 'package:event_finder/views/feature/base/ratings_page.dart';
 import 'package:event_finder/views/feature/base/saved_events_page.dart';
 import 'package:event_finder/views/feature/shared/saved_artists_page.dart';
 import 'package:event_finder/views/feature/shared/saved_hosts_page.dart';
@@ -93,13 +94,22 @@ class _BaseProfilePageState extends State<BaseProfilePage> {
                     },
                   ),
                 ),
-                ListTile(
-                  leading: const Icon(Icons.password),
-                  title: const Text('Passwort ändern (TODO)'),
-                  onTap: () {
-                    print('edit password');
-                  },
+                Opacity(
+                  opacity: currentUser.eventsToBeRated.isEmpty ? 0.4 : 1,
+                  child: ListTile(
+                    leading: const Icon(Icons.star),
+                    title: const Text('Ratings'),
+                    onTap: () {
+                      if (currentUser.eventsToBeRated.isEmpty) return;
+                      showModalBottomSheet<String>(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) => const RatingsPage(),
+                      );
+                    },
+                  ),
                 ),
+                //const ChangePasswordTile(),
                 ListTile(
                   leading: const Icon(Icons.question_mark),
                   title: const Text('Support'),

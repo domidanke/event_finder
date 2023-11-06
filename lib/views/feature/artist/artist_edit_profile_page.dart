@@ -112,13 +112,7 @@ class _ArtistEditProfilePageState extends State<ArtistEditProfilePage> {
                                 }
                               },
                             ),
-                            ListTile(
-                              leading: const Icon(Icons.password),
-                              title: const Text('Anderes Passwort (TODO)'),
-                              onTap: () {
-                                print('Change Password');
-                              },
-                            ),
+                            //const ChangePasswordTile(),
                           ],
                         ),
                       ),

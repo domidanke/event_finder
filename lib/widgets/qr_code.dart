@@ -18,7 +18,7 @@ class QrCode extends StatelessWidget {
       child: Stack(
         alignment: AlignmentDirectional.center,
         children: [
-          QrImage(
+          QrImageView(
             size: size,
             data: data,
             padding: const EdgeInsets.all(12),

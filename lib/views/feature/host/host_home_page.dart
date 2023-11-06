@@ -135,8 +135,7 @@ class _HostHomePageState extends State<HostHomePage> {
                     ),
                     ListTile(
                       leading: const Icon(Icons.edit),
-                      title: Text(
-                          'Profil ${!StateService().isProfileComplete() ? 'vervollständigen' : 'bearbeiten'}'),
+                      title: const Text('Profil bearbeiten'),
                       onTap: () {
                         showModalBottomSheet<String>(
                           context: context,
