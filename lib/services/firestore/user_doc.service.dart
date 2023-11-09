@@ -58,9 +58,15 @@ class UserDocService {
     if (AuthService().getCurrentFirebaseUser()!.isAnonymous) {
       return AppUser(displayName: 'Gast', type: UserType.guest);
     }
-    final doc = await usersCollection
+    DocumentSnapshot<AppUser> doc = await usersCollection
         .doc(AuthService().getCurrentFirebaseUser()!.uid)
         .get();
+    if (doc.data() == null) {
+      await addUserDocument(AuthService().getCurrentFirebaseUser()!);
+      doc = await usersCollection
+          .doc(AuthService().getCurrentFirebaseUser()!.uid)
+          .get();
+    }
     return doc.data();
   }
 

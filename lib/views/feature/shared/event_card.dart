@@ -79,6 +79,24 @@ class _EventCardState extends State<EventCard> {
                               : null,
                         );
                       }),
+                  if (_isEventOver(widget.event))
+                    Container(
+                      color: primaryGrey.withOpacity(0.8),
+                      child: Center(
+                          child: Container(
+                        padding: const EdgeInsets.all(12.0),
+                        decoration: BoxDecoration(
+                          color: primaryBackgroundColor.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        child: const Text(
+                          'Vergangen',
+                          style: TextStyle(
+                            color: primaryWhite,
+                          ),
+                        ),
+                      )),
+                    ),
                   if (StateService().currentUser!.type != UserType.host)
                     StatefulBuilder(
                         builder: (BuildContext context, StateSetter setState) {
@@ -217,5 +235,14 @@ class _EventCardState extends State<EventCard> {
       '${LocationService().getDistanceFromLatLonInKm(currentLatLng, eventLatLng)}km',
       style: TextStyle(fontSize: 16, color: primaryWhite.withOpacity(0.6)),
     );
+  }
+
+  bool _isEventOver(Event event) {
+    final now = DateTime.now();
+    if (event.endDate != null) {
+      return event.endDate!.isBefore(now);
+    } else {
+      return event.startDate.add(const Duration(hours: 6)).isBefore(now);
+    }
   }
 }

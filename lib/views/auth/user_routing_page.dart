@@ -86,7 +86,8 @@ class _UserRoutingPageState extends State<UserRoutingPage> {
   }
 
   Widget _getUserRoute() {
-    if (StateService().currentUser!.termsAcceptedDate == null) {
+    if (StateService().currentUser!.termsAcceptedDate == null &&
+        !AuthService().getCurrentFirebaseUser()!.isAnonymous) {
       return const TermsPage();
     } else {
       switch (StateService().currentUser!.type) {
